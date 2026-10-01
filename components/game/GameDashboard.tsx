@@ -2,6 +2,8 @@
 import { useEffect } from "react";
 import { useGame } from "@/store/store";
 import { useGameLoop } from "@/hooks/useGameLoop";
+import ExpansionCard from "./ExpansionCard";
+import SupplyPanel from "./SupplyPanel";
 import { storeStatus } from "@/lib/simulation";
 import TopBar from "./TopBar"; import StoreView from "./StoreView"; import AisleCard from "./AisleCard"; import CheckoutCard from "./CheckoutCard"; import RestockerCard from "./RestockerCard"; import OfflineEarningsModal from "./OfflineEarningsModal";
 const DEBUG = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_DEBUG === "1";
@@ -15,11 +17,15 @@ export default function GameDashboard() {
   const ready = useGame((s) => s.isInitialized), load = useGame((s) => s.loadGame), toast = useGame((s) => s.lastUpgrade), dbg = useGame((s) => s.debug), setSpeed = useGame((s) => s.setSpeed);
   useEffect(() => { load(); }, [load]);
   useGameLoop();
+  const a = useGame((s) => s.aisles.map((x) => x.id).join(","));
+  const c = useGame((s) => s.checkouts.map((x) => x.id).join(","));
+  const r = useGame((s) => s.restockers.map((x) => x.id).join(","));
+  const vis = { a: a.split(","), c: c.split(","), r: r.split(",").filter(Boolean) };
   if (!ready) return <div className="center">Loading…</div>;
   return (<main><TopBar />{toast && <div key={toast} className="toast">{toast}</div>}
-    <div className="layout"><div className="left"><StoreView /><Status /></div>
-    <section className="grid">{["produce", "bakery", "electronics"].map((id) => <AisleCard key={id} id={id} />)}
-      {["c1", "c2"].map((id) => <CheckoutCard key={id} id={id} />)}{["r1", "r2"].map((id) => <RestockerCard key={id} id={id} />)}</section></div>
+    <div className="layout"><div className="left"><StoreView /><Status /><SupplyPanel /></div>
+    <section className="grid"><ExpansionCard />{vis.a.map((id) => <AisleCard key={id} id={id} />)}
+      {vis.c.map((id) => <CheckoutCard key={id} id={id} />)}{vis.r.map((id) => <RestockerCard key={id} id={id} />)}</section></div>
     {DEBUG && <div className="card dbg">{[["10k", "+$10K"], ["1m", "+$1M"], ["spawn", "Spawn"], ["fill", "Fill"], ["empty", "Empty"], ["offline", "Offline 1h"]].map(([c, l]) => <button key={c} className="small" onClick={() => dbg(c)}>{l}</button>)}
       {[1, 2, 5].map((n) => <button key={n} className="small" onClick={() => setSpeed(n)}>{n}x</button>)}</div>}
     <OfflineEarningsModal /></main>);

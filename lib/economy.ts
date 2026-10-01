@@ -12,3 +12,4 @@ export const calculateEPS = (prev: number, revenueThisTick: number, dt: number) 
 };
 export const calculateOfflineEarnings = (eps: number, elapsed: number, max: number) =>
   Math.max(0, eps) * Math.max(0, Math.min(Number.isFinite(elapsed) ? elapsed : 0, max));
+export const getPlaceCost = (base: number, count: number, mult = 1.6) => Math.ceil(base * Math.pow(mult, Math.max(0, count)));

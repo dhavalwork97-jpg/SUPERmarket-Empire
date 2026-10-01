@@ -1,3 +1,24 @@
-{"name":"supermarket-tycoon","version":"0.1.0","private":true,"scripts":{"dev":"next dev","build":"next build","start":"next start"},
-"dependencies":{"next":"14.2.15","react":"^18.3.1","react-dom":"^18.3.1","zustand":"^4.5.5"},
-"devDependencies":{"typescript":"^5.5.0","@types/node":"^20","@types/react":"^18","@types/react-dom":"^18"}}
+{
+ "name": "supermarket-tycoon",
+ "version": "0.1.0",
+ "private": true,
+ "scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "sim": "tsx scripts/balance-sim.ts 3"
+ },
+ "dependencies": {
+  "next": "14.2.15",
+  "react": "^18.3.1",
+  "react-dom": "^18.3.1",
+  "zustand": "^4.5.5"
+ },
+ "devDependencies": {
+  "typescript": "^5.5.0",
+  "@types/node": "^20",
+  "@types/react": "^18",
+  "@types/react-dom": "^18",
+  "tsx": "^4.19.0"
+ }
+}
