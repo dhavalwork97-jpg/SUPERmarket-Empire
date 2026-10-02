@@ -83,7 +83,11 @@ export default function Store3DLayer({cols,rows,aisles,tier}:Props){
     const locMVP=gl.getUniformLocation(p,"uMVP"),locModel=gl.getUniformLocation(p,"uModel"),locColor=gl.getUniformLocation(p,"uColor");
     const draw=(key:string,model:Mat4,color:[number,number,number,number],vp:Mat4)=>{const m=meshes[key];if(!m)return;gl.uniformMatrix4fv(locModel,false,model);gl.uniformMatrix4fv(locMVP,false,multiply(vp,model));gl.uniform4fv(locColor,color);gl.bindVertexArray(m.vao);gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_INT,0);};
     const render=()=>{if(dead)return;const dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.floor(canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(canvas.clientHeight*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);const aspect=w/Math.max(1,h);const eye:[number,number,number]=[0,7.8,9.2];const view=lookAt(eye,[0,0,0],[0,1,0]);const proj=perspective(Math.PI/3,aspect,0.1,60);const vp=multiply(proj,view);
-      // The source shelf is ~7.7m wide x 2.3m tall. The first pass was too small.\n      // Size the shelf against the grid while preserving its proportions.\n      const sx=Math.max(0.145,Math.min(0.185,0.95/7.7));\n      const sy=sx*(2.2985/7.7)*1.55;\n      const sz=sx*2.9;
+      // The source shelf is ~7.7m wide x 2.3m tall. The first pass was too small.
+      // Size the shelf against the grid while preserving its proportions.
+      const sx=Math.max(0.145,Math.min(0.185,0.95/7.7));
+      const sy=sx*(2.2985/7.7)*1.55;
+      const sz=sx*2.9;
       aisles.filter(a=>a.level>0).forEach(a=>{const x=a.x-(cols-1)/2;const z=-((a.y-(rows-1)/2));const model=multiply(translation(x,0.02,z),scale(sx,sy,sz));draw("shelf",model,[0.42,0.46,0.48,0.96],vp);});
       const cartScale=Math.min(0.62,Math.max(0.48,6/Math.max(cols,6)));for(let i=0;i<2;i++){const x=-((cols-1)/2)+0.75+i*0.85;const z=-((rows-1)/2)+0.35;const model=multiply(translation(x,0.02,z),multiply(rotationY(i?0.12:-0.12),scale(cartScale,cartScale,cartScale)));draw(i?"cartB":"cartA",model,[0.38,0.43,0.45,0.9],vp);}
       if(tier>=1){const x=(cols-1)/2-0.55,z=-(rows-1)/2+0.55;const model=multiply(translation(x,0.02,z),scale(0.14,0.42,0.24));draw("display",model,[0.5,0.43,0.3,0.75],vp);}
