@@ -10,7 +10,6 @@ import { CUSTOMERS } from "@/lib/customers";
 import { AisleType, Customer, ItemKind } from "@/types/game";
 import { Icon, DecorImg } from "./Asset";
 import StoreEnvironment from "./StoreEnvironment";
-import StoreFixtures from "./StoreFixtures";
 const hash = (n: number) => ((Math.abs(n) * 2654435761) % 1000) / 1000;
 type Sel = { mode: "new"; kind: ItemKind; type?: AisleType } | { mode: "move" | "item"; kind: ItemKind; id: string } | null;
 type P = { x: number; y: number };
@@ -28,11 +27,11 @@ export default function StoreView() {
   const cell = new Map<string, { kind: ItemKind; id: string; lvl: number; bar?: number; badge?: string; item: React.ReactNode }>();
   aisles.forEach((a) => { const pct = a.maxStock ? a.stock / a.maxStock : 0, low = pct > 0 && pct < 0.25, blocked = !isFinite(L.dist.E?.[a.id]);
     cell.set(`${a.x},${a.y}`, { kind: "aisle", id: a.id, lvl: a.level, bar: pct, badge: blocked ? "⛔" : undefined,
-      item: <><img className={`spr ${low ? "low" : ""} ${pct <= 0 ? "oos" : ""}`} src={aisleSprite(a.type, a.level, pct)} alt={AISLE_DEFS[a.type].name} draggable={false} />
+      item: <><img className={`spr aisle-sprite ${low ? "low" : ""} ${pct <= 0 ? "oos" : ""}`} src={aisleSprite(a.type, a.level, pct)} alt={AISLE_DEFS[a.type].name} draggable={false} />
         {(low || pct <= 0) && <Icon n={pct <= 0 ? "alert" : "restock"} size={16} className="badge pulse" />}</> }); });
   checkouts.forEach((k) => { const q = customers.filter((c) => c.co === k.id).length, blocked = !isFinite(L.dist.E?.[k.id]);
     cell.set(`${k.x},${k.y}`, { kind: "checkout", id: k.id, lvl: k.level, bar: k.currentCustomerProgress, badge: blocked ? "⛔" : undefined,
-      item: <><img className="spr" src={checkoutSprite(k.level)} alt="Checkout" draggable={false} /><span className={`qtag ${q >= k.queueCapacity ? "full" : ""}`}>{q}/{k.queueCapacity}</span></> }); });
+      item: <><img className="spr checkout-sprite" src={checkoutSprite(k.level)} alt="Checkout" draggable={false} /><span className={`qtag ${q >= k.queueCapacity ? "full" : ""}`}>{q}/{k.queueCapacity}</span></> }); });
   s.decors.forEach((d) => cell.set(`${d.x},${d.y}`, { kind: "decor", id: d.id, lvl: 0, item: <DecorImg id={d.style} /> }));
   restockers.forEach((r) => cell.set(`${r.x},${r.y}`, { kind: "restocker", id: r.id, lvl: r.level, item: <span className="desk-mark" /> }));
   const pos2 = (id: string): P => { const i = [...aisles, ...checkouts].find((z) => z.id === id); return i ? { x: i.x, y: i.y } : E; };
