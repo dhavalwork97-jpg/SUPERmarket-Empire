@@ -1,19 +1,116 @@
-{
-  "source": "Super market low poly for free",
-  "creator": "dasy444",
-  "platform": "Sketchfab",
-  "license": "Free Standard",
-  "sourceUrl": "https://sketchfab.com/3d-models/super-market-low-poly-for-free-c14deca21a994978a8aa304561aced50",
-  "selectedAssets": [
-    {"asset":"supermarket-gondola-shelf.glb","sourceMeshes":["mesh-10","mesh-11","mesh-12","mesh-16","mesh-17","mesh-18"],"triangles":3052,"status":"KEEP + COMBINE"},
-    {"asset":"shopping-cart-a.glb","sourceMeshes":["mesh-20","mesh-21","mesh-22"],"triangles":3148,"status":"KEEP + LIGHT OPTIMIZE"},
-    {"asset":"shopping-cart-b.glb","sourceMeshes":["mesh-23","mesh-24","mesh-25"],"triangles":3148,"status":"KEEP + LIGHT OPTIMIZE"},
-    {"asset":"shallow-display-fixture.glb","sourceMeshes":["mesh-154","mesh-155"],"triangles":1120,"status":"OPTIONAL"}
-  ],
-  "excluded": [
-    {"sourceMeshes":["mesh-107"],"triangles":78310,"reason":"High-poly product/display array; optimize before use"},
-    {"sourceMeshes":["mesh-145"],"triangles":46986,"reason":"High-poly product/display array; optimize before use"},
-    {"sourceMeshes":["mesh-1"],"reason":"Large architectural/environment geometry; existing game environment retained"},
-    {"sourceMeshes":["mesh-163+"],"reason":"Individual product meshes; existing aisle artwork retained"}
-  ]
-}
+[
+  {
+    "asset": "supermarket-gondola-shelf.glb",
+    "sourceMeshes": [
+      "mesh-10.fbx",
+      "mesh-11.fbx",
+      "mesh-12.fbx",
+      "mesh-16.fbx",
+      "mesh-17.fbx",
+      "mesh-18.fbx"
+    ],
+    "triangles": 3052,
+    "vertices": 3512,
+    "sourcePivot": [
+      -2.832793712615967,
+      0.05566516891121864,
+      4.223177909851074
+    ],
+    "bounds": [
+      [
+        -3.8490610122680664,
+        0.0,
+        -0.7065753936767578
+      ],
+      [
+        3.8490610122680664,
+        2.2985212802886963,
+        0.7065749168395996
+      ]
+    ],
+    "bytes": 121916
+  },
+  {
+    "asset": "shopping-cart-a.glb",
+    "sourceMeshes": [
+      "mesh-20.fbx",
+      "mesh-21.fbx",
+      "mesh-22.fbx"
+    ],
+    "triangles": 3148,
+    "vertices": 3123,
+    "sourcePivot": [
+      5.955451011657715,
+      0.047058362513780594,
+      -1.6674485206604004
+    ],
+    "bounds": [
+      [
+        -0.5789008140563965,
+        0.0,
+        -0.5803780555725098
+      ],
+      [
+        0.5789003372192383,
+        1.0968812704086304,
+        0.5803780555725098
+      ]
+    ],
+    "bytes": 113732
+  },
+  {
+    "asset": "shopping-cart-b.glb",
+    "sourceMeshes": [
+      "mesh-23.fbx",
+      "mesh-24.fbx",
+      "mesh-25.fbx"
+    ],
+    "triangles": 3148,
+    "vertices": 3123,
+    "sourcePivot": [
+      -11.888364791870117,
+      0.08691688627004623,
+      1.3441907167434692
+    ],
+    "bounds": [
+      [
+        -0.6346349716186523,
+        0.0,
+        -0.3785132169723511
+      ],
+      [
+        0.6346349716186523,
+        1.2211941480636597,
+        0.3785132169723511
+      ]
+    ],
+    "bytes": 113732
+  },
+  {
+    "asset": "shallow-display-fixture.glb",
+    "sourceMeshes": [
+      "mesh-154.fbx",
+      "mesh-155.fbx"
+    ],
+    "triangles": 1120,
+    "vertices": 1270,
+    "sourcePivot": [
+      3.4309017658233643,
+      0.060795173048973083,
+      -6.4119720458984375
+    ],
+    "bounds": [
+      [
+        -3.2603566646575928,
+        0.0,
+        -0.26019287109375
+      ],
+      [
+        3.2603566646575928,
+        2.2888801097869873,
+        0.2601923942565918
+      ]
+    ],
+    "bytes": 44916
+  }
+]
