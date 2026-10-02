@@ -1,0 +1,19 @@
+{
+  "source": "Super market low poly for free",
+  "creator": "dasy444",
+  "platform": "Sketchfab",
+  "license": "Free Standard",
+  "sourceUrl": "https://sketchfab.com/3d-models/super-market-low-poly-for-free-c14deca21a994978a8aa304561aced50",
+  "selectedAssets": [
+    {"asset":"supermarket-gondola-shelf.glb","sourceMeshes":["mesh-10","mesh-11","mesh-12","mesh-16","mesh-17","mesh-18"],"triangles":3052,"status":"KEEP + COMBINE"},
+    {"asset":"shopping-cart-a.glb","sourceMeshes":["mesh-20","mesh-21","mesh-22"],"triangles":3148,"status":"KEEP + LIGHT OPTIMIZE"},
+    {"asset":"shopping-cart-b.glb","sourceMeshes":["mesh-23","mesh-24","mesh-25"],"triangles":3148,"status":"KEEP + LIGHT OPTIMIZE"},
+    {"asset":"shallow-display-fixture.glb","sourceMeshes":["mesh-154","mesh-155"],"triangles":1120,"status":"OPTIONAL"}
+  ],
+  "excluded": [
+    {"sourceMeshes":["mesh-107"],"triangles":78310,"reason":"High-poly product/display array; optimize before use"},
+    {"sourceMeshes":["mesh-145"],"triangles":46986,"reason":"High-poly product/display array; optimize before use"},
+    {"sourceMeshes":["mesh-1"],"reason":"Large architectural/environment geometry; existing game environment retained"},
+    {"sourceMeshes":["mesh-163+"],"reason":"Individual product meshes; existing aisle artwork retained"}
+  ]
+}
