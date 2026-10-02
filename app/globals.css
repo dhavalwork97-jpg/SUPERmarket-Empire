@@ -235,3 +235,68 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 @keyframes restockWork{0%,100%{transform:translateY(0) rotate(0deg)}40%{transform:translateY(-1px) rotate(-2deg)}70%{transform:translateY(0) rotate(2deg)}}
 @keyframes restockShadow{0%,100%{transform:scaleX(.8);opacity:.18}50%{transform:scaleX(1);opacity:.35}}
 @media(prefers-reduced-motion:reduce){.actor.staff.serving>img:first-child,.actor.staff.restocking>img:first-child,.serve-bubble,.restock-bubble,.actor.staff.restocking:after{animation:none!important}}
+
+/* ===== 2.5D supermarket presentation =====
+   Keeps the existing simulation/grid coordinates and artwork, but presents the store
+   as a tilted, depth-layered management scene instead of a flat board. */
+.floor{
+  perspective:1100px;
+  perspective-origin:50% 58%;
+  background:linear-gradient(180deg,#cbd8d8 0%,#dfe7e5 42%,#b9c8c7 100%);
+  overflow:visible;
+  isolation:isolate;
+}
+.store-environment,.tiles{
+  transform:perspective(1100px) rotateX(34deg) scale(1.055);
+  transform-origin:50% 62%;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+}
+.store-environment{border-radius:12px}
+.tiles{overflow:visible}
+.actor{
+  transform:translate(-50%,-70%) rotateX(-34deg) scaleY(1.26);
+  transform-origin:50% 82%;
+  transform-style:preserve-3d;
+  filter:drop-shadow(0 5px 3px rgba(15,23,42,.22));
+}
+.actor.walking>img:first-child{filter:drop-shadow(0 4px 2px rgba(15,23,42,.24))}
+.actor.staff,.actor.cust{transform:translate(-50%,-70%) rotateX(-34deg) scaleY(1.26)}
+.actor.staff.serving>img:first-child,.actor.staff.restocking>img:first-child{transform-origin:50% 92%}
+.float{
+  transform:rotateX(-34deg);
+  transform-origin:50% 100%;
+  text-shadow:0 2px 3px rgba(15,23,42,.7);
+}
+.tile{
+  transform-style:preserve-3d;
+}
+.tile.has:has(.aisle-sprite) .aisle-sprite,
+.tile.has:has(.checkout-sprite) .checkout-sprite{
+  filter:drop-shadow(0 10px 5px rgba(15,23,42,.28));
+}
+.tile.has:has(.aisle-sprite):after,
+.tile.has:has(.checkout-sprite):after{
+  content:"";
+  position:absolute;
+  left:13%;
+  right:13%;
+  bottom:10%;
+  height:12%;
+  border-radius:50%;
+  background:rgba(15,23,42,.17);
+  filter:blur(3px);
+  transform:translateZ(-1px);
+  pointer-events:none;
+}
+@media(max-width:700px){
+  .floor{perspective:900px;perspective-origin:50% 60%}
+  .store-environment,.tiles{transform:perspective(900px) rotateX(27deg) scale(1.035);transform-origin:50% 64%}
+  .actor,.actor.staff,.actor.cust{transform:translate(-50%,-70%) rotateX(-27deg) scaleY(1.16)}
+  .float{transform:rotateX(-27deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .store-environment,.tiles{transform:perspective(1100px) rotateX(22deg) scale(1.025)}
+  .actor,.actor.staff,.actor.cust{transform:translate(-50%,-70%) rotateX(-22deg) scaleY(1.08)}
+  .float{transform:rotateX(-22deg)}
+}
