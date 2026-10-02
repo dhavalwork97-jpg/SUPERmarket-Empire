@@ -10,6 +10,7 @@ import { CUSTOMERS } from "@/lib/customers";
 import { AisleType, Customer, ItemKind } from "@/types/game";
 import { Icon, DecorImg } from "./Asset";
 import StoreEnvironment from "./StoreEnvironment";
+import StoreFixtures from "./StoreFixtures";
 const hash = (n: number) => ((Math.abs(n) * 2654435761) % 1000) / 1000;
 type Sel = { mode: "new"; kind: ItemKind; type?: AisleType } | { mode: "move" | "item"; kind: ItemKind; id: string } | null;
 type P = { x: number; y: number };
@@ -81,6 +82,7 @@ export default function StoreView() {
       {sel?.mode === "item" && chosen && <>Selected {sel.kind} #{sel.id.slice(1)} <button className="small" onClick={() => setSel({ ...sel, mode: "move" })}>Move</button> <button className="small" onClick={() => { s.sellItem(sel.kind, sel.id); setSel(null); }}>Sell +{formatMoney(refund)}</button> <button className="small" onClick={() => setSel(null)}>Cancel</button></>}</div>
     <div className="floorscroll"><div className={`floor ${sel?.mode === "new" || sel?.mode === "move" ? "build-mode" : ""}`} style={{ "--cols": cols, aspectRatio: `${cols}/${rows}` } as React.CSSProperties}>
       <StoreEnvironment cols={cols} rows={rows} aisles={aisles} checkouts={checkouts} />
+      <StoreFixtures cols={cols} rows={rows} aisles={aisles} checkouts={checkouts} />
       {dirty > 0.05 && Array.from({ length: cols * rows }, (_, n) => (hash(n * 7 + 3) < dirty * 0.7 ? <img key={n} src={floorDirty} alt="" className="grime" draggable={false} style={{ left: `${((n % cols) / cols) * 100}%`, top: `${(Math.floor(n / cols) / rows) * 100}%`, width: `${100 / cols}%`, height: `${100 / rows}%` }} /> : null))}
       <div className="tiles" style={{ gridTemplateColumns: `repeat(${cols},1fr)`, gridTemplateRows: `repeat(${rows},1fr)` }}>
         {Array.from({ length: cols * rows }, (_, n) => { const x = n % cols, y = Math.floor(n / cols), it = cell.get(`${x},${y}`), picked = sel && "id" in sel && it?.id === sel.id, door = !it && x === 0 && y === rows - 1;
