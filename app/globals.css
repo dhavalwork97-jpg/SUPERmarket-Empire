@@ -193,3 +193,17 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 .tile.has:has(.aisle-sprite) .aisle-sprite{inset:auto;position:absolute;left:50%;top:50%;width:136%;height:136%;max-width:none;max-height:none;object-fit:contain;transform:translate(-50%,-50%);filter:drop-shadow(0 7px 5px rgba(15,23,42,.24));z-index:2}
 .tile.has:has(.checkout-sprite) .checkout-sprite{inset:auto;position:absolute;left:50%;top:50%;width:125%;height:125%;max-width:none;max-height:none;object-fit:contain;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 5px rgba(15,23,42,.22));z-index:2}
 .tile.has:has(.aisle-sprite) .mini,.tile.has:has(.aisle-sprite) small,.tile.has:has(.checkout-sprite) .mini,.tile.has:has(.checkout-sprite) small{z-index:4}
+
+/* ===== Customer movement polish: visual-only, simulation remains untouched ===== */
+.actor.cust{transition:left .16s linear,top .16s linear;will-change:left,top,transform;transform-origin:50% 88%}
+.actor.cust>img:first-child{image-rendering:auto;backface-visibility:hidden}
+.actor.cust:after{content:"";position:absolute;left:22%;right:22%;bottom:-4px;height:9%;border-radius:50%;background:rgba(15,23,42,.16);filter:blur(2px);z-index:-1;pointer-events:none}
+.actor.cust.browsing:after{background:rgba(22,163,74,.13)}
+.actor.cust.queueing:after{left:18%;right:18%;opacity:.7}
+.actor.cust.shopping-checkout:after{left:16%;right:16%;background:rgba(37,99,235,.2)}
+.actor.cust.face-left{transform:translate(-50%,-70%)}
+.actor.cust.face-left>img:first-child{transform:scaleX(-1)}
+.actor.cust:not(.face-left)>img:first-child{transform:scaleX(1)}
+.actor.cust.walking.face-left>img:first-child{animation:walkBobLeft .42s ease-in-out infinite}
+.actor.cust.walking:not(.face-left)>img:first-child{animation:walkBob .42s ease-in-out infinite}
+@media(max-width:600px){.actor.cust{transition:left .14s linear,top .14s linear}}
