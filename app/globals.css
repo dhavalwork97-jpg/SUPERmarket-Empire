@@ -207,3 +207,10 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 .actor.cust.walking.face-left>img:first-child{animation:walkBobLeft .42s ease-in-out infinite}
 .actor.cust.walking:not(.face-left)>img:first-child{animation:walkBob .42s ease-in-out infinite}
 @media(max-width:600px){.actor.cust{transition:left .14s linear,top .14s linear}}
+
+
+/* ===== Existing scene artwork integration ===== */
+.store-bg-art{position:absolute;inset:0;z-index:0;background:url("/assets/web/environment/store-bg.webp") center/cover no-repeat;filter:saturate(.92) contrast(.98);opacity:.96}
+.store-floor-surface{background-color:rgba(216,226,225,.46);background-image:url("/assets/web/environment/floor-tile.webp"),linear-gradient(90deg,rgba(255,255,255,.24) 1px,transparent 1px),linear-gradient(rgba(82,102,105,.065) 1px,transparent 1px),linear-gradient(135deg,rgba(255,255,255,.18),transparent 38%,rgba(62,82,86,.07));background-size:7% 11%,5% 100%,100% 8%,100% 100%;background-blend-mode:multiply,normal,normal,normal}
+.store-back-wall{background:linear-gradient(180deg,rgba(248,250,249,.82),rgba(213,223,223,.68));}
+@media(max-width:600px){.store-bg-art{background-position:center center}}
