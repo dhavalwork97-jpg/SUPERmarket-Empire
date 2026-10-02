@@ -143,7 +143,8 @@ export default function StoreView() {
         const src = c.mood === "🦹" ? char("shopper") : angry ? char("shopper-angry") : cart ? char("shopper-3") : char("shopper");
         const walking = c.phase === "ENTERING" || c.phase === "SHOPPING" || c.phase === "LEAVING";
         const nearestStop = c.plan.map((id) => pos2(id)).reduce((best, q) => { const d = Math.abs(q.x - p.x) + Math.abs(q.y - p.y); return d < best.d ? { q, d } : best; }, { q: E, d: 999 });
-        const browsing = c.phase === "SHOPPING" && nearestStop.d < 0.72;
+        const visualShop = c.phase === "SHOPPING" ? shoppingVisual(c) : null;
+        const browsing = c.phase === "SHOPPING" && !!visualShop?.shelf && nearestStop.d < 0.9;
         const checkoutAction = c.phase === "CHECKOUT";
         const entering = c.phase === "ENTERING";
         const leaving = c.phase === "LEAVING";
