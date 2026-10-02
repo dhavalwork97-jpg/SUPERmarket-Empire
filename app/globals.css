@@ -214,3 +214,12 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 .store-floor-surface{background-color:rgba(216,226,225,.46);background-image:url("/assets/web/environment/floor-tile.webp"),linear-gradient(90deg,rgba(255,255,255,.24) 1px,transparent 1px),linear-gradient(rgba(82,102,105,.065) 1px,transparent 1px),linear-gradient(135deg,rgba(255,255,255,.18),transparent 38%,rgba(62,82,86,.07));background-size:7% 11%,5% 100%,100% 8%,100% 100%;background-blend-mode:multiply,normal,normal,normal}
 .store-back-wall{background:linear-gradient(180deg,rgba(248,250,249,.82),rgba(213,223,223,.68));}
 @media(max-width:600px){.store-bg-art{background-position:center center}}
+
+/* ===== Living supermarket composition: depth + physical upgrade feedback ===== */
+.store-aisle-shadow-layer{pointer-events:none}
+.aisle-footprint{transition:opacity .25s ease,width .25s ease,height .25s ease}
+.tile.has:has(.aisle-sprite),.tile.has:has(.checkout-sprite){isolation:isolate}
+.tile.has:has(.aisle-sprite) .aisle-sprite,.tile.has:has(.checkout-sprite) .checkout-sprite{transition:transform .22s ease,filter .22s ease}
+.tile.has:has(.aisle-sprite):hover .aisle-sprite,.tile.has:has(.checkout-sprite):hover .checkout-sprite{filter:drop-shadow(0 9px 7px rgba(15,23,42,.3)) brightness(1.035)}
+.tile.picked:has(.aisle-sprite) .aisle-sprite,.tile.picked:has(.checkout-sprite) .checkout-sprite{filter:drop-shadow(0 0 7px rgba(74,222,128,.5)) drop-shadow(0 7px 5px rgba(15,23,42,.24))}
+.store-checkout-zone i{transition:transform .2s ease,background .2s ease}
