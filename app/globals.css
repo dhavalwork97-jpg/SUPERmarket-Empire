@@ -143,3 +143,25 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 .fixture-checkout:nth-of-type(2n) .checkout-base{background:linear-gradient(180deg,#52606f,#263442)}
 .build-mode .store-fixtures{opacity:.78}
 @media(max-width:600px){.fixture-aisle{width:clamp(38px,10%,64px);height:clamp(30px,8%,54px)}.fixture-label{display:none}.fixture-checkout{width:clamp(42px,11%,66px)}}
+
+
+/* ===== Phase 2: actor presentation ===== */
+.actor.cust{transition:left .2s linear,top .2s linear;contain:layout style paint}
+.actor.cust.walking{will-change:left,top,transform}
+.actor.cust.browsing>img:first-child{animation:shopBrowse 1.25s ease-in-out infinite}
+.actor.cust.queueing>img:first-child{animation:queueShift 1.8s ease-in-out infinite}
+.actor.cust.shopping-checkout>img:first-child{animation:checkoutWork .8s ease-in-out infinite}
+.actor.cust.browsing:before{content:"";position:absolute;left:50%;bottom:-7%;width:125%;height:26%;transform:translateX(-50%);border-radius:50%;background:rgba(34,197,94,.16);box-shadow:0 0 0 2px rgba(34,197,94,.08);animation:browsePulse 1.25s ease-in-out infinite}
+.browse-ring{position:absolute;left:50%;top:62%;width:92%;height:20%;transform:translate(-50%,-50%);border:1px solid rgba(74,222,128,.7);border-radius:50%;opacity:.55;animation:browseRing 1.25s ease-out infinite}
+.cart-prop{position:absolute;right:-17%;bottom:4%;width:28%;height:25%;border:2px solid #475569;border-top:0;border-radius:2px 2px 6px 6px;background:linear-gradient(180deg,rgba(226,232,240,.7),rgba(148,163,184,.35));filter:drop-shadow(0 1px 1px rgba(15,23,42,.35));transform:skewX(-5deg)}
+.cart-prop:before,.cart-prop:after{content:"";position:absolute;bottom:-28%;width:18%;height:18%;border-radius:50%;background:#334155}
+.cart-prop:before{left:8%}.cart-prop:after{right:8%}.cart-prop i{position:absolute;left:-25%;top:-16%;width:34%;height:10%;border-top:2px solid #475569;transform:rotate(-8deg)}
+.actor.cust.face-left .cart-prop{right:auto;left:-17%}.actor.cust.face-left .cart-prop i{left:auto;right:-25%;transform:rotate(8deg)}
+.actor.cust.shopping-checkout:after{content:"";position:absolute;left:20%;right:20%;bottom:-4px;height:7%;border-radius:50%;background:rgba(37,99,235,.25);animation:checkoutGlow .8s ease-in-out infinite}
+@keyframes shopBrowse{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}20%{transform:translateY(-1px) rotate(-1deg) scale(1.01)}45%{transform:translateY(-2px) rotate(1.5deg) scale(1.025)}65%{transform:translateY(-1px) rotate(0deg) scale(1.01)}80%{transform:translateY(0) rotate(-1deg) scale(1)}} 
+@keyframes queueShift{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(1px) translateY(-1px)}}
+@keyframes checkoutWork{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-2px) rotate(-1deg)}}
+@keyframes browsePulse{0%,100%{transform:translateX(-50%) scaleX(.8);opacity:.2}50%{transform:translateX(-50%) scaleX(1);opacity:.5}}
+@keyframes browseRing{0%{transform:translate(-50%,-50%) scale(.7);opacity:.7}100%{transform:translate(-50%,-50%) scale(1.08);opacity:0}}
+@keyframes checkoutGlow{0%,100%{transform:scaleX(.8);opacity:.15}50%{transform:scaleX(1);opacity:.45}}
+@media(prefers-reduced-motion:reduce){.actor.cust.browsing>img:first-child,.actor.cust.queueing>img:first-child,.actor.cust.shopping-checkout>img:first-child,.browse-ring,.cart-prop,.actor.cust.browsing:before,.actor.cust.shopping-checkout:after{animation:none!important}}
