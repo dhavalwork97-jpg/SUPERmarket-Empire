@@ -40,7 +40,7 @@ export default function StoreView() {
   for (const k in queues) queues[k].sort((a, b) => (a.phase === "CHECKOUT" ? -1 : 0) - (b.phase === "CHECKOUT" ? -1 : 0));
   const active = checkouts.filter((k) => k.level > 0);
   const lanePos = (id: string, i: number): P => { const k = checkouts.find((z) => z.id === id)!; return { x: k.x + (i % 2 ? -0.18 : 0.18), y: Math.max(-0.2, k.y - 0.55 - i * 0.3) }; };
-  /** Visual path reconstruction. It mirrors the simulation route without changing simulation state. */
+  /** Visual-only route: customers now visibly travel, pause at shelves, then continue to checkout. */
   const shoppingPath = (c: Customer): P[] => {
     const stops = c.plan.map((id) => { const p = pos2(id); return { x: p.x, y: p.y + 0.4 }; });
     const last = stops[stops.length - 1] ?? E;
@@ -49,35 +49,51 @@ export default function StoreView() {
     )[0];
     return [E, ...stops, ...(dest ? [{ x: dest.x, y: dest.y - 0.6 }] : [])];
   };
+  const shoppingVisual = (c: Customer) => {
+    const path = shoppingPath(c);
+    const legs = path.slice(1).map((p, i) => Math.abs(p.x - path[i].x) + Math.abs(p.y - path[i].y) || 0.01);
+    const pauses = path.slice(1, -1).map(() => 0.34);
+    const weights = legs.map((d, i) => d + (pauses[i] ?? 0));
+    const total = weights.reduce((a, b) => a + b, 0);
+    let progress = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0)));
+    let u = progress * total;
+    for (let i = 0; i < legs.length; i++) {
+      if (u <= legs[i]) return { p: lerp(path[i], path[i + 1], u / legs[i]), walking: true, shelf: false };
+      u -= legs[i];
+      if (i < pauses.length) {
+        if (u <= pauses[i]) return { p: path[i + 1], walking: false, shelf: true };
+        u -= pauses[i];
+      }
+    }
+    return { p: path[path.length - 1], walking: false, shelf: false };
+  };
   const place = (c: Customer): P => {
     if (c.phase === "ENTERING") return { x: E.x, y: E.y + 0.55 * c.t };
-    if (c.phase === "SHOPPING") {
-      const path = shoppingPath(c);
-      const len = path.slice(1).map((p, i) => Math.abs(p.x - path[i].x) + Math.abs(p.y - path[i].y) || 0.01);
-      const total = len.reduce((a, b) => a + b, 0);
-      let d = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0))) * total;
-      for (let i = 0; i < len.length; i++) { if (d <= len[i]) return lerp(path[i], path[i + 1], d / len[i]); d -= len[i]; }
-      return path[path.length - 1];
-    }
+    if (c.phase === "SHOPPING") return shoppingVisual(c).p;
     if (c.phase === "LEAVING") return lerp(c.at === "E" ? { x: 1, y: E.y } : (() => { const p = pos2(c.at); return { x: p.x, y: p.y + 0.4 }; })(), { x: E.x, y: E.y + 0.5 }, 1 - Math.max(0, c.t));
     return c.co && queues[c.co] ? lanePos(c.co, Math.max(0, queues[c.co].indexOf(c))) : E;
   };
-  /** Determine facing from the actual current route segment instead of the first planned aisle. */
+  /** Determine facing from the current visual route segment or shelf interaction. */
   const facingLeftFor = (c: Customer, p: P) => {
     if (c.phase === "ENTERING") return false;
     if (c.phase === "LEAVING") return p.x > E.x;
     if (c.phase !== "SHOPPING") return false;
+    const visual = shoppingVisual(c);
+    if (visual.shelf) {
+      const next = c.plan.map(id => pos2(id)).find(q => Math.abs(q.x - p.x) + Math.abs(q.y - p.y) < 0.75);
+      return next ? next.x < p.x : false;
+    }
     const path = shoppingPath(c);
-    const len = path.slice(1).map((q, i) => Math.abs(q.x - path[i].x) + Math.abs(q.y - path[i].y) || 0.01);
-    const total = len.reduce((a, b) => a + b, 0);
-    let d = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0))) * total;
-    for (let i = 0; i < len.length; i++) {
-      if (d <= len[i]) {
+    const progress = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0)));
+    const lengths = path.slice(1).map((q, i) => Math.abs(q.x - path[i].x) + Math.abs(q.y - path[i].y) || 0.01);
+    const total = lengths.reduce((a, b) => a + b, 0);
+    let d = progress * total;
+    for (let i = 0; i < lengths.length; i++) {
+      if (d <= lengths[i]) {
         const a = path[i], b = path[i + 1];
-        if (Math.abs(b.x - a.x) > 0.02) return b.x < a.x;
-        return false;
+        return Math.abs(b.x - a.x) > 0.02 ? b.x < a.x : false;
       }
-      d -= len[i];
+      d -= lengths[i];
     }
     return false;
   };
