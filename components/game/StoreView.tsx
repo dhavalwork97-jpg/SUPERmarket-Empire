@@ -40,20 +40,46 @@ export default function StoreView() {
   for (const k in queues) queues[k].sort((a, b) => (a.phase === "CHECKOUT" ? -1 : 0) - (b.phase === "CHECKOUT" ? -1 : 0));
   const active = checkouts.filter((k) => k.level > 0);
   const lanePos = (id: string, i: number): P => { const k = checkouts.find((z) => z.id === id)!; return { x: k.x + (i % 2 ? -0.18 : 0.18), y: Math.max(-0.2, k.y - 0.55 - i * 0.3) }; };
-  /** Where a customer is, in tile units, derived only from their simulation state. */
+  /** Visual path reconstruction. It mirrors the simulation route without changing simulation state. */
+  const shoppingPath = (c: Customer): P[] => {
+    const stops = c.plan.map((id) => { const p = pos2(id); return { x: p.x, y: p.y + 0.4 }; });
+    const last = stops[stops.length - 1] ?? E;
+    const dest = active.slice().sort((a, b) =>
+      Math.abs(a.x - last.x) + Math.abs(a.y - last.y) - (Math.abs(b.x - last.x) + Math.abs(b.y - last.y))
+    )[0];
+    return [E, ...stops, ...(dest ? [{ x: dest.x, y: dest.y - 0.6 }] : [])];
+  };
   const place = (c: Customer): P => {
     if (c.phase === "ENTERING") return { x: E.x, y: E.y + 0.55 * c.t };
     if (c.phase === "SHOPPING") {
-      const stops = c.plan.map((id) => { const p = pos2(id); return { x: p.x, y: p.y + 0.4 }; });
-      const last = stops[stops.length - 1] ?? E, dest = active.slice().sort((a, b) => Math.abs(a.x - last.x) + Math.abs(a.y - last.y) - (Math.abs(b.x - last.x) + Math.abs(b.y - last.y)))[0];
-      const path = [E, ...stops, ...(dest ? [{ x: dest.x, y: dest.y - 0.6 }] : [])];
-      const len = path.slice(1).map((p, i) => Math.abs(p.x - path[i].x) + Math.abs(p.y - path[i].y) || 0.01), total = len.reduce((a, b) => a + b, 0);
+      const path = shoppingPath(c);
+      const len = path.slice(1).map((p, i) => Math.abs(p.x - path[i].x) + Math.abs(p.y - path[i].y) || 0.01);
+      const total = len.reduce((a, b) => a + b, 0);
       let d = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0))) * total;
       for (let i = 0; i < len.length; i++) { if (d <= len[i]) return lerp(path[i], path[i + 1], d / len[i]); d -= len[i]; }
       return path[path.length - 1];
     }
     if (c.phase === "LEAVING") return lerp(c.at === "E" ? { x: 1, y: E.y } : (() => { const p = pos2(c.at); return { x: p.x, y: p.y + 0.4 }; })(), { x: E.x, y: E.y + 0.5 }, 1 - Math.max(0, c.t));
     return c.co && queues[c.co] ? lanePos(c.co, Math.max(0, queues[c.co].indexOf(c))) : E;
+  };
+  /** Determine facing from the actual current route segment instead of the first planned aisle. */
+  const facingLeftFor = (c: Customer, p: P) => {
+    if (c.phase === "ENTERING") return false;
+    if (c.phase === "LEAVING") return p.x > E.x;
+    if (c.phase !== "SHOPPING") return false;
+    const path = shoppingPath(c);
+    const len = path.slice(1).map((q, i) => Math.abs(q.x - path[i].x) + Math.abs(q.y - path[i].y) || 0.01);
+    const total = len.reduce((a, b) => a + b, 0);
+    let d = Math.min(1, Math.max(0, 1 - c.t / Math.max(0.1, c.t0))) * total;
+    for (let i = 0; i < len.length; i++) {
+      if (d <= len[i]) {
+        const a = path[i], b = path[i + 1];
+        if (Math.abs(b.x - a.x) > 0.02) return b.x < a.x;
+        return false;
+      }
+      d -= len[i];
+    }
+    return false;
   };
   const css = (p: P): React.CSSProperties => ({ left: `${((p.x + 0.5) / cols) * 100}%`, top: `${((p.y + 0.5) / rows) * 100}%` });
   const click = (x: number, y: number) => {
@@ -106,7 +132,7 @@ export default function StoreView() {
         const entering = c.phase === "ENTERING";
         const leaving = c.phase === "LEAVING";
         const queueing = c.phase === "QUEUING";
-        const facingLeft = c.phase === "SHOPPING" ? (() => { const target = c.plan.find((id) => pos2(id).y >= 0); const q = target ? pos2(target) : E; return q.x < p.x; })() : c.phase === "LEAVING" ? p.x > E.x : false;
+        const facingLeft = facingLeftFor(c, p);
         const faceClass = facingLeft ? "face-left" : "";
         return sprite(`u${c.id}`, src, p, 0.78 * def.scale, `cust ${walking ? "walking" : "idle"} ${faceClass} ${browsing ? "browsing" : ""} ${checkoutAction ? "shopping-checkout" : ""} ${queueing ? "queueing" : ""} ${c.phase === "ENTERING" ? "fadein" : ""} ${c.mood === "🦹" ? "thief" : ""} ${cart ? "has-cart" : ""}`, { filter: def.filter, opacity: c.phase === "LEAVING" ? Math.max(0.25, c.t) : 1, zIndex: 2 + Math.round(p.y * 10), animationDelay: `${-hash(c.id * 17) * 0.55}s` },
           <>{b && c.phase !== "SHOPPING" && <Icon n={b} size={13} className="bubble" />}{tag && <i className="ktag">{tag}</i>}{browsing && <span className="browse-ring" />}{browsing && <span className="pick-bubble">PICK</span>}{checkoutAction && <span className="checkout-bubble">PAY</span>}{leaving && <span className="leave-arrow">›</span>}{entering && <span className="enter-arrow">↓</span>}{cart && <span className="cart-prop"><i /></span>}</>); })}
