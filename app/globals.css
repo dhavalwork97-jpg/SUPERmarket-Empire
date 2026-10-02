@@ -122,3 +122,24 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 @keyframes walkBob{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}25%{transform:translateY(-1px) rotate(-1.2deg) scale(1.012)}50%{transform:translateY(-3px) rotate(.8deg) scale(1.025)}75%{transform:translateY(-1px) rotate(-.8deg) scale(1.012)}}
 @keyframes staffWalk{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-2px) rotate(1.2deg)}}
 @media(max-width:600px){.store-stockroom{display:none}.wall-sign{letter-spacing:.7px}.store-entry-mat{width:15%}.store-checkout-zone{height:17%}}
+
+
+/* ===== Phase 1B: physical fixture layer ===== */
+.store-fixtures{position:absolute;inset:7% 0 0;z-index:2;pointer-events:none;overflow:hidden}
+.fixture-aisle{position:absolute;width:clamp(44px,8.6%,92px);height:clamp(34px,7.6%,72px);transform:translate(-50%,-50%);filter:drop-shadow(0 8px 7px rgba(15,23,42,.18))}
+.fixture-shadow{position:absolute;left:-8%;right:-8%;bottom:0;height:32%;border-radius:50%;background:rgba(15,23,42,.25);filter:blur(4px)}
+.fixture-plinth{position:absolute;left:4%;right:4%;bottom:7%;height:28%;border-radius:4px 4px 7px 7px;background:linear-gradient(180deg,#64748b,#334155);box-shadow:inset 0 2px rgba(255,255,255,.3),0 2px 3px rgba(15,23,42,.28)}
+.fixture-shelf{position:absolute;left:10%;right:10%;top:8%;height:62%;border-radius:5px;background:linear-gradient(180deg,#f8fafc 0 9%,#cbd5e1 10% 17%,#94a3b8 18% 20%,#e2e8f0 21% 49%,#94a3b8 50% 53%,#e2e8f0 54% 84%,#64748b 85%);border:1px solid rgba(51,65,85,.5);box-shadow:inset 0 0 0 2px rgba(255,255,255,.22)}
+.fixture-shelf i{position:absolute;left:9%;right:9%;height:2px;background:#64748b;opacity:.65}.fixture-shelf i:nth-child(1){top:27%}.fixture-shelf i:nth-child(2){top:51%}.fixture-shelf i:nth-child(3){top:74%}
+.fixture-label{position:absolute;left:14%;right:14%;bottom:12%;font-size:clamp(4px,.48vw,7px);line-height:1;text-align:center;color:#f8fafc;font-weight:900;letter-spacing:.5px;opacity:.9}
+.fixture-produce .fixture-shelf{background:linear-gradient(180deg,#b7e4b5,#79b879 28%,#4f8f59 29% 35%,#d9e7d5 36% 65%,#8abf82 66% 72%,#dbead8 73%)}
+.fixture-bakery .fixture-shelf{background:linear-gradient(180deg,#f6d7a7,#d49a58 28%,#a86e37 29% 35%,#f4dfbe 36% 65%,#c58a4e 66% 72%,#f4e4ca 73%)}
+.fixture-electronics .fixture-shelf{background:linear-gradient(180deg,#c7d2fe,#818cf8 28%,#4f46e5 29% 35%,#e0e7ff 36% 65%,#818cf8 66% 72%,#dbeafe 73%)}
+.fixture-refrigerated .fixture-shelf,.fixture-freezer .fixture-shelf{background:linear-gradient(180deg,#dff7ff,#8ed0df 30%,#4d9fb1 31% 37%,#edfaff 38% 67%,#8ccbd8 68% 74%,#e9f9fc 75%)}
+.fixture-deli .fixture-shelf{background:linear-gradient(180deg,#ffe3e8,#ee9aaa 30%,#c75c75 31% 37%,#fff1f3 38% 67%,#e58b9d 68% 74%,#ffe8ed 75%)}
+.fixture-checkout{position:absolute;width:clamp(48px,9%,96px);height:clamp(28px,5.5%,54px);transform:translate(-50%,-50%);filter:drop-shadow(0 6px 5px rgba(15,23,42,.2))}
+.checkout-base{position:absolute;inset:17% 3% 7%;border-radius:5px;background:linear-gradient(180deg,#475569,#1e293b);box-shadow:inset 0 2px rgba(255,255,255,.28)}
+.checkout-belt{position:absolute;left:10%;right:25%;top:5%;height:34%;border-radius:4px;background:linear-gradient(180deg,#334155,#0f172a);box-shadow:inset 0 1px rgba(255,255,255,.25)}
+.fixture-checkout:nth-of-type(2n) .checkout-base{background:linear-gradient(180deg,#52606f,#263442)}
+.build-mode .store-fixtures{opacity:.78}
+@media(max-width:600px){.fixture-aisle{width:clamp(38px,10%,64px);height:clamp(30px,8%,54px)}.fixture-label{display:none}.fixture-checkout{width:clamp(42px,11%,66px)}}
