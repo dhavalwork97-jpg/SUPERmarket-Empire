@@ -165,3 +165,23 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 @keyframes browseRing{0%{transform:translate(-50%,-50%) scale(.7);opacity:.7}100%{transform:translate(-50%,-50%) scale(1.08);opacity:0}}
 @keyframes checkoutGlow{0%,100%{transform:scaleX(.8);opacity:.15}50%{transform:scaleX(1);opacity:.45}}
 @media(prefers-reduced-motion:reduce){.actor.cust.browsing>img:first-child,.actor.cust.queueing>img:first-child,.actor.cust.shopping-checkout>img:first-child,.browse-ring,.cart-prop,.actor.cust.browsing:before,.actor.cust.shopping-checkout:after{animation:none!important}}
+
+
+/* ===== Phase 3/4: living-store and tycoon feedback ===== */
+.actor.cust{z-index:7}
+.actor.cust .pick-bubble,.actor.cust .checkout-bubble,.actor.cust .leave-arrow,.actor.cust .enter-arrow{position:absolute;pointer-events:none;font-size:clamp(5px,.55vw,8px);font-weight:900;letter-spacing:.4px;white-space:nowrap}
+.pick-bubble{left:50%;top:-5%;transform:translate(-50%,-50%);background:#16a34a;color:#fff;border-radius:999px;padding:2px 5px;box-shadow:0 2px 4px rgba(15,23,42,.25);animation:actionPop 1.25s ease-in-out infinite}
+.checkout-bubble{left:50%;top:-7%;transform:translate(-50%,-50%);background:#2563eb;color:#fff;border-radius:999px;padding:2px 5px;box-shadow:0 2px 4px rgba(15,23,42,.25);animation:actionPop .8s ease-in-out infinite}
+.leave-arrow{right:-12%;top:38%;color:#ef4444;font-size:1.1em!important;animation:leaveNudge .55s ease-in-out infinite}
+.enter-arrow{left:50%;bottom:-18%;color:#16a34a;font-size:1.1em!important;animation:enterNudge .55s ease-in-out infinite}
+@keyframes actionPop{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(.92)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}} 
+@keyframes leaveNudge{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(4px);opacity:1}}
+@keyframes enterNudge{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(3px);opacity:1}}
+.actor.staff{filter:drop-shadow(0 3px 3px rgba(15,23,42,.25))}
+.actor.staff.walking:after{content:"";position:absolute;left:16%;right:16%;bottom:-2px;height:8%;border-radius:50%;background:rgba(15,23,42,.18);filter:blur(2px)}
+.fixture-aisle{z-index:1}
+.fixture-checkout{z-index:1}
+.store-floor-surface{background-image:linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px),linear-gradient(rgba(82,102,105,.075) 1px,transparent 1px),linear-gradient(135deg,rgba(255,255,255,.2),transparent 38%,rgba(62,82,86,.08));}
+.store-checkout-zone{background:linear-gradient(180deg,transparent 0%,rgba(226,232,240,.22) 65%,rgba(203,213,225,.42) 100%)}
+.store-entry-mat{box-shadow:0 4px 8px rgba(15,23,42,.28),inset 0 1px rgba(255,255,255,.3)}
+@media(prefers-reduced-motion:reduce){.pick-bubble,.checkout-bubble,.leave-arrow,.enter-arrow{animation:none!important}}
