@@ -14,7 +14,6 @@ export default function StoreEnvironment({ cols, rows, aisles, checkouts }: Prop
       <div className="ceiling-lights">{Array.from({ length: lightCount }, (_, i) => <i key={i} style={{ left: ((i + 0.5) / lightCount) * 100 + "%" }} />)}</div>
     </div>
     <div className="store-floor-surface" />
-    <div className="store-aisle-shadow-layer">{aisles.map(a => <span key={a.id} className="aisle-footprint" style={{ left: pctX(a.x, cols) + "%", top: pctY(a.y, rows) + "%", width: Math.max(8, 88 / cols) + "%", height: Math.max(8, 88 / rows) + "%" }} />)}</div>
     <div className="store-checkout-zone">
       <span className="checkout-zone-label">CHECKOUT</span>
       {checkouts.filter(c => c.level > 0).map(c => <i key={c.id} style={{ left: pctX(c.x, cols) + "%", top: pctY(c.y, rows) + "%" }} />)}
