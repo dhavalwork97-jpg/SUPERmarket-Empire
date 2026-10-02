@@ -4,11 +4,11 @@ import { useGame } from "@/store/store";
 import { AISLE_DEFS, AISLE_ORDER, TIERS } from "@/lib/constants";
 import { placeCost, analyzeLayout } from "@/lib/simulation";
 import { formatMoney } from "@/lib/formatting";
-import { aisleSprite, checkoutSprite, char, floorTile, floorDirty, entranceDoors, fxImg, asset, icon } from "@/lib/assets";
+import { DECOR, aisleSprite, checkoutSprite, char, floorTile, floorDirty, entranceDoors, fxImg, asset, icon } from "@/lib/assets";
 import { cashierByLane } from "@/lib/staff";
 import { CUSTOMERS } from "@/lib/customers";
 import { AisleType, Customer, ItemKind } from "@/types/game";
-import { Icon } from "./Asset";
+import { Icon, DecorImg } from "./Asset";
 const hash = (n: number) => ((Math.abs(n) * 2654435761) % 1000) / 1000;
 type Sel = { mode: "new"; kind: ItemKind; type?: AisleType } | { mode: "move" | "item"; kind: ItemKind; id: string } | null;
 type P = { x: number; y: number };
@@ -18,7 +18,7 @@ const KIND_TAG: Record<string, string> = { vip: "★", impatient: "⏱", budget:
 
 export default function StoreView() {
   const s = useGame(); const { customers, aisles, checkouts, restockers, floats, tier, cash, staff, clock, cleanliness, fx } = s;
-  const [sel, setSel] = useState<Sel>(null);
+  const [sel, setSel] = useState<Sel>(null); const [decorStyle, setDecorStyle] = useState<string>(DECOR[0].id);
   const { cols, rows } = TIERS[tier]; const L = analyzeLayout(s);
   const E: P = { x: 0, y: rows - 1 };
   const th = 100 / rows; // one tile's height in % of the floor; sprites are sized from this so they scale with the screen
@@ -31,7 +31,7 @@ export default function StoreView() {
   checkouts.forEach((k) => { const q = customers.filter((c) => c.co === k.id).length, blocked = !isFinite(L.dist.E?.[k.id]);
     cell.set(`${k.x},${k.y}`, { kind: "checkout", id: k.id, lvl: k.level, bar: k.currentCustomerProgress, badge: blocked ? "⛔" : undefined,
       item: <><img className="spr" src={checkoutSprite(k.level)} alt="Checkout" draggable={false} /><span className={`qtag ${q >= k.queueCapacity ? "full" : ""}`}>{q}/{k.queueCapacity}</span></> }); });
-  s.decors.forEach((d) => cell.set(`${d.x},${d.y}`, { kind: "decor", id: d.id, lvl: 0, item: <span className="emo">🪴</span> })); // no decor art exists in public/assets yet
+  s.decors.forEach((d) => cell.set(`${d.x},${d.y}`, { kind: "decor", id: d.id, lvl: 0, item: <DecorImg id={d.style} /> }));
   restockers.forEach((r) => cell.set(`${r.x},${r.y}`, { kind: "restocker", id: r.id, lvl: r.level, item: <span className="desk-mark" /> }));
   const pos2 = (id: string): P => { const i = [...aisles, ...checkouts].find((z) => z.id === id); return i ? { x: i.x, y: i.y } : E; };
   const queues: Record<string, Customer[]> = Object.fromEntries(checkouts.map((k) => [k.id, [] as Customer[]]));
@@ -58,13 +58,13 @@ export default function StoreView() {
   const click = (x: number, y: number) => {
     const it = cell.get(`${x},${y}`);
     if (it) { setSel({ mode: "item", kind: it.kind, id: it.id }); return; }
-    if (sel?.mode === "new") s.buyItem(sel.kind, sel.type, x, y);
+    if (sel?.mode === "new") s.buyItem(sel.kind, sel.type, x, y, decorStyle);
     else if (sel?.mode === "move") { s.moveItem(sel.kind, sel.id, x, y); setSel(null); }
   };
   const thumb = (src: string) => <img src={src} alt="" className="bthumb" draggable={false} />;
   const builds: { label: string; thumb: React.ReactNode; kind: ItemKind; type?: AisleType }[] = [
     ...AISLE_ORDER.slice(0, TIERS[tier].aisles).map((t) => ({ label: AISLE_DEFS[t].name, thumb: thumb(aisleSprite(t, 1, 1)), kind: "aisle" as const, type: t })),
-    { label: "Checkout", thumb: thumb(checkoutSprite(1)), kind: "checkout" }, { label: "Restocker", thumb: thumb(char("restocker")), kind: "restocker" }, { label: "Decor", thumb: <span className="emo">🪴</span>, kind: "decor" }];
+    { label: "Checkout", thumb: thumb(checkoutSprite(1)), kind: "checkout" }, { label: "Restocker", thumb: thumb(char("restocker")), kind: "restocker" }, { label: "Decor", thumb: <span className="bthumb"><DecorImg id={decorStyle} className="bthumb" /></span>, kind: "decor" }];
   const chosen = sel?.mode === "item" || sel?.mode === "move" ? ((s as any)[{ aisle: "aisles", checkout: "checkouts", restocker: "restockers", decor: "decors" }[sel.kind]] as any[]).find((i) => i.id === sel.id) : null;
   const refund = chosen && sel ? Math.floor(0.5 * placeCost(s, sel.kind, chosen.type, -1)) : 0;
   const cleaners = staff.filter((x) => x.role === "cleaner"), guards = staff.filter((x) => x.role === "security"), mgr = staff.find((x) => x.role === "manager");
@@ -75,6 +75,7 @@ export default function StoreView() {
     <div className="shopsign"><img src={TIERS[tier].img} alt="" className="signimg" /><b>{TIERS[tier].name}</b><span className="open"><i /> OPEN</span></div>
     <div className="buildbar">{builds.map((b) => { const c = placeCost(s, b.kind, b.type), on = sel?.mode === "new" && sel.kind === b.kind && sel.type === b.type;
       return <button key={b.label} disabled={cash < c} className={`small bbtn ${on ? "on" : ""}`} onClick={() => setSel(on ? null : { mode: "new", ...b })}>{b.thumb}<span>{b.label}<em>{formatMoney(c)}</em></span></button>; })}</div>
+    {sel?.mode === "new" && sel.kind === "decor" && <div className="decorbar">{DECOR.map((d) => <button key={d.id} title={d.name} className={`small dchip ${decorStyle === d.id ? "on" : ""}`} onClick={() => setDecorStyle(d.id)}><DecorImg id={d.id} className="bthumb" /><span>{d.name}</span></button>)}<span className="lbl dim">Each decor within 2 tiles of a shelf adds +10% to its sales (max 5).</span></div>}
     <div className="hint">{sel?.mode === "new" ? "Tap an empty tile to place it (tap again to buy more)." : sel?.mode === "move" ? "Tap an empty tile to move it there." : sel?.mode === "item" && chosen ? "" : "Pick something to build, or tap an item to move or sell it. Customers enter at the doors (bottom-left). ⛔ = customers cannot reach it."}
       {sel?.mode === "item" && chosen && <>Selected {sel.kind} #{sel.id.slice(1)} <button className="small" onClick={() => setSel({ ...sel, mode: "move" })}>Move</button> <button className="small" onClick={() => { s.sellItem(sel.kind, sel.id); setSel(null); }}>Sell +{formatMoney(refund)}</button> <button className="small" onClick={() => setSel(null)}>Cancel</button></>}</div>
     <div className="floorscroll"><div className="floor" style={{ "--cols": cols, aspectRatio: `${cols}/${rows}`, "--tile": `url(${floorTile})`, "--ts": `${100 / cols}% ${100 / rows}%` } as React.CSSProperties}>

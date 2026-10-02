@@ -3,6 +3,7 @@ import { GameState, SimData, AisleState, CheckoutState, RestockerState, ItemKind
 import { MAX_OFFLINE, START_CASH, AISLE_DEFS, AISLE_ORDER, TIERS, DELIVERY_TIME } from "@/lib/constants";
 import { calculateOfflineEarnings } from "@/lib/economy";
 import { simulate, deriveAisle, deriveCheckout, deriveRestocker, placeCost, orderCost, defaultSupply, defaultExtras } from "@/lib/simulation";
+import { DECOR } from "@/lib/assets";
 import { STAFF_ROLES, canHire, deriveStaff, hireCost, rederiveAll, STAFF_DEFS } from "@/lib/staff";
 import { ACHIEVEMENTS, levelOf, objectiveAt } from "@/lib/progress";
 import { EVENTS } from "@/lib/events";
@@ -44,13 +45,13 @@ export const useGame = create<GameState>((set, get) => {
     upgradeAisle: (id) => buy("aisles", id, (x: AisleState) => `${AISLE_DEFS[x.type].name} #${x.id.slice(1)}`),
     upgradeCheckout: (id) => buy("checkouts", id, (x: CheckoutState) => `Checkout #${x.id.slice(1)}`),
     upgradeRestocker: (id) => buy("restockers", id, (x: RestockerState) => `Restocker #${x.id.slice(1)}`),
-    buyItem: (kind, type, x, y) => {
+    buyItem: (kind, type, x, y, style) => {
       const s = get(); if (!inGrid(s, x, y) || taken(s, x, y)) return;
       if (kind === "aisle" && (!type || !AISLE_ORDER.slice(0, TIERS[s.tier].aisles).includes(type))) return;
       const cost = placeCost(s, kind, type); if (s.cash < cost) return;
       if (kind === "aisle") set({ aisles: [...s.aisles, mkAisle(seq(s.aisles, "a"), type!, x, y)] });
       else if (kind === "checkout") set({ checkouts: [...s.checkouts, mkCheckout(seq(s.checkouts, "c"), x, y)] });
-      else if (kind === "decor") set({ decors: [...s.decors, { id: seq(s.decors, "d"), x, y }] });
+      else if (kind === "decor") set({ decors: [...s.decors, { id: seq(s.decors, "d"), x, y, style: DECOR.some((d) => d.id === style) ? style : DECOR[0].id }] });
       else { set({ restockers: [...s.restockers, mkRestocker(seq(s.restockers, "r"), x, y, null)] }); }
       set({ cash: s.cash - cost, lastUpgrade: "Built!" }); addXp(Math.max(3, Math.round(Math.sqrt(cost)))); say("built", kind === "aisle" ? `New ${AISLE_DEFS[type!].name} aisle built!` : kind === "checkout" ? "New checkout lane opened!" : kind === "restocker" ? "Restocker hired!" : "Decor placed"); get().saveGame();
     },
@@ -103,7 +104,7 @@ export const useGame = create<GameState>((set, get) => {
       if (!checkouts.length) { checkouts = f.checkouts; used.add("2,3"); }
       const restockers = lst(o.restockers).flatMap((m) => { const p = take(m, "r"); if (!p) return [];
         return [mkRestocker(m.id, p.x, p.y, aisles.some((a) => a.id === m.assignedAisleId) ? m.assignedAisleId : null, Math.floor(num(m.level, 1, 1, 9999)))]; });
-      const decors = lst(o.decors).flatMap((m) => { const p = take(m, "d"); return p ? [{ id: m.id as string, x: p.x, y: p.y }] : []; });
+      const decors = lst(o.decors).flatMap((m) => { const p = take(m, "d"); return p ? [{ id: m.id as string, x: p.x, y: p.y, style: DECOR.some((d) => d.id === m.style) ? (m.style as string) : DECOR[0].id }] : []; });
       const eps = num(o.earningsPerSecond, 0, 0, 1e15), seconds = Math.min(MAX_OFFLINE, Math.max(0, (Date.now() - num(o.lastSavedTimestamp, Date.now(), 0, Date.now())) / 1000));
       const earnings = calculateOfflineEarnings(eps, seconds, MAX_OFFLINE);
       const def = defaultSupply(), storeroom = { ...def.storeroom }, standing = { ...def.standing };

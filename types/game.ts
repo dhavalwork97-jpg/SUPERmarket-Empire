@@ -5,7 +5,7 @@ export interface RestockerState { id: string; level: number; restockAmount: numb
 export type ItemKind = "aisle" | "checkout" | "restocker" | "decor";
 export interface Order { id: number; type: AisleType; qty: number; eta: number; cost: number; }
 export interface Standing { on: boolean; below: number; qty: number; }
-export interface DecorState { id: string; x: number; y: number; }
+export interface DecorState { id: string; x: number; y: number; style?: string; }
 export type CustomerPhase = "ENTERING" | "SHOPPING" | "QUEUING" | "CHECKOUT" | "LEAVING";
 export type CustomerKind = "normal" | "budget" | "impulse" | "vip" | "impatient";
 /** t = seconds left in the current phase, t0 = length of the SHOPPING trip, at = where a LEAVING customer walks away from ("E" = entrance). */
@@ -28,7 +28,7 @@ export interface GameState extends SimData {
   offline: { seconds: number; earnings: number } | null; lastUpgrade: string | null;
   hireStaff: (role: StaffRole) => void; upgradeStaff: (id: string) => void; claimObjective: () => void; toast: (text: string, kind?: FxKind) => void;
   upgradeAisle: (id: string) => void; upgradeCheckout: (id: string) => void; upgradeRestocker: (id: string) => void;
-  buyItem: (kind: ItemKind, type: AisleType | undefined, x: number, y: number) => void; moveItem: (kind: ItemKind, id: string, x: number, y: number) => void; sellItem: (kind: ItemKind, id: string) => void;
+  buyItem: (kind: ItemKind, type: AisleType | undefined, x: number, y: number, style?: string) => void; moveItem: (kind: ItemKind, id: string, x: number, y: number) => void; sellItem: (kind: ItemKind, id: string) => void;
   assignRestocker: (id: string, aisleId: string) => void;
   simulateTick: (dt: number) => void; saveGame: () => void; loadGame: () => void; resetGame: () => void;
   collectOffline: () => void; expandStore: () => void; orderStock: (type: AisleType, qty: number) => void; setStanding: (type: AisleType, patch: Partial<Standing>) => void; setSpeed: (n: number) => void; debug: (cmd: string) => void;

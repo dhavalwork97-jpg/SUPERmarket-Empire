@@ -47,5 +47,7 @@ t("new fields survive save → load", () => {
   useGame.setState({ staff: [], xp: 0, achievements: [], objectiveStep: 0, thefts: 0 }); g.loadGame(); const r = useGame.getState();
   assert.equal(r.staff.length, 2); assert.equal(r.xp, saved.xp); assert.equal(r.objectiveStep, saved.objectiveStep); });
 t("expansion needs both cash and level", () => { useGame.setState({ cash: 1e9, xp: 0, tier: 0 }); useGame.getState().expandStore(); assert.equal(useGame.getState().tier, 0); useGame.setState({ xp: xpForLevel(4) }); useGame.getState().expandStore(); assert.equal(useGame.getState().tier, 1); });
+t("decor styles are placed, saved and reloaded", () => { useGame.getState().resetGame(); useGame.setState({ cash: 1e6 }); useGame.getState().buyItem("decor", undefined, 5, 0, "bench"); useGame.getState().buyItem("decor", undefined, 4, 0, "nonsense");
+  assert.equal(useGame.getState().decors[0].style, "bench"); assert.equal(useGame.getState().decors[1].style, "plant"); useGame.getState().saveGame(); useGame.setState({ decors: [] }); useGame.getState().loadGame(); assert.deepEqual(useGame.getState().decors.map((d) => d.style), ["bench", "plant"]); });
 t("reset wipes new fields too", () => { useGame.getState().resetGame(); const g = useGame.getState(); assert.equal(g.xp, 0); assert.equal(g.staff.length, 0); assert.equal(g.tier, 0); });
 console.log(`\n${n} tests passed`); process.exit(0);

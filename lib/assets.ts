@@ -14,3 +14,11 @@ export function aisleSprite(type: AisleType, level: number, stockPct: number) {
 }
 export const checkoutSprite = (level: number) => asset("checkouts", level >= 10 ? "checkout-premium" : level >= 5 ? "checkout-express" : "checkout-basic");
 export const char = (n: "shopper" | "shopper-3" | "shopper-angry" | "cashier" | "restocker" | "cleaner" | "guard" | "manager") => asset("characters", `char-${n}`);
+
+/** Decor styles. Files: public/assets/decor/decor-<id>.png (originals) → public/assets/web/decor/decor-<id>.webp (run `npm run assets`). Add a row + a PNG to add a style. */
+export const DECOR = [
+  { id: "plant", name: "Plant", emoji: "🪴" }, { id: "plant-tall", name: "Tall plant", emoji: "🌿" }, { id: "bench", name: "Bench", emoji: "🪑" }, { id: "vending", name: "Vending", emoji: "🥤" },
+  { id: "sign", name: "Sale sign", emoji: "🏷️" }, { id: "baskets", name: "Baskets", emoji: "🧺" }, { id: "candy", name: "Candy", emoji: "🍬" },
+];
+export const decorSprite = (id?: string) => asset("decor", `decor-${DECOR.some((d) => d.id === id) ? id : DECOR[0].id}`);
+export const decorEmoji = (id?: string) => (DECOR.find((d) => d.id === id) ?? DECOR[0]).emoji;

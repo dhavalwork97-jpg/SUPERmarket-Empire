@@ -4,7 +4,7 @@ Originals are left untouched. Each image is trimmed to its visible bounds and do
 import glob, os
 from PIL import Image
 ROOT = os.path.join(os.path.dirname(__file__), "..", "public", "assets")
-MAX = {"aisles": 320, "characters": 256, "checkouts": 320, "icons": 128, "effects": 320, "branding": 512, "environment": 512}
+MAX = {"aisles": 320, "characters": 256, "checkouts": 320, "icons": 128, "effects": 320, "branding": 512, "environment": 512, "decor": 256}
 KEEP_FULL = {"floor-tile", "floor-tile-dirty"}  # floor tiles are not trimmed (they must tile edge to edge)
 for src in sorted(glob.glob(os.path.join(ROOT, "*", "*.png"))):
     folder = os.path.basename(os.path.dirname(src)); name = os.path.basename(src).replace(".png.png", ".png")[:-4]
