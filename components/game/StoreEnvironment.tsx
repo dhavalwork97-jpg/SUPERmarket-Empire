@@ -9,6 +9,7 @@ const pctY = (y: number, rows: number) => ((y + 0.5) / rows) * 100;
 export default function StoreEnvironment({ cols, rows, aisles, checkouts }: Props) {
   const lightCount = Math.max(4, Math.ceil(cols / 2));
   return <div className="store-environment" aria-hidden="true">
+    <div className="store-bg-art" />
     <div className="store-back-wall">
       <div className="wall-sign">FRESH • QUALITY • EVERY DAY</div>
       <div className="ceiling-lights">{Array.from({ length: lightCount }, (_, i) => <i key={i} style={{ left: ((i + 0.5) / lightCount) * 100 + "%" }} />)}</div>
