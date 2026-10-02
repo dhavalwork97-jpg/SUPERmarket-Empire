@@ -1,6 +1,16 @@
 import { AISLE_DEFS, CHECKOUT, RESTOCK, AISLE_MULT, BASE_DEMAND, MAX_CUSTOMERS, TIERS, AISLE_ORDER, DELIVERY_TIME } from "./constants";
 import * as E from "./economy";
-import { AisleState, Bottleneck, CheckoutState, Customer, RestockerState, SimData } from "@/types/game";
+import { AisleState, Bottleneck, CheckoutState, Customer, Fx, FxKind, RestockerState, SimData } from "@/types/game";
+import { CUSTOMERS, rollKind } from "./customers";
+import { EVENTS, rollEvent, DAY_SECONDS } from "./events";
+import { cashierByLane, managerBonus, restockerWage, wagePerSecond, rederiveAll } from "./staff";
+import { levelOf, xpForSale } from "./progress";
+
+/** Fields added after the first save format. Used by new games, the loader (for old saves) and the balance bot. */
+export const defaultExtras = () => ({ xp: 0, staff: [] as SimData["staff"], lifetimeExpenses: 0, satisfaction: 0.8, cleanliness: 1, clock: 0, event: null as SimData["event"], objectiveStep: 0,
+  achievements: [] as string[], thefts: 0, theftsPrevented: 0, gems: 0, cosmetics: [] as string[], adsRemoved: false, revPerSec: 0, expPerSec: 0, recentThief: 0, fx: [] as Fx[] });
+export const THEFT_CHANCE = 0.02;
+export const demandMult = (s: SimData) => (0.85 + 0.15 * s.cleanliness) * (0.85 + 0.15 * s.satisfaction) * (s.event ? EVENTS[s.event.id]?.demand ?? 1 : 1);
 
 export const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 export const aisleCost = (a: AisleState) => E.getUpgradeCost(AISLE_DEFS[a.type].cost, AISLE_MULT, a.level);
@@ -56,10 +66,20 @@ export function simulate(s: SimData, dt: number): SimData {
   const storeroom = { ...s.storeroom };
   let orders = s.orders.map((o) => ({ ...o, eta: o.eta - dt }));
   const floats = s.floats.map((f) => ({ ...f, age: f.age + dt })).filter((f) => f.age < 1.5);
+  const fx: Fx[] = s.fx.map((f) => ({ ...f, age: f.age + dt })).filter((f) => f.age < 4);
+  const say = (kind: FxKind, text: string) => { if (fx.length < 8 && !fx.some((f) => f.text === text)) fx.push({ id: nextId++, kind, text, age: 0 }); };
+  let { xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event } = s, happy = 0, angry = 0, recentThief = Math.max(0, s.recentThief - dt);
+  const staff = s.staff.map((x) => ({ ...x })), lanes = cashierByLane(staff, checkouts), mb = managerBonus(staff), ev = event ? EVENTS[event.id] : undefined;
+  const secStop = Math.min(0.85, staff.filter((x) => x.role === "security").reduce((n, x) => n + x.efficiency, 0));
+  const lvlBefore = levelOf(xp);
+  clock += dt;
+  if (Math.floor(clock / DAY_SECONDS) > Math.floor(s.clock / DAY_SECONDS)) { event = rollEvent(); if (event) say("event", `${EVENTS[event.id].name}: ${EVENTS[event.id].blurb}`); }
+  else if (event) { event = { ...event, left: event.left - dt }; if (event.left <= 0) event = null; }
+  const leave = (c: Customer, at: string, mood: string) => { c.phase = "LEAVING"; c.t = 1; c.at = at; c.mood = mood; c.co = null; };
   const active = checkouts.filter((c) => c.level > 0);
 
-  spawnAcc += demandOf(s) * dt;
-  while (spawnAcc >= 1) { spawnAcc -= 1; if (customers.length < MAX_CUSTOMERS) customers.push({ id: nextId++, phase: "ENTERING", t: 1, wait: 0, basket: 0, co: null, mood: "🚶", plan: [] }); }
+  spawnAcc += demandOf(s) * demandMult({ ...s, event }) * dt;
+  while (spawnAcc >= 1) { spawnAcc -= 1; if (customers.length < MAX_CUSTOMERS) customers.push({ id: nextId++, phase: "ENTERING", t: 1, wait: 0, basket: 0, co: null, mood: "🚶", plan: [], kind: rollKind(s.tier, ev?.kinds), t0: 1, at: "E" }); }
 
   const tileTime = 0.5 * (1 + customers.length / 150); // crowds walk slower
   const qlen = (id: string) => customers.filter((c) => c.co === id && (c.phase === "QUEUING" || c.phase === "CHECKOUT")).length;
@@ -67,34 +87,45 @@ export function simulate(s: SimData, dt: number): SimData {
     if (c.phase === "ENTERING" || c.phase === "SHOPPING" || c.phase === "LEAVING") c.t -= dt;
     if (c.phase === "ENTERING" && c.t <= 0) {
       // plan the trip: reachable shelves only, nearest-neighbour order, then walk to a checkout
-      const picks = aisles.filter((a) => a.level > 0 && isFinite(L.dist.E[a.id]) && Math.random() < a.demandRate).sort(() => Math.random() - 0.5).slice(0, 2 + s.tier);
+      const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal, reach = aisles.filter((a) => a.level > 0 && isFinite(L.dist.E[a.id]));
+      const picks = reach.filter((a) => Math.random() < Math.min(1, a.demandRate * def.want(a))).sort(() => Math.random() - 0.5).slice(0, 2 + s.tier);
+      if (def.impulse && Math.random() < def.impulse) { const extra = reach.filter((a) => !picks.includes(a)); if (extra.length) picks.push(extra[Math.floor(Math.random() * extra.length)]); }
       const cks = active.filter((k) => isFinite(L.dist.E[k.id]));
       let at = "E", tiles = 0; const order: string[] = [];
       while (picks.length) { picks.sort((p, q) => L.dist[at][p.id] - L.dist[at][q.id]); const n = picks.shift()!; if (isFinite(L.dist[at][n.id])) { tiles += L.dist[at][n.id]; at = n.id; order.push(n.id); } }
       const back = Math.min(...cks.map((k) => L.dist[at][k.id]));
       const secs = (tiles + (isFinite(back) ? back : 0)) * tileTime + order.length * 1.0 + 1;
-      if (!cks.length || !isFinite(back) || secs > 40) { c.phase = "LEAVING"; c.t = 1; c.mood = "😡"; } // no route, or lost patience
-      else { c.phase = "SHOPPING"; c.plan = order; c.t = secs; c.mood = "🛒"; }
+      if (!cks.length || !isFinite(back) || secs > 40) { leave(c, "E", "😡"); angry++; } // no route, or lost patience
+      else { c.phase = "SHOPPING"; c.plan = order; c.t = secs; c.t0 = secs; c.mood = "🛒"; }
     } else if (c.phase === "SHOPPING" && c.t <= 0) {
-      let oos = false;
+      let oos = false; const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal;
       for (const id of c.plan) { const a = aisles.find((x) => x.id === id); if (!a) continue;
-        if (a.stock >= a.stockConsumptionRate) { a.stock -= a.stockConsumptionRate; c.basket += E.getAisleRevenue(a.baseRevenue, a.level) * (L.boost[id] ?? 1); cogs += a.stockConsumptionRate * unitCost(a.type); } else oos = true; }
+        if (a.stock >= a.stockConsumptionRate) { a.stock -= a.stockConsumptionRate; c.basket += E.getAisleRevenue(a.baseRevenue, a.level) * (L.boost[id] ?? 1) * def.basket * (ev?.revenue?.[a.type] ?? 1); cogs += a.stockConsumptionRate * unitCost(a.type); } else oos = true; }
       const last = L.dist[c.plan[c.plan.length - 1]] ? c.plan[c.plan.length - 1] : "E";
-      const open = active.filter((k) => qlen(k.id) < k.queueCapacity && isFinite(L.dist[last][k.id])).sort((x, y) => qlen(x.id) + L.dist[last][x.id] * 0.25 - (qlen(y.id) + L.dist[last][y.id] * 0.25))[0];
-      if (c.basket <= 0) { c.phase = "LEAVING"; c.t = 1; c.mood = oos ? "❗" : "😐"; }
-      else if (!open) { c.phase = "LEAVING"; c.t = 1; c.basket = 0; c.mood = "😡"; }
+      const open = active.filter((k) => qlen(k.id) < Math.min(k.queueCapacity, def.maxQueue) && isFinite(L.dist[last][k.id])).sort((x, y) => qlen(x.id) + L.dist[last][x.id] * 0.25 - (qlen(y.id) + L.dist[last][y.id] * 0.25))[0];
+      const spot = c.plan.length ? c.plan[c.plan.length - 1] : "E";
+      if (c.basket <= 0) { leave(c, spot, oos ? "❗" : "😐"); if (oos) angry++; }
+      else if (!open) { c.basket = 0; leave(c, spot, "😡"); angry++; }
+      else if (Math.random() < THEFT_CHANCE * (1 + s.tier * 0.5)) { // shoplifter: a guard may stop them, otherwise the basket walks out
+        recentThief = 3;
+        if (Math.random() < secStop) { theftsPrevented++; say("stopped", "Security stopped a shoplifter!"); c.basket = 0; leave(c, spot, "🛡️"); }
+        else { thefts++; say("theft", `Shoplifter got away with ${"$" + Math.round(c.basket)}`); c.basket = 0; leave(c, spot, "🦹"); }
+      }
       else { c.phase = "QUEUING"; c.co = open.id; c.mood = "💵"; }
-    } else if (c.phase === "QUEUING") { c.wait += dt; if (c.wait > 12) c.mood = "😡"; }
+    } else if (c.phase === "QUEUING") { c.wait += dt; if (c.wait > 12) c.mood = "😡";
+      const pat = (CUSTOMERS[c.kind] ?? CUSTOMERS.normal).patience; if (c.wait > pat) { const lane = c.co ?? "E"; c.basket = 0; leave(c, lane, "😡"); angry++; } }
   }
   for (const k of active) {
     let cur = customers.find((c) => c.co === k.id && c.phase === "CHECKOUT");
     if (!cur) { cur = customers.find((c) => c.co === k.id && c.phase === "QUEUING"); if (cur) { cur.phase = "CHECKOUT"; k.currentCustomerProgress = 0; } }
     if (!cur) { k.currentCustomerProgress = 0; continue; }
-    k.currentCustomerProgress += dt / k.processingTime;
+    const cashier = lanes[k.id], speed = cashier ? cashier.efficiency : 1;
+    k.currentCustomerProgress += (dt * speed) / k.processingTime;
     if (k.currentCustomerProgress >= 1) {
       cash += cur.basket; revenue += cur.basket; lifetimeRevenue += cur.basket; totalCustomersServed++; k.customersProcessed++;
       floats.push({ id: nextId++, amt: cur.basket, age: 0 });
-      cur.phase = "LEAVING"; cur.t = 1; cur.mood = "💚"; cur.co = null; cur.basket = 0; k.currentCustomerProgress = 0;
+      xp += xpForSale(cur.basket); happy++;
+      leave(cur, k.id, "💚"); cur.basket = 0; k.currentCustomerProgress = 0;
     }
   }
   customers = customers.filter((c) => c.phase !== "LEAVING" || c.t > 0);
@@ -113,12 +144,30 @@ export function simulate(s: SimData, dt: number): SimData {
   if (cash < 30 && orders.length === 0 && aisles.every((a) => a.stock <= 0) && AISLE_ORDER.every((t) => storeroom[t] <= 0)) storeroom.produce += 30; // safety net against a dead store
   for (const r of restockers) {
     if (r.level < 1) continue;
-    r.currentCooldown = Math.max(0, r.currentCooldown - dt);
+    r.currentCooldown = Math.max(0, r.currentCooldown - dt * mb); r.busy = Math.max(0, (r.busy ?? 0) - dt); r.salary = restockerWage(r.level, s.tier);
     const a = r.assignedAisleId ? aisles.find((x) => x.id === r.assignedAisleId) : aisles.filter((x) => x.level > 0 && x.stock < x.maxStock && storeroom[x.type] > 0).sort((p, q) => p.stock / p.maxStock - q.stock / q.maxStock)[0]; // null = Auto: emptiest shelf
-    if (r.currentCooldown <= 0 && a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0) { const n = Math.min(r.restockAmount, a.maxStock - a.stock, storeroom[a.type]); a.stock += n; storeroom[a.type] -= n; r.currentCooldown = r.cooldown; }
+    if (r.currentCooldown <= 0 && a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0) { const n = Math.min(Math.max(1, Math.round(r.restockAmount * AISLE_DEFS[a.type].restock)), a.maxStock - a.stock, storeroom[a.type]); a.stock += n; storeroom[a.type] -= n; r.currentCooldown = r.cooldown; r.busy = 2.4; r.target = a.id; }
+    const hasWork = !!(a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0); r.workload = (r.workload ?? 0) + ((hasWork || r.busy > 0 ? 1 : 0) - (r.workload ?? 0)) * Math.min(1, dt / 4);
   }
-  const eps = E.calculateEPS(s.earningsPerSecond, revenue - cogs, dt);
-  return { ...s, aisles, checkouts, restockers, customers, floats, storeroom, orders, cash, lifetimeRevenue, totalCustomersServed, nextId, spawnAcc, earningsPerSecond: eps };
+  // running costs: wages + store upkeep (never push cash below zero)
+  const wage = Math.min(cash, wagePerSecond(staff, restockers, s.tier) * dt); cash -= wage;
+  // cleanliness: customers make a mess, cleaners mop it up
+  cleanliness = Math.min(1, Math.max(0, cleanliness - 0.0004 * Math.sqrt(customers.length) * dt + staff.filter((x) => x.role === "cleaner").reduce((n, x) => n + x.efficiency, 0) * 0.01 * dt));
+  satisfaction = Math.min(1, Math.max(0, satisfaction + happy * 0.02 - angry * 0.04 + (cleanliness - 0.6) * 0.002 * dt));
+  // staff workload (0..1, smoothed) so the UI can show who is busy
+  const sm = (v: number, t: number) => v + (t - v) * Math.min(1, dt / 4), others = staff.filter((x) => x.role !== "manager");
+  for (const x of staff) {
+    const lane = x.role === "cashier" ? Object.keys(lanes).find((id) => lanes[id].id === x.id) : undefined;
+    const t = x.role === "cashier" ? (lane && customers.some((c) => c.co === lane) ? 1 : 0) : x.role === "cleaner" ? 1 - cleanliness : x.role === "security" ? Math.min(1, customers.length / 25 + recentThief / 3) : others.length ? others.reduce((n, o) => n + o.workload, 0) / others.length : 0;
+    x.workload = sm(x.workload, t);
+  }
+  // alerts + level-up
+  for (const a of aisles) { const p = s.aisles.find((z) => z.id === a.id); if (!p || a.level < 1) continue; const nm = `${AISLE_DEFS[a.type].name} #${a.id.slice(1)}`;
+    if (p.stock > 0 && a.stock <= 0) say("oos", `Out of stock: ${nm}`); else if (p.stock >= 0.25 * p.maxStock && a.stock < 0.25 * a.maxStock && a.stock > 0) say("low", `Low stock: ${nm}`); }
+  const lvlAfter = levelOf(xp); if (lvlAfter > lvlBefore) say("level", `LEVEL UP! You are now level ${lvlAfter}`);
+  const eps = E.calculateEPS(s.earningsPerSecond, revenue - cogs - wage, dt);
+  const revPerSec = E.calculateEPS(s.revPerSec, revenue, dt), expPerSec = E.calculateEPS(s.expPerSec, wage, dt);
+  return { ...s, aisles, checkouts, restockers, customers, floats, fx, staff, xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event, recentThief, lifetimeExpenses: s.lifetimeExpenses + wage, storeroom, orders, cash, lifetimeRevenue, totalCustomersServed, nextId, spawnAcc, earningsPerSecond: eps, revPerSec, expPerSec };
 }
 
 export function storeStatus(s: SimData) {
@@ -152,3 +201,19 @@ export const defaultSupply = () => ({
 /** Unit cost is 40% of the base revenue each unit earns; bulk orders get a discount. */
 export const unitCost = (t: AisleType) => (AISLE_DEFS[t].rev / AISLE_DEFS[t].use) * 0.4;
 export const orderCost = (t: AisleType, qty: number) => Math.ceil(qty * unitCost(t) * (qty >= 300 ? 0.8 : qty >= 100 ? 0.9 : 1));
+
+export type Alert = { id: string; icon: "alert" | "wait" | "restock" | "angry" | "coin"; text: string; tone: "bad" | "warn" };
+/** Plain-language list of what needs the player's attention, derived only from live state. */
+export function storeAlerts(s: SimData): Alert[] {
+  const out: Alert[] = [], act = s.aisles.filter((a) => a.level > 0);
+  for (const a of act) { const nm = AISLE_DEFS[a.type].name; const room = s.storeroom[a.type] + s.orders.filter((o) => o.type === a.type).reduce((n, o) => n + o.qty, 0);
+    if (a.stock <= 0) out.push({ id: `o${a.id}`, icon: "alert", tone: "bad", text: `${nm} #${a.id.slice(1)} is OUT OF STOCK${room > 0 ? "" : ": order more in Supply"}` });
+    else if (a.stock < 0.25 * a.maxStock) out.push({ id: `l${a.id}`, icon: "restock", tone: "warn", text: `${nm} #${a.id.slice(1)} is low (${Math.floor(a.stock)}/${a.maxStock})` }); }
+  const L = analyzeLayout(s);
+  for (const k of s.checkouts) { const q = s.customers.filter((c) => c.co === k.id).length; if (k.level > 0 && q >= k.queueCapacity) out.push({ id: `q${k.id}`, icon: "wait", tone: "warn", text: `Checkout #${k.id.slice(1)} queue is full: add a lane or a cashier` }); }
+  for (const i of [...s.aisles, ...s.checkouts]) if (!isFinite(L.dist.E?.[i.id])) { out.push({ id: `b${i.id}`, icon: "alert", tone: "bad", text: "Something is blocked off: customers cannot reach it" }); break; }
+  if (s.cleanliness < 0.35) out.push({ id: "dirty", icon: "angry", tone: "warn", text: "The store is getting dirty: hire a cleaner" });
+  if (s.satisfaction < 0.4) out.push({ id: "sat", icon: "angry", tone: "bad", text: "Customers are unhappy: check queues and stock" });
+  if (s.cash < 10 && s.customers.length === 0) out.push({ id: "broke", icon: "coin", tone: "bad", text: "Out of cash" });
+  return out;
+}

@@ -1,11 +1,11 @@
-import { simulate, storeStatus, placeCost, orderCost, deriveAisle, deriveCheckout, deriveRestocker, analyzeLayout, defaultSupply } from "../lib/simulation";
+import { simulate, defaultExtras, storeStatus, placeCost, orderCost, deriveAisle, deriveCheckout, deriveRestocker, analyzeLayout, defaultSupply } from "../lib/simulation";
 import { AISLE_DEFS, AISLE_ORDER, TIERS, START_CASH } from "../lib/constants";
 import { getAisleRevenue } from "../lib/economy";
 import { SimData } from "../types/game";
 const mk = (): SimData => ({ cash: START_CASH, tier: 0, lifetimeRevenue: 0, totalCustomersServed: 0, earningsPerSecond: 0, lastSavedTimestamp: 0, customers: [], floats: [], spawnAcc: 0, nextId: 1,
   aisles: [deriveAisle({ id: "a1", type: "produce", level: 1, stock: 100, maxStock: 0, baseRevenue: 0, demandRate: 0, stockConsumptionRate: 0, upgradeCost: 0, x: 1, y: 0 })],
   checkouts: [deriveCheckout({ id: "c1", level: 1, processingTime: 0, queueCapacity: 0, currentCustomerProgress: 0, customersProcessed: 0, upgradeCost: 0, x: 2, y: 3 }, 0)],
-  decors: [], ...defaultSupply(), restockers: [deriveRestocker({ id: "r1", level: 1, restockAmount: 0, cooldown: 0, currentCooldown: 0, assignedAisleId: null, upgradeCost: 0, x: 0, y: 1 }, 0)] });
+  decors: [], ...defaultSupply(), ...defaultExtras(), restockers: [deriveRestocker({ id: "r1", level: 1, restockAmount: 0, cooldown: 0, currentCooldown: 0, assignedAisleId: null, upgradeCost: 0, x: 0, y: 1 }, 0)] });
 const seq = (l: { id: string }[], p: string) => p + (Math.max(0, ...l.map((x) => parseInt(x.id.slice(1)) || 0)) + 1);
 const placeOk = (s: SimData, x: number, y: number) => { const { rows } = TIERS[s.tier]; if (x === 0 && y === rows - 1) return false;
   const t = { ...s, aisles: [...s.aisles, { ...s.aisles[0], id: "tmp", x, y }] }; const L = analyzeLayout(t);
