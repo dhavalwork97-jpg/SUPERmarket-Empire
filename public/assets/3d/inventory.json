@@ -1,0 +1,5069 @@
+{
+ "source": "Super market low poly for free",
+ "creator": "dasy444",
+ "platform": "Sketchfab",
+ "license": "Free Standard",
+ "sourceUrl": "https://sketchfab.com/3d-models/super-market-low-poly-for-free-c14deca21a994978a8aa304561aced50",
+ "slotLengthM": 3.25,
+ "tileM": 3.4,
+ "fixtures": {
+  "bytes": 1153604,
+  "anchors": {
+   "shelf_bay": {
+    "size": [
+     3.25,
+     2.2990000247955322,
+     1.0850000381469727
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.506,
+      "z1": 0.506
+     },
+     {
+      "y": 0.38,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 0.86,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 1.34,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 1.8,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 2.16,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.062,
+      "z1": 0.062
+     }
+    ]
+   },
+   "fridge_bay": {
+    "size": [
+     3.2190001010894775,
+     2.496999979019165,
+     0.875
+    ],
+    "levels": [
+     {
+      "y": 0.24,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.437,
+      "z1": 0.437
+     },
+     {
+      "y": 0.28,
+      "x0": -1.555,
+      "x1": 1.553,
+      "z0": 0.287,
+      "z1": 0.384
+     },
+     {
+      "y": 0.48,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 0.88,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 1.28,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 1.68,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 2.08,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 2.46,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.322,
+      "z1": 0.384
+     },
+     {
+      "y": 2.5,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.416,
+      "z1": 0.344
+     }
+    ]
+   },
+   "freezer_chest": {
+    "size": [
+     3.25,
+     0.9160000085830688,
+     0.9259999990463257
+    ],
+    "levels": [
+     {
+      "y": 0.14,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.463,
+      "z1": 0.463
+     },
+     {
+      "y": 0.16,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.423,
+      "z1": 0.423
+     },
+     {
+      "y": 0.46,
+      "x0": -1.479,
+      "x1": 1.51,
+      "z0": -0.364,
+      "z1": 0.364
+     },
+     {
+      "y": 0.88,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.452,
+      "z1": 0.452
+     },
+     {
+      "y": 0.9,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.452,
+      "z1": 0.452
+     }
+    ]
+   },
+   "display_wall": {
+    "size": [
+     3.25,
+     2.2890000343322754,
+     0.5199999809265137
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.252,
+      "z1": 0.224
+     },
+     {
+      "y": 0.38,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.233,
+      "z1": 0.259
+     },
+     {
+      "y": 0.86,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.233,
+      "z1": 0.259
+     },
+     {
+      "y": 1.32,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.233,
+      "z1": 0.259
+     },
+     {
+      "y": 1.8,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.233,
+      "z1": 0.259
+     }
+    ]
+   },
+   "cart_a": {
+    "size": [
+     1.1579999923706055,
+     1.097000002861023,
+     1.1610000133514404
+    ],
+    "levels": []
+   },
+   "cart_b": {
+    "size": [
+     1.2690000534057617,
+     1.2209999561309814,
+     0.7570000290870667
+    ],
+    "levels": []
+   },
+   "pos": {
+    "size": [
+     0.9929999709129333,
+     0.3700000047683716,
+     1.1690000295639038
+    ],
+    "levels": []
+   },
+   "checkout_counter": {
+    "size": [
+     1.899999976158142,
+     0.8840000033378601,
+     0.9259999990463257
+    ],
+    "levels": [
+     {
+      "y": 0.14,
+      "x0": -0.95,
+      "x1": 0.95,
+      "z0": -0.463,
+      "z1": 0.463
+     },
+     {
+      "y": 0.16,
+      "x0": -0.837,
+      "x1": 0.837,
+      "z0": -0.423,
+      "z1": 0.423
+     }
+    ]
+   },
+   "sign_board": {
+    "size": [
+     5.480999946594238,
+     1.8020000457763672,
+     0.5740000009536743
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -2.74,
+      "x1": 2.74,
+      "z0": -0.287,
+      "z1": 0.287
+     },
+     {
+      "y": 1.76,
+      "x0": -2.699,
+      "x1": 2.699,
+      "z0": -0.272,
+      "z1": 0.272
+     }
+    ]
+   }
+  }
+ },
+ "products": {
+  "bytes": 638140,
+  "departments": {
+   "p_chips": [
+    175,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186
+   ],
+   "p_ramen": [
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198
+   ],
+   "p_sushi": [
+    200,
+    202,
+    204,
+    206,
+    208,
+    210,
+    212,
+    214
+   ],
+   "p_dumpling": [
+    199,
+    201,
+    203,
+    205,
+    207,
+    209,
+    211,
+    213
+   ],
+   "p_candy": [
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162
+   ],
+   "p_meat": [
+    176,
+    177,
+    178,
+    174,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224
+   ],
+   "p_fruit": [
+    238,
+    240,
+    242,
+    244,
+    246
+   ],
+   "p_veg": [
+    237,
+    239,
+    241,
+    243,
+    245,
+    247
+   ],
+   "p_household": [
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173
+   ],
+   "p_misc": [
+    226,
+    228,
+    230,
+    232,
+    234,
+    236
+   ],
+   "p_goods": [
+    225,
+    227,
+    229,
+    231,
+    233,
+    235
+   ]
+  }
+ },
+ "textures": {
+  "floor_tile": {
+   "source": "пол плита.png",
+   "size": [
+    512,
+    419
+   ]
+  },
+  "floor_normal": {
+   "source": "NormalMap пол.png",
+   "size": [
+    512,
+    419
+   ]
+  },
+  "wall": {
+   "source": "стена.jpg",
+   "size": [
+    288,
+    512
+   ]
+  },
+  "ceiling": {
+   "source": "потолок.jpg",
+   "size": [
+    288,
+    512
+   ]
+  },
+  "ceiling_normal": {
+   "source": "NormalMap потолок.png",
+   "size": [
+    288,
+    512
+   ]
+  },
+  "shelf_paint": {
+   "source": "полки.jpg",
+   "size": [
+    341,
+    512
+   ]
+  },
+  "fridge_panel": {
+   "source": "холод.jpg",
+   "size": [
+    288,
+    512
+   ]
+  },
+  "fridge_normal": {
+   "source": "NormalMap хоод.png",
+   "size": [
+    288,
+    512
+   ]
+  },
+  "pos_terminal": {
+   "source": "касса ап.jpg",
+   "size": [
+    512,
+    401
+   ]
+  },
+  "legend": {
+   "source": "мб.png",
+   "size": [
+    512,
+    288
+   ]
+  },
+  "p_chips": {
+   "source": "чипси.jpg",
+   "size": [
+    1000,
+    1000
+   ]
+  },
+  "p_ramen": {
+   "source": "рамены.jpg",
+   "size": [
+    724,
+    1024
+   ]
+  },
+  "p_sushi": {
+   "source": "суши.jpg",
+   "size": [
+    714,
+    1024
+   ]
+  },
+  "p_dumpling": {
+   "source": "пельмени.jpg",
+   "size": [
+    683,
+    1024
+   ]
+  },
+  "p_candy": {
+   "source": "мармелад.jpg",
+   "size": [
+    576,
+    1024
+   ]
+  },
+  "p_meat": {
+   "source": "мясо.jpg",
+   "size": [
+    576,
+    1024
+   ]
+  },
+  "p_fruit": {
+   "source": "фрукты.jpg",
+   "size": [
+    576,
+    1024
+   ]
+  },
+  "p_veg": {
+   "source": "трава.jpg",
+   "size": [
+    576,
+    1024
+   ]
+  },
+  "p_household": {
+   "source": "бытовое.jpg",
+   "size": [
+    577,
+    1024
+   ]
+  },
+  "p_misc": {
+   "source": "всякое.jpg",
+   "size": [
+    576,
+    1024
+   ]
+  },
+  "p_goods": {
+   "source": "быт2.jpg",
+   "size": [
+    461,
+    1024
+   ]
+  }
+ },
+ "meshes": [
+  {
+   "id": 0,
+   "file": "mesh.fbx",
+   "tris": 12,
+   "size": [
+    28.222999572753906,
+    0.45500001311302185,
+    0.11500000208616257
+   ],
+   "center": [
+    0.9319999814033508,
+    5.738999843597412,
+    0.0
+   ],
+   "role": "ceiling light housing (28.2 m)",
+   "usage": "partial",
+   "note": "recreated as light bars at runtime, shown when the camera is low"
+  },
+  {
+   "id": 1,
+   "file": "mesh-1.fbx",
+   "tris": 2640,
+   "size": [
+    28.576000213623047,
+    1.3309999704360962,
+    15.206999778747559
+   ],
+   "center": [
+    1.1200000047683716,
+    5.160999774932861,
+    0.7139999866485596
+   ],
+   "role": "ceiling louvre grid (8 rails)",
+   "usage": "partial",
+   "note": "recreated as ceiling plane with потолок.jpg"
+  },
+  {
+   "id": 2,
+   "file": "mesh-2.fbx",
+   "tris": 12,
+   "size": [
+    28.222999572753906,
+    0.1289999932050705,
+    0.42899999022483826
+   ],
+   "center": [
+    0.9319999814033508,
+    4.497000217437744,
+    5.748000144958496
+   ],
+   "role": "ceiling light housing (28.2 m)",
+   "usage": "partial",
+   "note": "recreated as light bars at runtime, shown when the camera is low"
+  },
+  {
+   "id": 3,
+   "file": "mesh-3.fbx",
+   "tris": 2,
+   "size": [
+    28.222999572753906,
+    0.0,
+    0.22599999606609344
+   ],
+   "center": [
+    0.9319999814033508,
+    4.415999889373779,
+    5.748000144958496
+   ],
+   "role": "ceiling light diffuser",
+   "usage": "partial",
+   "note": "see above"
+  },
+  {
+   "id": 4,
+   "file": "mesh-4.fbx",
+   "tris": 12,
+   "size": [
+    28.222999572753906,
+    0.1289999932050705,
+    0.42899999022483826
+   ],
+   "center": [
+    0.9319999814033508,
+    4.497000217437744,
+    2.385999917984009
+   ],
+   "role": "ceiling light housing (28.2 m)",
+   "usage": "partial",
+   "note": "recreated as light bars at runtime, shown when the camera is low"
+  },
+  {
+   "id": 5,
+   "file": "mesh-5.fbx",
+   "tris": 2,
+   "size": [
+    28.222999572753906,
+    0.0,
+    0.22599999606609344
+   ],
+   "center": [
+    0.9319999814033508,
+    4.415999889373779,
+    2.385999917984009
+   ],
+   "role": "ceiling light diffuser",
+   "usage": "partial",
+   "note": "see above"
+  },
+  {
+   "id": 6,
+   "file": "mesh-6.fbx",
+   "tris": 12,
+   "size": [
+    28.222999572753906,
+    0.1289999932050705,
+    0.42899999022483826
+   ],
+   "center": [
+    0.9319999814033508,
+    4.497000217437744,
+    -1.1710000038146973
+   ],
+   "role": "ceiling light housing (28.2 m)",
+   "usage": "partial",
+   "note": "recreated as light bars at runtime, shown when the camera is low"
+  },
+  {
+   "id": 7,
+   "file": "mesh-7.fbx",
+   "tris": 2,
+   "size": [
+    28.222999572753906,
+    0.0,
+    0.22599999606609344
+   ],
+   "center": [
+    0.9319999814033508,
+    4.415999889373779,
+    -1.1710000038146973
+   ],
+   "role": "ceiling light diffuser",
+   "usage": "partial",
+   "note": "see above"
+  },
+  {
+   "id": 8,
+   "file": "mesh-8.fbx",
+   "tris": 12,
+   "size": [
+    28.222999572753906,
+    0.1289999932050705,
+    0.42899999022483826
+   ],
+   "center": [
+    0.9319999814033508,
+    4.497000217437744,
+    -4.843999862670898
+   ],
+   "role": "ceiling light housing (28.2 m)",
+   "usage": "partial",
+   "note": "recreated as light bars at runtime, shown when the camera is low"
+  },
+  {
+   "id": 9,
+   "file": "mesh-9.fbx",
+   "tris": 2,
+   "size": [
+    28.222999572753906,
+    0.0,
+    0.22599999606609344
+   ],
+   "center": [
+    0.9319999814033508,
+    4.415999889373779,
+    -4.843999862670898
+   ],
+   "role": "ceiling light diffuser",
+   "usage": "partial",
+   "note": "see above"
+  },
+  {
+   "id": 10,
+   "file": "mesh-10.fbx",
+   "tris": 1464,
+   "size": [
+    6.520999908447266,
+    2.2890000343322754,
+    1.0850000381469727
+   ],
+   "center": [
+    -2.8320000171661377,
+    1.2100000381469727,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 11,
+   "file": "mesh-11.fbx",
+   "tris": 12,
+   "size": [
+    6.519000053405762,
+    2.2119998931884766,
+    0.07999999821186066
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.1619999408721924,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 12,
+   "file": "mesh-12.fbx",
+   "tris": 720,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    1.0820000171661377
+   ],
+   "center": [
+    -2.8320000171661377,
+    1.3619999885559082,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 13,
+   "file": "mesh-13.fbx",
+   "tris": 1464,
+   "size": [
+    6.520999908447266,
+    2.2890000343322754,
+    1.0850000381469727
+   ],
+   "center": [
+    -2.8239998817443848,
+    1.2100000381469727,
+    0.6359999775886536
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 14,
+   "file": "mesh-14.fbx",
+   "tris": 12,
+   "size": [
+    6.519000053405762,
+    2.2119998931884766,
+    0.07999999821186066
+   ],
+   "center": [
+    -2.825000047683716,
+    1.1619999408721924,
+    0.6359999775886536
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 15,
+   "file": "mesh-15.fbx",
+   "tris": 720,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    1.0820000171661377
+   ],
+   "center": [
+    -2.8239998817443848,
+    1.3619999885559082,
+    0.6359999775886536
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 16,
+   "file": "mesh-16.fbx",
+   "tris": 528,
+   "size": [
+    7.697999954223633,
+    2.2890000343322754,
+    1.4129999876022339
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.2100000381469727,
+    4.2230000495910645
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 17,
+   "file": "mesh-17.fbx",
+   "tris": 24,
+   "size": [
+    6.692999839782715,
+    2.2119998931884766,
+    1.3609999418258667
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.1619999408721924,
+    4.2220001220703125
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 18,
+   "file": "mesh-18.fbx",
+   "tris": 304,
+   "size": [
+    7.695000171661377,
+    1.8200000524520874,
+    1.409999966621399
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.312999963760376,
+    4.2220001220703125
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 19,
+   "file": "mesh-19.fbx",
+   "tris": 12,
+   "size": [
+    0.05999999865889549,
+    0.3409999907016754,
+    0.14499999582767487
+   ],
+   "center": [
+    -6.465000152587891,
+    2.003999948501587,
+    0.23899999260902405
+   ],
+   "role": "shelf tag clip (tiny)",
+   "usage": "unused",
+   "note": "0.06 m parts; below readable size at game zoom"
+  },
+  {
+   "id": 20,
+   "file": "mesh-20.fbx",
+   "tris": 2952,
+   "size": [
+    1.100000023841858,
+    1.0410000085830688,
+    1.1030000448226929
+   ],
+   "center": [
+    5.927000045776367,
+    0.5839999914169312,
+    -1.6390000581741333
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 21,
+   "file": "mesh-21.fbx",
+   "tris": 84,
+   "size": [
+    0.5239999890327454,
+    0.07999999821186066,
+    0.5210000276565552
+   ],
+   "center": [
+    6.271999835968018,
+    1.1039999723434448,
+    -1.9880000352859497
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 22,
+   "file": "mesh-22.fbx",
+   "tris": 112,
+   "size": [
+    0.9340000152587891,
+    0.11100000143051147,
+    0.9369999766349792
+   ],
+   "center": [
+    5.854000091552734,
+    0.10300000011920929,
+    -1.565999984741211
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 23,
+   "file": "mesh-23.fbx",
+   "tris": 2952,
+   "size": [
+    1.2070000171661377,
+    1.159000039100647,
+    0.7210000157356262
+   ],
+   "center": [
+    -11.918999671936035,
+    0.6840000152587891,
+    1.3619999885559082
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 24,
+   "file": "mesh-24.fbx",
+   "tris": 84,
+   "size": [
+    0.17599999904632568,
+    0.08900000154972076,
+    0.7360000014305115
+   ],
+   "center": [
+    -11.342000007629395,
+    1.2640000581741333,
+    1.3339999914169312
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 25,
+   "file": "mesh-25.fbx",
+   "tris": 112,
+   "size": [
+    1.0210000276565552,
+    0.12399999797344208,
+    0.6129999756813049
+   ],
+   "center": [
+    -12.012999534606934,
+    0.14900000393390656,
+    1.3969999551773071
+   ],
+   "role": "shopping cart (basket / handle / wheels)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 26,
+   "file": "mesh-26.fbx",
+   "tris": 2952,
+   "size": [
+    1.2070000171661377,
+    1.159000039100647,
+    0.7210000157356262
+   ],
+   "center": [
+    -11.918999671936035,
+    0.6840000152587891,
+    2.128999948501587
+   ],
+   "role": "shopping cart (third copy)",
+   "usage": "partial",
+   "note": "duplicate of 23-25"
+  },
+  {
+   "id": 27,
+   "file": "mesh-27.fbx",
+   "tris": 84,
+   "size": [
+    0.17599999904632568,
+    0.08900000154972076,
+    0.7360000014305115
+   ],
+   "center": [
+    -11.342000007629395,
+    1.2640000581741333,
+    2.1010000705718994
+   ],
+   "role": "shopping cart (third copy)",
+   "usage": "partial",
+   "note": "duplicate of 23-25"
+  },
+  {
+   "id": 28,
+   "file": "mesh-28.fbx",
+   "tris": 112,
+   "size": [
+    1.0210000276565552,
+    0.12399999797344208,
+    0.6129999756813049
+   ],
+   "center": [
+    -12.012999534606934,
+    0.14900000393390656,
+    2.1640000343322754
+   ],
+   "role": "shopping cart (third copy)",
+   "usage": "partial",
+   "note": "duplicate of 23-25"
+  },
+  {
+   "id": 29,
+   "file": "mesh-29.fbx",
+   "tris": 528,
+   "size": [
+    7.697999954223633,
+    2.2890000343322754,
+    1.4129999876022339
+   ],
+   "center": [
+    -2.825000047683716,
+    1.2100000381469727,
+    0.6520000100135803
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 30,
+   "file": "mesh-30.fbx",
+   "tris": 24,
+   "size": [
+    6.692999839782715,
+    2.2119998931884766,
+    1.3609999418258667
+   ],
+   "center": [
+    -2.825000047683716,
+    1.1619999408721924,
+    0.6510000228881836
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 31,
+   "file": "mesh-31.fbx",
+   "tris": 304,
+   "size": [
+    7.695000171661377,
+    1.8200000524520874,
+    1.409999966621399
+   ],
+   "center": [
+    -2.825000047683716,
+    1.312999963760376,
+    0.6510000228881836
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 32,
+   "file": "mesh-32.fbx",
+   "tris": 12,
+   "size": [
+    0.05999999865889549,
+    0.3409999907016754,
+    0.14499999582767487
+   ],
+   "center": [
+    -6.465000152587891,
+    1.562999963760376,
+    1.2350000143051147
+   ],
+   "role": "shelf tag clip (tiny)",
+   "usage": "unused",
+   "note": "0.06 m parts; below readable size at game zoom"
+  },
+  {
+   "id": 33,
+   "file": "mesh-33.fbx",
+   "tris": 1464,
+   "size": [
+    6.520999908447266,
+    2.2890000343322754,
+    1.0850000381469727
+   ],
+   "center": [
+    6.926000118255615,
+    1.2100000381469727,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 34,
+   "file": "mesh-34.fbx",
+   "tris": 12,
+   "size": [
+    6.519000053405762,
+    2.2119998931884766,
+    0.07999999821186066
+   ],
+   "center": [
+    6.925000190734863,
+    1.1619999408721924,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 35,
+   "file": "mesh-35.fbx",
+   "tris": 720,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    1.0820000171661377
+   ],
+   "center": [
+    6.925000190734863,
+    1.3619999885559082,
+    4.206999778747559
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 36,
+   "file": "mesh-36.fbx",
+   "tris": 528,
+   "size": [
+    7.697999954223633,
+    2.2890000343322754,
+    1.4129999876022339
+   ],
+   "center": [
+    6.925000190734863,
+    1.2100000381469727,
+    4.2230000495910645
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 37,
+   "file": "mesh-37.fbx",
+   "tris": 24,
+   "size": [
+    6.692999839782715,
+    2.2119998931884766,
+    1.3609999418258667
+   ],
+   "center": [
+    6.925000190734863,
+    1.1619999408721924,
+    4.2220001220703125
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 38,
+   "file": "mesh-38.fbx",
+   "tris": 304,
+   "size": [
+    7.695000171661377,
+    1.8200000524520874,
+    1.409999966621399
+   ],
+   "center": [
+    6.925000190734863,
+    1.312999963760376,
+    4.2220001220703125
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 39,
+   "file": "mesh-39.fbx",
+   "tris": 1464,
+   "size": [
+    6.520999908447266,
+    2.2890000343322754,
+    1.0850000381469727
+   ],
+   "center": [
+    -2.8320000171661377,
+    1.2100000381469727,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 40,
+   "file": "mesh-40.fbx",
+   "tris": 12,
+   "size": [
+    6.519000053405762,
+    2.2119998931884766,
+    0.07999999821186066
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.1619999408721924,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 41,
+   "file": "mesh-41.fbx",
+   "tris": 720,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    1.0820000171661377
+   ],
+   "center": [
+    -2.8320000171661377,
+    1.3619999885559082,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 42,
+   "file": "mesh-42.fbx",
+   "tris": 528,
+   "size": [
+    7.697999954223633,
+    2.2890000343322754,
+    1.4129999876022339
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.2100000381469727,
+    -3.1579999923706055
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 43,
+   "file": "mesh-43.fbx",
+   "tris": 24,
+   "size": [
+    6.692999839782715,
+    2.2119998931884766,
+    1.3609999418258667
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.1619999408721924,
+    -3.1589999198913574
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 44,
+   "file": "mesh-44.fbx",
+   "tris": 304,
+   "size": [
+    7.695000171661377,
+    1.8200000524520874,
+    1.409999966621399
+   ],
+   "center": [
+    -2.8329999446868896,
+    1.312999963760376,
+    -3.1589999198913574
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 45,
+   "file": "mesh-45.fbx",
+   "tris": 1464,
+   "size": [
+    6.520999908447266,
+    2.2890000343322754,
+    1.0850000381469727
+   ],
+   "center": [
+    6.926000118255615,
+    1.2100000381469727,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 46,
+   "file": "mesh-46.fbx",
+   "tris": 12,
+   "size": [
+    6.519000053405762,
+    2.2119998931884766,
+    0.07999999821186066
+   ],
+   "center": [
+    6.925000190734863,
+    1.1619999408721924,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 47,
+   "file": "mesh-47.fbx",
+   "tris": 720,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    1.0820000171661377
+   ],
+   "center": [
+    6.925000190734863,
+    1.3619999885559082,
+    -3.174999952316284
+   ],
+   "role": "gondola shelf (body / back panel / shelf boards)",
+   "usage": "used",
+   "note": "5 identical runs; one 3.25 m bay is cut from the centre of mesh 10-12"
+  },
+  {
+   "id": 48,
+   "file": "mesh-48.fbx",
+   "tris": 528,
+   "size": [
+    7.697999954223633,
+    2.2890000343322754,
+    1.4129999876022339
+   ],
+   "center": [
+    6.925000190734863,
+    1.2100000381469727,
+    -3.1579999923706055
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 49,
+   "file": "mesh-49.fbx",
+   "tris": 24,
+   "size": [
+    6.692999839782715,
+    2.2119998931884766,
+    1.3609999418258667
+   ],
+   "center": [
+    6.925000190734863,
+    1.1619999408721924,
+    -3.1589999198913574
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 50,
+   "file": "mesh-50.fbx",
+   "tris": 304,
+   "size": [
+    7.695000171661377,
+    1.8200000524520874,
+    1.409999966621399
+   ],
+   "center": [
+    6.925000190734863,
+    1.312999963760376,
+    -3.1589999198913574
+   ],
+   "role": "gondola end-cap / header frame (wider than body)",
+   "usage": "partial",
+   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+  },
+  {
+   "id": 51,
+   "file": "mesh-51.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    4.765999794006348
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 52,
+   "file": "mesh-52.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    5.2820000648498535
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 53,
+   "file": "mesh-53.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    5.2820000648498535
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 54,
+   "file": "mesh-54.fbx",
+   "tris": 12,
+   "size": [
+    0.027000000700354576,
+    3.802999973297119,
+    8.395000457763672
+   ],
+   "center": [
+    -12.972000122070312,
+    2.2639999389648438,
+    -1.0149999856948853
+   ],
+   "role": "west wall window panels",
+   "usage": "unused",
+   "note": "walls are procedural per tier"
+  },
+  {
+   "id": 55,
+   "file": "mesh-55.fbx",
+   "tris": 12,
+   "size": [
+    0.875,
+    0.23100000619888306,
+    4.415999889373779
+   ],
+   "center": [
+    13.687999725341797,
+    0.14300000667572021,
+    5.808000087738037
+   ],
+   "role": "refrigerated wall cabinet (plinth / glass shell / cabinet / kick / back)",
+   "usage": "used",
+   "note": "east-wall unit rotated so doors face +Z; 3 doors = 3.24 m bay"
+  },
+  {
+   "id": 56,
+   "file": "mesh-56.fbx",
+   "tris": 22,
+   "size": [
+    0.7599999904632568,
+    2.3369998931884766,
+    4.4120001792907715
+   ],
+   "center": [
+    13.723999977111816,
+    1.3550000190734863,
+    5.808000087738037
+   ],
+   "role": "refrigerated wall cabinet (plinth / glass shell / cabinet / kick / back)",
+   "usage": "used",
+   "note": "east-wall unit rotated so doors face +Z; 3 doors = 3.24 m bay"
+  },
+  {
+   "id": 57,
+   "file": "mesh-57.fbx",
+   "tris": 320,
+   "size": [
+    0.578000009059906,
+    2.236999988555908,
+    4.322999954223633
+   ],
+   "center": [
+    13.727999687194824,
+    1.3630000352859497,
+    5.824999809265137
+   ],
+   "role": "refrigerated wall cabinet (plinth / glass shell / cabinet / kick / back)",
+   "usage": "used",
+   "note": "east-wall unit rotated so doors face +Z; 3 doors = 3.24 m bay"
+  },
+  {
+   "id": 58,
+   "file": "mesh-58.fbx",
+   "tris": 8,
+   "size": [
+    0.0,
+    0.2630000114440918,
+    4.328999996185303
+   ],
+   "center": [
+    13.543999671936035,
+    0.37299999594688416,
+    5.824999809265137
+   ],
+   "role": "refrigerated wall cabinet (plinth / glass shell / cabinet / kick / back)",
+   "usage": "used",
+   "note": "east-wall unit rotated so doors face +Z; 3 doors = 3.24 m bay"
+  },
+  {
+   "id": 59,
+   "file": "mesh-59.fbx",
+   "tris": 40,
+   "size": [
+    0.0,
+    1.6820000410079956,
+    4.2829999923706055
+   ],
+   "center": [
+    13.508000373840332,
+    1.319000005722046,
+    5.824999809265137
+   ],
+   "role": "refrigerated wall cabinet (plinth / glass shell / cabinet / kick / back)",
+   "usage": "used",
+   "note": "east-wall unit rotated so doors face +Z; 3 doors = 3.24 m bay"
+  },
+  {
+   "id": 60,
+   "file": "mesh-60.fbx",
+   "tris": 32,
+   "size": [
+    0.4259999990463257,
+    3.802999973297119,
+    8.395000457763672
+   ],
+   "center": [
+    -12.986000061035156,
+    2.2639999389648438,
+    -1.0149999856948853
+   ],
+   "role": "west wall window panels",
+   "usage": "unused",
+   "note": "walls are procedural per tier"
+  },
+  {
+   "id": 61,
+   "file": "mesh-61.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    3.683000087738037
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 62,
+   "file": "mesh-62.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    4.198999881744385
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 63,
+   "file": "mesh-63.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    4.198999881744385
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 64,
+   "file": "mesh-64.fbx",
+   "tris": 24,
+   "size": [
+    0.23499999940395355,
+    3.697999954223633,
+    4.831999778747559
+   ],
+   "center": [
+    -12.972000122070312,
+    2.2679998874664307,
+    -1.0149999856948853
+   ],
+   "role": "west wall window panels",
+   "usage": "unused",
+   "note": "walls are procedural per tier"
+  },
+  {
+   "id": 65,
+   "file": "mesh-65.fbx",
+   "tris": 24,
+   "size": [
+    0.23499999940395355,
+    3.697999954223633,
+    1.774999976158142
+   ],
+   "center": [
+    -12.972000122070312,
+    2.2679998874664307,
+    -1.0149999856948853
+   ],
+   "role": "west wall window panels",
+   "usage": "unused",
+   "note": "walls are procedural per tier"
+  },
+  {
+   "id": 66,
+   "file": "mesh-66.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    5.840000152587891
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 67,
+   "file": "mesh-67.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    6.355999946594238
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 68,
+   "file": "mesh-68.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    6.355999946594238
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 69,
+   "file": "mesh-69.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    6.922999858856201
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 70,
+   "file": "mesh-70.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    7.438000202178955
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 71,
+   "file": "mesh-71.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    7.438000202178955
+   ],
+   "role": "fridge door part (handle 44 tris / frame 32 / glass 2)",
+   "usage": "used",
+   "note": "the 3 doors inside the cut bay are used"
+  },
+  {
+   "id": 72,
+   "file": "mesh-72.fbx",
+   "tris": 44,
+   "size": [
+    0.020999999716877937,
+    0.5559999942779541,
+    0.054999999701976776
+   ],
+   "center": [
+    12.300999641418457,
+    1.4559999704360962,
+    0.38600000739097595
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 73,
+   "file": "mesh-73.fbx",
+   "tris": 32,
+   "size": [
+    1.0800000429153442,
+    2.236999988555908,
+    0.13600000739097595
+   ],
+   "center": [
+    12.8149995803833,
+    1.3630000352859497,
+    0.30399999022483826
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 74,
+   "file": "mesh-74.fbx",
+   "tris": 2,
+   "size": [
+    1.0529999732971191,
+    2.188999891281128,
+    0.03799999877810478
+   ],
+   "center": [
+    12.814000129699707,
+    1.3630000352859497,
+    0.2980000078678131
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 75,
+   "file": "mesh-75.fbx",
+   "tris": 12,
+   "size": [
+    0.875,
+    0.23100000619888306,
+    4.415999889373779
+   ],
+   "center": [
+    13.687999725341797,
+    0.14300000667572021,
+    1.3550000190734863
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 76,
+   "file": "mesh-76.fbx",
+   "tris": 22,
+   "size": [
+    0.7599999904632568,
+    2.3369998931884766,
+    4.4120001792907715
+   ],
+   "center": [
+    13.723999977111816,
+    1.3550000190734863,
+    1.3550000190734863
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 77,
+   "file": "mesh-77.fbx",
+   "tris": 320,
+   "size": [
+    0.578000009059906,
+    2.236999988555908,
+    4.322999954223633
+   ],
+   "center": [
+    13.727999687194824,
+    1.3630000352859497,
+    1.371999979019165
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 78,
+   "file": "mesh-78.fbx",
+   "tris": 8,
+   "size": [
+    0.0,
+    0.2630000114440918,
+    4.328999996185303
+   ],
+   "center": [
+    13.543999671936035,
+    0.37299999594688416,
+    1.371999979019165
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 79,
+   "file": "mesh-79.fbx",
+   "tris": 40,
+   "size": [
+    0.0,
+    1.6820000410079956,
+    4.2829999923706055
+   ],
+   "center": [
+    13.508000373840332,
+    1.319000005722046,
+    1.371999979019165
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 80,
+   "file": "mesh-80.fbx",
+   "tris": 44,
+   "size": [
+    0.04500000178813934,
+    0.5559999942779541,
+    0.0560000017285347
+   ],
+   "center": [
+    12.48900032043457,
+    1.4559999704360962,
+    1.9759999513626099
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 81,
+   "file": "mesh-81.fbx",
+   "tris": 32,
+   "size": [
+    0.9670000076293945,
+    2.236999988555908,
+    0.6499999761581421
+   ],
+   "center": [
+    12.895000457763672,
+    1.3630000352859497,
+    1.6510000228881836
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 82,
+   "file": "mesh-82.fbx",
+   "tris": 2,
+   "size": [
+    0.8960000276565552,
+    2.188999891281128,
+    0.5550000071525574
+   ],
+   "center": [
+    12.892000198364258,
+    1.3630000352859497,
+    1.6460000276565552
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 83,
+   "file": "mesh-83.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    1.3869999647140503
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 84,
+   "file": "mesh-84.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    1.902999997138977
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 85,
+   "file": "mesh-85.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    1.902999997138977
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 86,
+   "file": "mesh-86.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    2.4700000286102295
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 87,
+   "file": "mesh-87.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    2.9860000610351562
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 88,
+   "file": "mesh-88.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    2.9860000610351562
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 89,
+   "file": "mesh-89.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    -5.2129998207092285
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 90,
+   "file": "mesh-90.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    -4.697000026702881
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 91,
+   "file": "mesh-91.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    -4.697000026702881
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 92,
+   "file": "mesh-92.fbx",
+   "tris": 12,
+   "size": [
+    0.875,
+    0.23100000619888306,
+    4.415999889373779
+   ],
+   "center": [
+    13.687999725341797,
+    0.14300000667572021,
+    -3.0880000591278076
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 93,
+   "file": "mesh-93.fbx",
+   "tris": 22,
+   "size": [
+    0.7599999904632568,
+    2.3369998931884766,
+    4.4120001792907715
+   ],
+   "center": [
+    13.723999977111816,
+    1.3550000190734863,
+    -3.0880000591278076
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 94,
+   "file": "mesh-94.fbx",
+   "tris": 320,
+   "size": [
+    0.578000009059906,
+    2.236999988555908,
+    4.322999954223633
+   ],
+   "center": [
+    13.727999687194824,
+    1.3630000352859497,
+    -3.071000099182129
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 95,
+   "file": "mesh-95.fbx",
+   "tris": 8,
+   "size": [
+    0.0,
+    0.2630000114440918,
+    4.328999996185303
+   ],
+   "center": [
+    13.543999671936035,
+    0.37299999594688416,
+    -3.071000099182129
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 96,
+   "file": "mesh-96.fbx",
+   "tris": 40,
+   "size": [
+    0.0,
+    1.6820000410079956,
+    4.2829999923706055
+   ],
+   "center": [
+    13.508000373840332,
+    1.319000005722046,
+    -3.071000099182129
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 97,
+   "file": "mesh-97.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    -4.130000114440918
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 98,
+   "file": "mesh-98.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    -3.614000082015991
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 99,
+   "file": "mesh-99.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    -3.614000082015991
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 100,
+   "file": "mesh-100.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    -3.055999994277954
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 101,
+   "file": "mesh-101.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    -2.5399999618530273
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 102,
+   "file": "mesh-102.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    -2.5399999618530273
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 103,
+   "file": "mesh-103.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.01899999938905239
+   ],
+   "center": [
+    13.289999961853027,
+    1.4559999704360962,
+    -1.9730000495910645
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 104,
+   "file": "mesh-104.fbx",
+   "tris": 32,
+   "size": [
+    0.09700000286102295,
+    2.236999988555908,
+    1.0770000219345093
+   ],
+   "center": [
+    13.352999687194824,
+    1.3630000352859497,
+    -1.4579999446868896
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 105,
+   "file": "mesh-105.fbx",
+   "tris": 2,
+   "size": [
+    0.0,
+    2.188999891281128,
+    1.0540000200271606
+   ],
+   "center": [
+    13.357999801635742,
+    1.3630000352859497,
+    -1.4579999446868896
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 106,
+   "file": "mesh-106.fbx",
+   "tris": 60,
+   "size": [
+    8.916999816894531,
+    0.1379999965429306,
+    0.9259999990463257
+   ],
+   "center": [
+    4.109000205993652,
+    0.15000000596046448,
+    7.627999782562256
+   ],
+   "role": "chest freezer with wire baskets (base / body / glass cover / baskets)",
+   "usage": "used",
+   "note": "mesh 107 is 78k tris; decimated by vertex clustering to a mobile budget"
+  },
+  {
+   "id": 107,
+   "file": "mesh-107.fbx",
+   "tris": 78310,
+   "size": [
+    8.925999641418457,
+    0.8019999861717224,
+    0.9089999794960022
+   ],
+   "center": [
+    4.109000205993652,
+    0.597000002861023,
+    7.627999782562256
+   ],
+   "role": "chest freezer with wire baskets (base / body / glass cover / baskets)",
+   "usage": "used",
+   "note": "mesh 107 is 78k tris; decimated by vertex clustering to a mobile budget"
+  },
+  {
+   "id": 108,
+   "file": "mesh-108.fbx",
+   "tris": 90,
+   "size": [
+    8.911999702453613,
+    0.7289999723434448,
+    0.8889999985694885
+   ],
+   "center": [
+    4.109000205993652,
+    0.6010000109672546,
+    7.627999782562256
+   ],
+   "role": "chest freezer with wire baskets (base / body / glass cover / baskets)",
+   "usage": "used",
+   "note": "mesh 107 is 78k tris; decimated by vertex clustering to a mobile budget"
+  },
+  {
+   "id": 109,
+   "file": "mesh-109.fbx",
+   "tris": 10,
+   "size": [
+    8.897000312805176,
+    0.0,
+    0.8809999823570251
+   ],
+   "center": [
+    4.109000205993652,
+    0.9700000286102295,
+    7.627999782562256
+   ],
+   "role": "chest freezer with wire baskets (base / body / glass cover / baskets)",
+   "usage": "used",
+   "note": "mesh 107 is 78k tris; decimated by vertex clustering to a mobile budget"
+  },
+  {
+   "id": 110,
+   "file": "mesh-110.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -0.6100000143051147,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 111,
+   "file": "mesh-111.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -1.1260000467300415,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 112,
+   "file": "mesh-112.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -1.1260000467300415,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 113,
+   "file": "mesh-113.fbx",
+   "tris": 12,
+   "size": [
+    4.415999889373779,
+    0.23100000619888306,
+    0.875
+   ],
+   "center": [
+    -2.734999895095825,
+    0.14300000667572021,
+    7.567999839782715
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 114,
+   "file": "mesh-114.fbx",
+   "tris": 22,
+   "size": [
+    4.4120001792907715,
+    2.3369998931884766,
+    0.7599999904632568
+   ],
+   "center": [
+    -2.734999895095825,
+    1.3550000190734863,
+    7.604000091552734
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 115,
+   "file": "mesh-115.fbx",
+   "tris": 320,
+   "size": [
+    4.322999954223633,
+    2.236999988555908,
+    0.578000009059906
+   ],
+   "center": [
+    -2.752000093460083,
+    1.3630000352859497,
+    7.60699987411499
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 116,
+   "file": "mesh-116.fbx",
+   "tris": 8,
+   "size": [
+    4.328999996185303,
+    0.2630000114440918,
+    0.0
+   ],
+   "center": [
+    -2.752000093460083,
+    0.37299999594688416,
+    7.422999858856201
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 117,
+   "file": "mesh-117.fbx",
+   "tris": 40,
+   "size": [
+    4.2829999923706055,
+    1.6820000410079956,
+    0.0
+   ],
+   "center": [
+    -2.752000093460083,
+    1.319000005722046,
+    7.388000011444092
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 118,
+   "file": "mesh-118.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -1.6929999589920044,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 119,
+   "file": "mesh-119.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -2.2090001106262207,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 120,
+   "file": "mesh-120.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -2.2090001106262207,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 121,
+   "file": "mesh-121.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -2.7669999599456787,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 122,
+   "file": "mesh-122.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -3.2829999923706055,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 123,
+   "file": "mesh-123.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -3.2829999923706055,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 124,
+   "file": "mesh-124.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -3.8499999046325684,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 125,
+   "file": "mesh-125.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -4.366000175476074,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 126,
+   "file": "mesh-126.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -4.366000175476074,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 127,
+   "file": "mesh-127.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -5.064000129699707,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 128,
+   "file": "mesh-128.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -5.579999923706055,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 129,
+   "file": "mesh-129.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -5.579999923706055,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 130,
+   "file": "mesh-130.fbx",
+   "tris": 12,
+   "size": [
+    4.415999889373779,
+    0.23100000619888306,
+    0.875
+   ],
+   "center": [
+    -7.189000129699707,
+    0.14300000667572021,
+    7.567999839782715
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 131,
+   "file": "mesh-131.fbx",
+   "tris": 22,
+   "size": [
+    4.4120001792907715,
+    2.3369998931884766,
+    0.7599999904632568
+   ],
+   "center": [
+    -7.189000129699707,
+    1.3550000190734863,
+    7.604000091552734
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 132,
+   "file": "mesh-132.fbx",
+   "tris": 320,
+   "size": [
+    4.322999954223633,
+    2.236999988555908,
+    0.578000009059906
+   ],
+   "center": [
+    -7.205999851226807,
+    1.3630000352859497,
+    7.60699987411499
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 133,
+   "file": "mesh-133.fbx",
+   "tris": 8,
+   "size": [
+    4.328999996185303,
+    0.2630000114440918,
+    0.0
+   ],
+   "center": [
+    -7.205999851226807,
+    0.37299999594688416,
+    7.422999858856201
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 134,
+   "file": "mesh-134.fbx",
+   "tris": 40,
+   "size": [
+    4.2829999923706055,
+    1.6820000410079956,
+    0.0
+   ],
+   "center": [
+    -7.205999851226807,
+    1.319000005722046,
+    7.388000011444092
+   ],
+   "role": "refrigerated wall cabinet (duplicate instance)",
+   "usage": "partial",
+   "note": "identical to 55-59; one instance is enough, the bay is instanced at runtime"
+  },
+  {
+   "id": 135,
+   "file": "mesh-135.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -6.146999835968018,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 136,
+   "file": "mesh-136.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -6.6620001792907715,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 137,
+   "file": "mesh-137.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -6.6620001792907715,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 138,
+   "file": "mesh-138.fbx",
+   "tris": 44,
+   "size": [
+    0.05400000140070915,
+    0.5559999942779541,
+    0.05000000074505806
+   ],
+   "center": [
+    -9.0,
+    1.4559999704360962,
+    6.464000225067139
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 139,
+   "file": "mesh-139.fbx",
+   "tris": 32,
+   "size": [
+    0.7649999856948853,
+    2.236999988555908,
+    0.8880000114440918
+   ],
+   "center": [
+    -8.619999885559082,
+    1.3630000352859497,
+    6.818999767303467
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 140,
+   "file": "mesh-140.fbx",
+   "tris": 2,
+   "size": [
+    0.6759999990463257,
+    2.188999891281128,
+    0.8080000281333923
+   ],
+   "center": [
+    -8.616000175476074,
+    1.3630000352859497,
+    6.815000057220459
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 141,
+   "file": "mesh-141.fbx",
+   "tris": 44,
+   "size": [
+    0.01899999938905239,
+    0.5559999942779541,
+    0.05400000140070915
+   ],
+   "center": [
+    -8.303000450134277,
+    1.4559999704360962,
+    7.169000148773193
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 142,
+   "file": "mesh-142.fbx",
+   "tris": 32,
+   "size": [
+    1.0770000219345093,
+    2.236999988555908,
+    0.09700000286102295
+   ],
+   "center": [
+    -8.819000244140625,
+    1.3630000352859497,
+    7.23199987411499
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 143,
+   "file": "mesh-143.fbx",
+   "tris": 2,
+   "size": [
+    1.0540000200271606,
+    2.188999891281128,
+    0.0
+   ],
+   "center": [
+    -8.819000244140625,
+    1.3630000352859497,
+    7.23799991607666
+   ],
+   "role": "fridge door part (duplicate instance)",
+   "usage": "partial",
+   "note": "identical door parts for the other fridge units"
+  },
+  {
+   "id": 144,
+   "file": "mesh-144.fbx",
+   "tris": 36,
+   "size": [
+    5.340000152587891,
+    0.1379999965429306,
+    0.9259999990463257
+   ],
+   "center": [
+    10.140000343322754,
+    0.15000000596046448,
+    -5.956999778747559
+   ],
+   "role": "chest freezer, 5.3 m variant",
+   "usage": "partial",
+   "note": "same design as 106-109 (47k tris); one variant is enough"
+  },
+  {
+   "id": 145,
+   "file": "mesh-145.fbx",
+   "tris": 46986,
+   "size": [
+    5.348999977111816,
+    0.8019999861717224,
+    0.9089999794960022
+   ],
+   "center": [
+    10.140000343322754,
+    0.597000002861023,
+    -5.956999778747559
+   ],
+   "role": "chest freezer, 5.3 m variant",
+   "usage": "partial",
+   "note": "same design as 106-109 (47k tris); one variant is enough"
+  },
+  {
+   "id": 146,
+   "file": "mesh-146.fbx",
+   "tris": 54,
+   "size": [
+    5.335000038146973,
+    0.7289999723434448,
+    0.8889999985694885
+   ],
+   "center": [
+    10.140000343322754,
+    0.6010000109672546,
+    -5.956999778747559
+   ],
+   "role": "chest freezer, 5.3 m variant",
+   "usage": "partial",
+   "note": "same design as 106-109 (47k tris); one variant is enough"
+  },
+  {
+   "id": 147,
+   "file": "mesh-147.fbx",
+   "tris": 6,
+   "size": [
+    5.320000171661377,
+    0.0,
+    0.8809999823570251
+   ],
+   "center": [
+    10.140000343322754,
+    0.9700000286102295,
+    -5.956999778747559
+   ],
+   "role": "chest freezer, 5.3 m variant",
+   "usage": "partial",
+   "note": "same design as 106-109 (47k tris); one variant is enough"
+  },
+  {
+   "id": 148,
+   "file": "mesh-148.fbx",
+   "tris": 12,
+   "size": [
+    0.7409999966621399,
+    6.104000091552734,
+    15.897000312805176
+   ],
+   "center": [
+    14.515000343322754,
+    3.0160000324249268,
+    0.8159999847412109
+   ],
+   "role": "east wall slab (6.1 m x 15.9 m)",
+   "usage": "partial",
+   "note": "walls are generated per tier so they fit any grid; textured with стена.jpg"
+  },
+  {
+   "id": 149,
+   "file": "mesh-149.fbx",
+   "tris": 24,
+   "size": [
+    3.4059998989105225,
+    1.8020000457763672,
+    0.17499999701976776
+   ],
+   "center": [
+    -3.8589999675750732,
+    3.4230000972747803,
+    -7.208000183105469
+   ],
+   "role": "store sign board (name is drawn onto it at runtime)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 150,
+   "file": "mesh-150.fbx",
+   "tris": 12,
+   "size": [
+    1.8819999694824219,
+    6.159999847412109,
+    0.765999972820282
+   ],
+   "center": [
+    -0.21400000154972076,
+    3.197999954223633,
+    -7.71999979019165
+   ],
+   "role": "structural pillar",
+   "usage": "unused",
+   "note": "no pillar in the tile-grid layout"
+  },
+  {
+   "id": 151,
+   "file": "mesh-151.fbx",
+   "tris": 32,
+   "size": [
+    5.480999946594238,
+    1.8020000457763672,
+    0.5740000009536743
+   ],
+   "center": [
+    -3.8589999675750732,
+    3.4230000972747803,
+    -7.11299991607666
+   ],
+   "role": "store sign board (name is drawn onto it at runtime)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 152,
+   "file": "mesh-152.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.6010000109672546,
+    0.13600000739097595
+   ],
+   "center": [
+    2.321000099182129,
+    28.60700035095215,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on candy sheet; scaled x0.666"
+  },
+  {
+   "id": 153,
+   "file": "mesh-153.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.6859999895095825,
+    0.13600000739097595
+   ],
+   "center": [
+    3.0260000228881836,
+    28.60700035095215,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on candy sheet; scaled x0.583"
+  },
+  {
+   "id": 154,
+   "file": "mesh-154.fbx",
+   "tris": 760,
+   "size": [
+    6.519999980926514,
+    2.2890000343322754,
+    0.5199999809265137
+   ],
+   "center": [
+    3.430999994277954,
+    1.2050000429153442,
+    -6.4120001792907715
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on candy sheet; scaled x0.061"
+  },
+  {
+   "id": 155,
+   "file": "mesh-155.fbx",
+   "tris": 360,
+   "size": [
+    6.519999980926514,
+    1.8380000591278076,
+    0.492000013589859
+   ],
+   "center": [
+    3.430000066757202,
+    1.3569999933242798,
+    -6.39900016784668
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on candy sheet; scaled x0.061"
+  },
+  {
+   "id": 156,
+   "file": "mesh-156.fbx",
+   "tris": 136,
+   "size": [
+    0.6140000224113464,
+    0.6859999895095825,
+    0.13600000739097595
+   ],
+   "center": [
+    3.7769999504089355,
+    28.60700035095215,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on candy sheet; scaled x0.583"
+  },
+  {
+   "id": 157,
+   "file": "mesh-157.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.7429999709129333,
+    0.13600000739097595
+   ],
+   "center": [
+    2.321000099182129,
+    27.610000610351562,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on candy sheet; scaled x0.539"
+  },
+  {
+   "id": 158,
+   "file": "mesh-158.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.7429999709129333,
+    0.3400000035762787
+   ],
+   "center": [
+    3.0360000133514404,
+    27.610000610351562,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on candy sheet; scaled x0.539"
+  },
+  {
+   "id": 159,
+   "file": "mesh-159.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.7429999709129333,
+    0.13600000739097595
+   ],
+   "center": [
+    3.7750000953674316,
+    27.610000610351562,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on candy sheet; scaled x0.539"
+  },
+  {
+   "id": 160,
+   "file": "mesh-160.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.8119999766349792,
+    0.13600000739097595
+   ],
+   "center": [
+    2.321000099182129,
+    26.631999969482422,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on candy sheet; scaled x0.493"
+  },
+  {
+   "id": 161,
+   "file": "mesh-161.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.7390000224113464,
+    0.13600000739097595
+   ],
+   "center": [
+    3.0360000133514404,
+    26.631999969482422,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on candy sheet; scaled x0.541"
+  },
+  {
+   "id": 162,
+   "file": "mesh-162.fbx",
+   "tris": 36,
+   "size": [
+    0.6010000109672546,
+    0.6439999938011169,
+    0.13600000739097595
+   ],
+   "center": [
+    3.802999973297119,
+    26.631999969482422,
+    -0.25699999928474426
+   ],
+   "role": "candy bag (candy)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on candy sheet; scaled x0.621"
+  },
+  {
+   "id": 163,
+   "file": "mesh-163.fbx",
+   "tris": 28,
+   "size": [
+    0.7509999871253967,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -8.230999946594238,
+    24.663000106811523,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 164,
+   "file": "mesh-164.fbx",
+   "tris": 28,
+   "size": [
+    0.8019999861717224,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -7.376999855041504,
+    24.663000106811523,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (5,1) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 165,
+   "file": "mesh-165.fbx",
+   "tris": 28,
+   "size": [
+    0.8019999861717224,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -6.436999797821045,
+    24.663000106811523,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (4,3) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 166,
+   "file": "mesh-166.fbx",
+   "tris": 28,
+   "size": [
+    0.6790000200271606,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -5.5960001945495605,
+    24.663000106811523,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,5) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 167,
+   "file": "mesh-167.fbx",
+   "tris": 28,
+   "size": [
+    0.843999981880188,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -8.230999946594238,
+    23.243999481201172,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,7) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 168,
+   "file": "mesh-168.fbx",
+   "tris": 28,
+   "size": [
+    0.843999981880188,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -7.306000232696533,
+    23.243999481201172,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 169,
+   "file": "mesh-169.fbx",
+   "tris": 28,
+   "size": [
+    0.843999981880188,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -6.366000175476074,
+    23.243999481201172,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,3) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 170,
+   "file": "mesh-170.fbx",
+   "tris": 28,
+   "size": [
+    0.843999981880188,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -5.439000129699707,
+    23.243999481201172,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (5,4) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 171,
+   "file": "mesh-171.fbx",
+   "tris": 28,
+   "size": [
+    0.6359999775886536,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -4.48199987411499,
+    23.263999938964844,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (4,6) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 172,
+   "file": "mesh-172.fbx",
+   "tris": 28,
+   "size": [
+    0.6359999775886536,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -4.85099983215332,
+    24.68199920654297,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,0) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 173,
+   "file": "mesh-173.fbx",
+   "tris": 28,
+   "size": [
+    0.6359999775886536,
+    1.2660000324249268,
+    0.1550000011920929
+   ],
+   "center": [
+    -4.1529998779296875,
+    24.68199920654297,
+    -0.25699999928474426
+   ],
+   "role": "household bottle (household)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 6x8 grid on household sheet; scaled x0.316"
+  },
+  {
+   "id": 174,
+   "file": "mesh-174.fbx",
+   "tris": 32,
+   "size": [
+    0.8119999766349792,
+    0.7129999995231628,
+    0.15399999916553497
+   ],
+   "center": [
+    3.6619999408721924,
+    24.256999969482422,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x6 grid on meat sheet; scaled x0.493"
+  },
+  {
+   "id": 175,
+   "file": "mesh-175.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7070000171661377,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.7250000238418579,
+    28.506000518798828,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 4x5 grid on chips sheet; scaled x0.566"
+  },
+  {
+   "id": 176,
+   "file": "mesh-176.fbx",
+   "tris": 32,
+   "size": [
+    0.8119999766349792,
+    0.7129999995231628,
+    0.15399999916553497
+   ],
+   "center": [
+    3.6619999408721924,
+    23.46299934387207,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x6 grid on meat sheet; scaled x0.493"
+  },
+  {
+   "id": 177,
+   "file": "mesh-177.fbx",
+   "tris": 32,
+   "size": [
+    0.9850000143051147,
+    0.5559999942779541,
+    0.1860000044107437
+   ],
+   "center": [
+    3.6619999408721924,
+    22.652000427246094,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,5) of a 3x6 grid on meat sheet; scaled x0.406"
+  },
+  {
+   "id": 178,
+   "file": "mesh-178.fbx",
+   "tris": 32,
+   "size": [
+    0.8119999766349792,
+    0.7129999995231628,
+    0.15399999916553497
+   ],
+   "center": [
+    3.6619999408721924,
+    25.06999969482422,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,2) of a 3x6 grid on meat sheet; scaled x0.493"
+  },
+  {
+   "id": 179,
+   "file": "mesh-179.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.843999981880188,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.03099999949336052,
+    28.506000518798828,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 4x5 grid on chips sheet; scaled x0.474"
+  },
+  {
+   "id": 180,
+   "file": "mesh-180.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7070000171661377,
+    0.11100000143051147
+   ],
+   "center": [
+    0.6359999775886536,
+    28.506000518798828,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 4x5 grid on chips sheet; scaled x0.566"
+  },
+  {
+   "id": 181,
+   "file": "mesh-181.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7070000171661377,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.7250000238418579,
+    27.562999725341797,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,1) of a 4x5 grid on chips sheet; scaled x0.566"
+  },
+  {
+   "id": 182,
+   "file": "mesh-182.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7070000171661377,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.008999999612569809,
+    27.562999725341797,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,4) of a 4x5 grid on chips sheet; scaled x0.566"
+  },
+  {
+   "id": 183,
+   "file": "mesh-183.fbx",
+   "tris": 80,
+   "size": [
+    0.6169999837875366,
+    0.7070000171661377,
+    0.11100000143051147
+   ],
+   "center": [
+    0.6809999942779541,
+    27.562999725341797,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 4x5 grid on chips sheet; scaled x0.566"
+  },
+  {
+   "id": 184,
+   "file": "mesh-184.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7649999856948853,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.7250000238418579,
+    26.69099998474121,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,3) of a 4x5 grid on chips sheet; scaled x0.523"
+  },
+  {
+   "id": 185,
+   "file": "mesh-185.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7649999856948853,
+    0.11100000143051147
+   ],
+   "center": [
+    -0.03099999949336052,
+    26.69099998474121,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,0) of a 4x5 grid on chips sheet; scaled x0.523"
+  },
+  {
+   "id": 186,
+   "file": "mesh-186.fbx",
+   "tris": 80,
+   "size": [
+    0.5960000157356262,
+    0.7649999856948853,
+    0.11100000143051147
+   ],
+   "center": [
+    0.6510000228881836,
+    26.69099998474121,
+    -0.25699999928474426
+   ],
+   "role": "chips bag (chips)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,3) of a 4x5 grid on chips sheet; scaled x0.523"
+  },
+  {
+   "id": 187,
+   "file": "mesh-187.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.640999972820282,
+    0.1679999977350235
+   ],
+   "center": [
+    -3.296999931335449,
+    28.464000701904297,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 4x6 grid on ramen sheet; scaled x0.624"
+  },
+  {
+   "id": 188,
+   "file": "mesh-188.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.7360000014305115,
+    0.1679999977350235
+   ],
+   "center": [
+    -2.694999933242798,
+    28.464000701904297,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 4x6 grid on ramen sheet; scaled x0.544"
+  },
+  {
+   "id": 189,
+   "file": "mesh-189.fbx",
+   "tris": 68,
+   "size": [
+    0.47699999809265137,
+    0.7360000014305115,
+    0.1679999977350235
+   ],
+   "center": [
+    -2.1500000953674316,
+    28.464000701904297,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 4x6 grid on ramen sheet; scaled x0.544"
+  },
+  {
+   "id": 190,
+   "file": "mesh-190.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.7360000014305115,
+    0.1679999977350235
+   ],
+   "center": [
+    -1.5950000286102295,
+    28.464000701904297,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,0) of a 4x6 grid on ramen sheet; scaled x0.544"
+  },
+  {
+   "id": 191,
+   "file": "mesh-191.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.7360000014305115,
+    0.1679999977350235
+   ],
+   "center": [
+    -3.309000015258789,
+    27.62299919128418,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,3) of a 4x6 grid on ramen sheet; scaled x0.544"
+  },
+  {
+   "id": 192,
+   "file": "mesh-192.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.8669999837875366,
+    0.1679999977350235
+   ],
+   "center": [
+    -2.694999933242798,
+    27.61199951171875,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,5) of a 4x6 grid on ramen sheet; scaled x0.462"
+  },
+  {
+   "id": 193,
+   "file": "mesh-193.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.7540000081062317,
+    0.1679999977350235
+   ],
+   "center": [
+    -2.11899995803833,
+    27.61199951171875,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,1) of a 4x6 grid on ramen sheet; scaled x0.531"
+  },
+  {
+   "id": 194,
+   "file": "mesh-194.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.7540000081062317,
+    0.1679999977350235
+   ],
+   "center": [
+    -1.5010000467300415,
+    27.61199951171875,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,3) of a 4x6 grid on ramen sheet; scaled x0.531"
+  },
+  {
+   "id": 195,
+   "file": "mesh-195.fbx",
+   "tris": 68,
+   "size": [
+    0.5509999990463257,
+    0.6859999895095825,
+    0.1679999977350235
+   ],
+   "center": [
+    -3.296999931335449,
+    26.719999313354492,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 4x6 grid on ramen sheet; scaled x0.583"
+  },
+  {
+   "id": 196,
+   "file": "mesh-196.fbx",
+   "tris": 68,
+   "size": [
+    0.48899999260902405,
+    0.7549999952316284,
+    0.14900000393390656
+   ],
+   "center": [
+    -2.7239999771118164,
+    26.719999313354492,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 4x6 grid on ramen sheet; scaled x0.530"
+  },
+  {
+   "id": 197,
+   "file": "mesh-197.fbx",
+   "tris": 68,
+   "size": [
+    0.5230000019073486,
+    0.6890000104904175,
+    0.1599999964237213
+   ],
+   "center": [
+    -2.125999927520752,
+    26.719999313354492,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 4x6 grid on ramen sheet; scaled x0.581"
+  },
+  {
+   "id": 198,
+   "file": "mesh-198.fbx",
+   "tris": 68,
+   "size": [
+    0.5230000019073486,
+    0.6890000104904175,
+    0.1599999964237213
+   ],
+   "center": [
+    -1.5219999551773071,
+    26.719999313354492,
+    -0.25699999928474426
+   ],
+   "role": "instant-noodle pack (ramen)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,0) of a 4x6 grid on ramen sheet; scaled x0.581"
+  },
+  {
+   "id": 199,
+   "file": "mesh-199.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    4.7179999351501465,
+    28.753999710083008,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 200,
+   "file": "mesh-200.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    5.679999828338623,
+    28.753999710083008,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 201,
+   "file": "mesh-201.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    6.63100004196167,
+    28.753999710083008,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 202,
+   "file": "mesh-202.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    7.598999977111816,
+    28.753999710083008,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 203,
+   "file": "mesh-203.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    4.7179999351501465,
+    27.968000411987305,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 204,
+   "file": "mesh-204.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    5.679999828338623,
+    27.968000411987305,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 205,
+   "file": "mesh-205.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    6.63100004196167,
+    27.968000411987305,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,2) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 206,
+   "file": "mesh-206.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    7.598999977111816,
+    27.968000411987305,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 207,
+   "file": "mesh-207.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    4.7179999351501465,
+    27.132999420166016,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,1) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 208,
+   "file": "mesh-208.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    5.679999828338623,
+    27.132999420166016,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 209,
+   "file": "mesh-209.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    6.63100004196167,
+    27.132999420166016,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 210,
+   "file": "mesh-210.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    7.598999977111816,
+    27.132999420166016,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 211,
+   "file": "mesh-211.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    4.7179999351501465,
+    26.347999572753906,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,1) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 212,
+   "file": "mesh-212.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    5.679999828338623,
+    26.347999572753906,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 213,
+   "file": "mesh-213.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    6.63100004196167,
+    26.347999572753906,
+    -0.25699999928474426
+   ],
+   "role": "frozen dumpling pack (dumpling)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,0) of a 3x3 grid on dumpling sheet; scaled x0.446"
+  },
+  {
+   "id": 214,
+   "file": "mesh-214.fbx",
+   "tris": 44,
+   "size": [
+    0.8970000147819519,
+    0.7409999966621399,
+    0.2029999941587448
+   ],
+   "center": [
+    7.598999977111816,
+    26.347999572753906,
+    -0.25699999928474426
+   ],
+   "role": "sushi tray (sushi)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on sushi sheet; scaled x0.446"
+  },
+  {
+   "id": 215,
+   "file": "mesh-215.fbx",
+   "tris": 12,
+   "size": [
+    0.7269999980926514,
+    0.5289999842643738,
+    0.15399999916553497
+   ],
+   "center": [
+    2.640000104904175,
+    24.184999465942383,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 3x6 grid on meat sheet; scaled x0.550"
+  },
+  {
+   "id": 216,
+   "file": "mesh-216.fbx",
+   "tris": 12,
+   "size": [
+    0.6589999794960022,
+    0.5289999842643738,
+    0.15399999916553497
+   ],
+   "center": [
+    2.640000104904175,
+    24.795000076293945,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x6 grid on meat sheet; scaled x0.607"
+  },
+  {
+   "id": 217,
+   "file": "mesh-217.fbx",
+   "tris": 28,
+   "size": [
+    0.8080000281333923,
+    0.5289999842643738,
+    0.2460000067949295
+   ],
+   "center": [
+    2.640000104904175,
+    23.61400032043457,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,4) of a 3x6 grid on meat sheet; scaled x0.495"
+  },
+  {
+   "id": 218,
+   "file": "mesh-218.fbx",
+   "tris": 28,
+   "size": [
+    0.7730000019073486,
+    0.41499999165534973,
+    0.15600000321865082
+   ],
+   "center": [
+    2.640000104904175,
+    23.106000900268555,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,0) of a 3x6 grid on meat sheet; scaled x0.517"
+  },
+  {
+   "id": 219,
+   "file": "mesh-219.fbx",
+   "tris": 28,
+   "size": [
+    0.7009999752044678,
+    0.45899999141693115,
+    0.11999999731779099
+   ],
+   "center": [
+    1.8289999961853027,
+    23.492000579833984,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,3) of a 3x6 grid on meat sheet; scaled x0.570"
+  },
+  {
+   "id": 220,
+   "file": "mesh-220.fbx",
+   "tris": 28,
+   "size": [
+    0.5929999947547913,
+    0.45899999141693115,
+    0.1809999942779541
+   ],
+   "center": [
+    1.8289999961853027,
+    22.974000930786133,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x6 grid on meat sheet; scaled x0.675"
+  },
+  {
+   "id": 221,
+   "file": "mesh-221.fbx",
+   "tris": 28,
+   "size": [
+    0.5929999947547913,
+    0.45899999141693115,
+    0.1809999942779541
+   ],
+   "center": [
+    2.484999895095825,
+    22.572999954223633,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x6 grid on meat sheet; scaled x0.675"
+  },
+  {
+   "id": 222,
+   "file": "mesh-222.fbx",
+   "tris": 28,
+   "size": [
+    0.6060000061988831,
+    0.6710000038146973,
+    0.21199999749660492
+   ],
+   "center": [
+    1.8559999465942383,
+    24.969999313354492,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,5) of a 3x6 grid on meat sheet; scaled x0.596"
+  },
+  {
+   "id": 223,
+   "file": "mesh-223.fbx",
+   "tris": 28,
+   "size": [
+    0.6549999713897705,
+    0.6710000038146973,
+    0.21199999749660492
+   ],
+   "center": [
+    1.8559999465942383,
+    24.20599937438965,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,2) of a 3x6 grid on meat sheet; scaled x0.596"
+  },
+  {
+   "id": 224,
+   "file": "mesh-224.fbx",
+   "tris": 44,
+   "size": [
+    0.6589999794960022,
+    0.27000001072883606,
+    0.15399999916553497
+   ],
+   "center": [
+    2.5940001010894775,
+    25.256000518798828,
+    -0.257999986410141
+   ],
+   "role": "meat tray (meat)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 3x6 grid on meat sheet; scaled x0.607"
+  },
+  {
+   "id": 225,
+   "file": "mesh-225.fbx",
+   "tris": 28,
+   "size": [
+    0.6850000023841858,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -2.884999990463257,
+    24.440000534057617,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 4x8 grid on goods sheet; scaled x0.351"
+  },
+  {
+   "id": 226,
+   "file": "mesh-226.fbx",
+   "tris": 28,
+   "size": [
+    0.6850000023841858,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -2.1679999828338623,
+    24.440000534057617,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x6 grid on misc sheet; scaled x0.351"
+  },
+  {
+   "id": 227,
+   "file": "mesh-227.fbx",
+   "tris": 28,
+   "size": [
+    0.6850000023841858,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -1.4220000505447388,
+    24.440000534057617,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 4x8 grid on goods sheet; scaled x0.351"
+  },
+  {
+   "id": 228,
+   "file": "mesh-228.fbx",
+   "tris": 28,
+   "size": [
+    0.6850000023841858,
+    1.0169999599456787,
+    0.14000000059604645
+   ],
+   "center": [
+    -0.7089999914169312,
+    24.440000534057617,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x6 grid on misc sheet; scaled x0.393"
+  },
+  {
+   "id": 229,
+   "file": "mesh-229.fbx",
+   "tris": 28,
+   "size": [
+    0.6850000023841858,
+    1.0169999599456787,
+    0.14000000059604645
+   ],
+   "center": [
+    0.00800000037997961,
+    24.440000534057617,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 4x8 grid on goods sheet; scaled x0.393"
+  },
+  {
+   "id": 230,
+   "file": "mesh-230.fbx",
+   "tris": 28,
+   "size": [
+    0.8059999942779541,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -2.884999990463257,
+    23.131000518798828,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,5) of a 3x6 grid on misc sheet; scaled x0.351"
+  },
+  {
+   "id": 231,
+   "file": "mesh-231.fbx",
+   "tris": 28,
+   "size": [
+    0.8059999942779541,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -1.9839999675750732,
+    23.131000518798828,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (3,6) of a 4x8 grid on goods sheet; scaled x0.351"
+  },
+  {
+   "id": 232,
+   "file": "mesh-232.fbx",
+   "tris": 28,
+   "size": [
+    0.8059999942779541,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -1.0779999494552612,
+    23.131000518798828,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,2) of a 3x6 grid on misc sheet; scaled x0.351"
+  },
+  {
+   "id": 233,
+   "file": "mesh-233.fbx",
+   "tris": 28,
+   "size": [
+    0.6420000195503235,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    -0.3619999885559082,
+    23.145999908447266,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,1) of a 4x8 grid on goods sheet; scaled x0.351"
+  },
+  {
+   "id": 234,
+   "file": "mesh-234.fbx",
+   "tris": 28,
+   "size": [
+    0.640999972820282,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    1.0260000228881836,
+    23.19499969482422,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,4) of a 3x6 grid on misc sheet; scaled x0.351"
+  },
+  {
+   "id": 235,
+   "file": "mesh-235.fbx",
+   "tris": 28,
+   "size": [
+    0.7820000052452087,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    0.8230000138282776,
+    24.41900062561035,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (goods)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,3) of a 4x8 grid on goods sheet; scaled x0.351"
+  },
+  {
+   "id": 236,
+   "file": "mesh-236.fbx",
+   "tris": 28,
+   "size": [
+    0.7820000052452087,
+    1.1390000581741333,
+    0.14000000059604645
+   ],
+   "center": [
+    0.28999999165534973,
+    23.165000915527344,
+    -0.25699999928474426
+   ],
+   "role": "grocery box (misc)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x6 grid on misc sheet; scaled x0.351"
+  },
+  {
+   "id": 237,
+   "file": "mesh-237.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -3.7049999237060547,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 238,
+   "file": "mesh-238.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -3.364000082015991,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (fruit)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on fruit sheet; scaled x1.072"
+  },
+  {
+   "id": 239,
+   "file": "mesh-239.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -3.013000011444092,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,0) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 240,
+   "file": "mesh-240.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -2.6559998989105225,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (fruit)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on fruit sheet; scaled x1.072"
+  },
+  {
+   "id": 241,
+   "file": "mesh-241.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -5.896999835968018,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,1) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 242,
+   "file": "mesh-242.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -5.556000232696533,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (fruit)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 3x4 grid on fruit sheet; scaled x1.072"
+  },
+  {
+   "id": 243,
+   "file": "mesh-243.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -5.204999923706055,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,1) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 244,
+   "file": "mesh-244.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -4.8480000495910645,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (fruit)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,0) of a 3x4 grid on fruit sheet; scaled x1.072"
+  },
+  {
+   "id": 245,
+   "file": "mesh-245.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -4.494999885559082,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (0,2) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 246,
+   "file": "mesh-246.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -4.1519999504089355,
+    0.628000020980835,
+    4.604000091552734
+   ],
+   "role": "produce box (fruit)",
+   "usage": "used",
+   "note": "UV-mapped to cell (2,2) of a 3x4 grid on fruit sheet; scaled x1.072"
+  },
+  {
+   "id": 247,
+   "file": "mesh-247.fbx",
+   "tris": 32,
+   "size": [
+    0.3400000035762787,
+    0.37299999594688416,
+    0.15800000727176666
+   ],
+   "center": [
+    -5.896999835968018,
+    0.628000020980835,
+    4.485000133514404
+   ],
+   "role": "produce box (veg)",
+   "usage": "used",
+   "note": "UV-mapped to cell (1,2) of a 2x3 grid on veg sheet; scaled x1.072"
+  },
+  {
+   "id": 248,
+   "file": "mesh-248.fbx",
+   "tris": 28,
+   "size": [
+    0.4320000112056732,
+    0.2919999957084656,
+    0.09300000220537186
+   ],
+   "center": [
+    -5.867000102996826,
+    2.0239999294281006,
+    4.646999835968018
+   ],
+   "role": "POS screen (textured with the supplied cash-register photo)",
+   "usage": "used",
+   "note": ""
+  },
+  {
+   "id": 249,
+   "file": "mesh-249.fbx",
+   "tris": 68,
+   "size": [
+    0.13699999451637268,
+    0.3700000047683716,
+    0.2800000011920929
+   ],
+   "center": [
+    -6.576000213623047,
+    2.007999897003174,
+    3.6649999618530273
+   ],
+   "role": "barcode scanner / card reader",
+   "usage": "used",
+   "note": ""
+  }
+ ]
+}
