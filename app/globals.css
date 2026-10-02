@@ -300,3 +300,17 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
   .actor,.actor.staff,.actor.cust{transform:translate(-50%,-70%) rotateX(-22deg) scaleY(1.08)}
   .float{transform:rotateX(-22deg)}
 }
+
+/* ===== 2.5D depth layers ===== */
+.store-floor-surface{overflow:hidden;transform-style:preserve-3d}
+.floor-perspective-glow{position:absolute;left:8%;right:8%;top:8%;height:34%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(255,255,255,.22),transparent 70%);filter:blur(2px);opacity:.8}
+.floor-front-edge{position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(180deg,transparent,rgba(51,65,85,.2));border-top:1px solid rgba(71,85,105,.18)}
+.store-depth-bands{position:absolute;inset:8% 0 0;z-index:1;pointer-events:none;overflow:hidden}
+.store-depth-bands i{position:absolute;left:-5%;width:110%;height:10%;border-top:1px solid rgba(71,85,105,.08);border-bottom:1px solid rgba(255,255,255,.09);transform:skewY(-1.2deg);opacity:.6}
+.store-depth-bands i:nth-child(1){top:28%}
+.store-depth-bands i:nth-child(2){top:55%}
+.store-depth-bands i:nth-child(3){top:78%}
+.store-environment{transform-style:preserve-3d}
+.store-back-wall{transform:translateZ(2px)}
+.store-stockroom{transform:translateZ(4px)}
+.store-entry-mat{transform:translateZ(5px)}
