@@ -131,8 +131,9 @@ export default function StoreView() {
             {door && <><img src={entranceDoors} alt="Entrance" className="spr door" draggable={false} /><span className="doorlbl">ENTRANCE</span></>}</button>; })}</div>
       {/* staff */}
       {restockers.filter((r) => r.level > 0).map((r) => { const home = { x: r.x, y: r.y }, busy = (r.busy ?? 0) > 0 && r.target, t = busy ? pos2(r.target!) : home, p = 1 - (r.busy ?? 0) / 2.4, f = busy ? (p < 0.5 ? p * 2 : (1 - p) * 2) : 0, at = lerp(home, { x: t.x, y: t.y + 0.35 }, Math.min(1, f));
-        return sprite(`r${r.id}`, char("restocker"), at, 0.95, `staff ${busy ? "walking" : "idle"}`, undefined, busy ? <Icon n="restock" size={14} className="bubble" /> : null); })}
-      {Object.entries(lanes).map(([lid, c]) => { const k = checkouts.find((z) => z.id === lid)!; return sprite(`c${c.id}`, char("cashier"), { x: k.x + 0.36, y: k.y - 0.12 }, 1, "staff idle", undefined, c.workload > 0.5 ? <Icon n="speed" size={12} className="bubble" /> : null); })}
+        const nearShelf = !!busy && Math.abs(at.x - t.x) + Math.abs(at.y - (t.y + 0.35)) < 0.38;
+        return sprite(`r${r.id}`, char("restocker"), at, 0.95, `staff ${busy ? (nearShelf ? "restocking" : "walking") : "idle"}`, undefined, busy ? <><Icon n="restock" size={14} className="bubble" />{nearShelf && <span className="restock-bubble">STOCK</span>}</> : null); })}
+      {Object.entries(lanes).map(([lid, c]) => { const k = checkouts.find((z) => z.id === lid)!; const serving = customers.some((u) => u.co === lid && u.phase === "CHECKOUT"); return sprite(`c${c.id}`, char("cashier"), { x: k.x + 0.36, y: k.y - 0.12 }, 1, `staff ${serving ? "serving" : "idle"}`, undefined, serving ? <span className="serve-bubble">SERVE</span> : c.workload > 0.5 ? <Icon n="speed" size={12} className="bubble" /> : null); })}
       {cleaners.map((c, i) => { const ph = i * 2.1 + 1, p = { x: (cols - 1) * (0.5 + 0.38 * Math.sin(clock * 0.11 + ph)), y: (rows - 1) * (0.5 + 0.32 * Math.sin(clock * 0.17 + ph * 1.7)) };
         return sprite(`cl${c.id}`, char("cleaner"), p, 0.95, "staff walking", undefined, <img src={fxImg("levelup-sparkle")} alt="" className="sparkle" draggable={false} />); })}
       {guards.map((g, i) => sprite(`g${g.id}`, char("guard"), { x: 1.1 + i * 0.9 + 0.5 * Math.sin(clock * 0.4 + i), y: rows - 1.35 }, 0.95, "staff walking", undefined, stopped ? <Icon n="alert" size={16} className="bubble pulse" /> : null))}
@@ -141,9 +142,9 @@ export default function StoreView() {
       {/* customers */}
       {customers.slice(0, 70).map((c) => { const p = place(c), def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal, angry = c.mood === "😡", cart = c.phase !== "ENTERING" && c.phase !== "LEAVING" && hash(c.id) < 0.5, b = BUBBLE[c.mood], tag = KIND_TAG[c.kind];
         const src = c.mood === "🦹" ? char("shopper") : angry ? char("shopper-angry") : cart ? char("shopper-3") : char("shopper");
-        const walking = c.phase === "ENTERING" || c.phase === "SHOPPING" || c.phase === "LEAVING";
-        const nearestStop = c.plan.map((id) => pos2(id)).reduce((best, q) => { const d = Math.abs(q.x - p.x) + Math.abs(q.y - p.y); return d < best.d ? { q, d } : best; }, { q: E, d: 999 });
         const visualShop = c.phase === "SHOPPING" ? shoppingVisual(c) : null;
+        const walking = c.phase === "ENTERING" || c.phase === "LEAVING" || (c.phase === "SHOPPING" && !!visualShop?.walking);
+        const nearestStop = c.plan.map((id) => pos2(id)).reduce((best, q) => { const d = Math.abs(q.x - p.x) + Math.abs(q.y - p.y); return d < best.d ? { q, d } : best; }, { q: E, d: 999 });
         const browsing = c.phase === "SHOPPING" && !!visualShop?.shelf && nearestStop.d < 0.9;
         const checkoutAction = c.phase === "CHECKOUT";
         const entering = c.phase === "ENTERING";
