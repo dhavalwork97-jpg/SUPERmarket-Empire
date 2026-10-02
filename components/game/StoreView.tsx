@@ -113,7 +113,7 @@ export default function StoreView() {
   const cleaners = staff.filter((x) => x.role === "cleaner"), guards = staff.filter((x) => x.role === "security"), mgr = staff.find((x) => x.role === "manager");
   const stopped = fx.some((f) => f.kind === "stopped" && f.age < 2.5), dirty = Math.max(0, 0.85 - cleanliness) / 0.85; // share of tiles showing grime
   const sprite = (key: string, src: string, p: P, h: number, extra = "", style?: React.CSSProperties, children?: React.ReactNode) =>
-    <span key={key} className={`actor ${extra}`} style={{ ...css(p), height: `${th * h}%`, ...style }}><img src={src} alt="" draggable={false} />{children}</span>;
+    <span key={key} className={`actor ${extra}`} style={{ ...css(p), height: `${th * h}%`, zIndex: 6 + Math.round(p.y * 2), ...style }}><img src={src} alt="" draggable={false} />{children}</span>;
   return (<div className="storewrap">
     <div className="shopsign"><img src={TIERS[tier].img} alt="" className="signimg" /><b>{TIERS[tier].name}</b><span className="open"><i /> OPEN</span></div>
     <div className="buildbar">{builds.map((b) => { const c = placeCost(s, b.kind, b.type), on = sel?.mode === "new" && sel.kind === b.kind && sel.type === b.type;
@@ -126,7 +126,7 @@ export default function StoreView() {
       {dirty > 0.05 && Array.from({ length: cols * rows }, (_, n) => (hash(n * 7 + 3) < dirty * 0.7 ? <img key={n} src={floorDirty} alt="" className="grime" draggable={false} style={{ left: `${((n % cols) / cols) * 100}%`, top: `${(Math.floor(n / cols) / rows) * 100}%`, width: `${100 / cols}%`, height: `${100 / rows}%` }} /> : null))}
       <div className="tiles" style={{ gridTemplateColumns: `repeat(${cols},1fr)`, gridTemplateRows: `repeat(${rows},1fr)` }}>
         {Array.from({ length: cols * rows }, (_, n) => { const x = n % cols, y = Math.floor(n / cols), it = cell.get(`${x},${y}`), picked = sel && "id" in sel && it?.id === sel.id, door = !it && x === 0 && y === rows - 1;
-          return <button key={n} aria-label={it ? `${it.kind} ${it.id}` : door ? "entrance" : "empty tile"} className={`tile ${it ? "has" : ""} ${picked ? "picked" : ""}`} onClick={() => click(x, y)}>
+          return <button key={n} aria-label={it ? `${it.kind} ${it.id}` : door ? "entrance" : "empty tile"} className={`tile ${it ? "has" : ""} ${picked ? "picked" : ""}`} style={{ zIndex: 2 + y }} onClick={() => click(x, y)}>
             {it && <>{it.item}{it.badge && <span className="nb">{it.badge}</span>}{it.lvl > 0 && <small>L{it.lvl}</small>}{it.bar !== undefined && <i className="mini"><b style={{ width: `${Math.min(1, it.bar) * 100}%`, background: it.kind === "aisle" ? (it.bar < 0.25 ? "#ef4444" : "#4ade80") : "#60a5fa" }} /></i>}</>}
             {door && <><img src={entranceDoors} alt="Entrance" className="spr door" draggable={false} /><span className="doorlbl">ENTRANCE</span></>}</button>; })}</div>
       {/* staff */}
