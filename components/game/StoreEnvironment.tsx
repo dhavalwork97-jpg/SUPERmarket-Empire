@@ -14,7 +14,11 @@ export default function StoreEnvironment({ cols, rows, aisles, checkouts, tier =
       <div className="wall-sign">{tier >= 2 ? "MEGA MARKET • FRESH • QUALITY" : tier === 1 ? "FRESH • QUALITY • EVERY DAY" : "WELCOME • FRESH • QUALITY"}</div>
       <div className="ceiling-lights">{Array.from({ length: lightCount }, (_, i) => <i key={i} style={{ left: ((i + 0.5) / lightCount) * 100 + "%" }} />)}</div>
     </div>
-    <div className="store-floor-surface" />
+    <div className="store-floor-surface">
+      <div className="floor-perspective-glow" />
+      <div className="floor-front-edge" />
+    </div>
+    <div className="store-depth-bands" aria-hidden="true"><i /><i /><i /></div>
     <div className="store-aisle-shadow-layer">
       {aisles.filter(a => a.level > 0).map(a => (
         <i key={a.id} className="aisle-footprint" style={{ left: pctX(a.x, cols) + "%", top: pctY(a.y, rows) + "%", width: Math.min(15, 9.5 + a.level * 0.35) + "%", height: Math.min(11, 6.5 + a.level * 0.25) + "%", opacity: Math.min(0.34, 0.16 + a.level * 0.018) }} />
