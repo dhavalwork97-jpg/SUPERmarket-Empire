@@ -223,3 +223,15 @@ main>*{min-width:0}.top{min-width:0;max-width:100%}.toprow{min-width:0}.cash{whi
 .tile.has:has(.aisle-sprite):hover .aisle-sprite,.tile.has:has(.checkout-sprite):hover .checkout-sprite{filter:drop-shadow(0 9px 7px rgba(15,23,42,.3)) brightness(1.035)}
 .tile.picked:has(.aisle-sprite) .aisle-sprite,.tile.picked:has(.checkout-sprite) .checkout-sprite{filter:drop-shadow(0 0 7px rgba(74,222,128,.5)) drop-shadow(0 7px 5px rgba(15,23,42,.24))}
 .store-checkout-zone i{transition:transform .2s ease,background .2s ease}
+
+/* ===== Phase 5: staff task presentation ===== */
+.actor.staff.serving>img:first-child{animation:cashierServe .62s ease-in-out infinite}
+.actor.staff.restocking>img:first-child{animation:restockWork .7s ease-in-out infinite}
+.serve-bubble,.restock-bubble{position:absolute;left:50%;top:-9%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;font-size:clamp(5px,.52vw,8px);font-weight:900;letter-spacing:.45px;color:#fff;border-radius:999px;padding:2px 5px;box-shadow:0 2px 4px rgba(15,23,42,.25);animation:actionPop .8s ease-in-out infinite}
+.serve-bubble{background:#2563eb}
+.restock-bubble{background:#16a34a}
+.actor.staff.restocking:after{left:8%;right:8%;background:rgba(22,163,74,.2);animation:restockShadow .7s ease-in-out infinite}
+@keyframes cashierServe{0%,100%{transform:translateY(0) rotate(0deg)}35%{transform:translateY(-1px) rotate(-1.5deg)}65%{transform:translateY(0) rotate(1deg)}}
+@keyframes restockWork{0%,100%{transform:translateY(0) rotate(0deg)}40%{transform:translateY(-1px) rotate(-2deg)}70%{transform:translateY(0) rotate(2deg)}}
+@keyframes restockShadow{0%,100%{transform:scaleX(.8);opacity:.18}50%{transform:scaleX(1);opacity:.35}}
+@media(prefers-reduced-motion:reduce){.actor.staff.serving>img:first-child,.actor.staff.restocking>img:first-child,.serve-bubble,.restock-bubble,.actor.staff.restocking:after{animation:none!important}}
