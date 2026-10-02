@@ -66,7 +66,7 @@ async function loadGLB(url:string):Promise<MeshData>{
   if(!json||!bin)throw new Error("incomplete GLB");
   const prim=json.meshes[0].primitives[0], acc=(i:number)=>json.accessors[i], bv=(i:number)=>json.bufferViews[i];
   function read(index:number):Float32Array{const a=acc(index),v=bv(a.bufferView),base=(v.byteOffset||0)+(a.byteOffset||0),count=a.count, comps=a.type==="VEC3"?3:1,stride=v.byteStride||comps*4,out=new Float32Array(count*comps),bd=new DataView(bin!.buffer,bin!.byteOffset);for(let i=0;i<count;i++)for(let c=0;c<comps;c++)out[i*comps+c]=bd.getFloat32(base+i*stride+c*4,true);return out;}
-  function readIndex(index:number):Uint32Array{const a=acc(index),v=bv(a.bufferView),base=(v.byteOffset||0)+(a.byteOffset||0),out=new Uint32Array(a.count),bd=new DataView(bin!.buffer,bin!.byteOffset+base);for(let i=0;i<a.count;i++)out[i]=bd.getUint32(i*4,true);return out;}
+  function readIndex(index:number):Uint32Array{const a=acc(index),v=bv(a.bufferView),base=(v.byteOffset||0)+(a.byteOffset||0),out=new Uint32Array(a.count),component=a.componentType||5125,bytes=component===5121?1:component===5123?2:4,bd=new DataView(bin!.buffer,bin!.byteOffset+base);for(let i=0;i<a.count;i++){const p=i*bytes;out[i]=component===5121?bd.getUint8(p):component===5123?bd.getUint16(p,true):bd.getUint32(p,true);}return out;}
   const positions=read(prim.attributes.POSITION);const normals=read(prim.attributes.NORMAL);const indices=readIndex(prim.indices);return {positions,normals,indices,min:acc(prim.attributes.POSITION).min as Vec3,max:acc(prim.attributes.POSITION).max as Vec3};
 }
 
