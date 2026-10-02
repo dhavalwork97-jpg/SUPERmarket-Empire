@@ -105,11 +105,13 @@ export default function StoreView() {
         const nearestStop = c.plan.map((id) => pos2(id)).reduce((best, q) => { const d = Math.abs(q.x - p.x) + Math.abs(q.y - p.y); return d < best.d ? { q, d } : best; }, { q: E, d: 999 });
         const browsing = c.phase === "SHOPPING" && nearestStop.d < 0.72;
         const checkoutAction = c.phase === "CHECKOUT";
+        const entering = c.phase === "ENTERING";
+        const leaving = c.phase === "LEAVING";
         const queueing = c.phase === "QUEUING";
         const facingLeft = c.phase === "SHOPPING" ? (() => { const target = c.plan.find((id) => pos2(id).y >= 0); const q = target ? pos2(target) : E; return q.x < p.x; })() : c.phase === "LEAVING" ? p.x > E.x : false;
         const faceClass = facingLeft ? "face-left" : "";
         return sprite(`u${c.id}`, src, p, 0.78 * def.scale, `cust ${walking ? "walking" : "idle"} ${faceClass} ${browsing ? "browsing" : ""} ${checkoutAction ? "shopping-checkout" : ""} ${queueing ? "queueing" : ""} ${c.phase === "ENTERING" ? "fadein" : ""} ${c.mood === "🦹" ? "thief" : ""} ${cart ? "has-cart" : ""}`, { filter: def.filter, opacity: c.phase === "LEAVING" ? Math.max(0.25, c.t) : 1, zIndex: 2 + Math.round(p.y * 10), animationDelay: `${-hash(c.id * 17) * 0.55}s` },
-          <>{b && c.phase !== "SHOPPING" && <Icon n={b} size={13} className="bubble" />}{tag && <i className="ktag">{tag}</i>}{browsing && <span className="browse-ring" />}{cart && <span className="cart-prop"><i /></span>}</>); })}
+          <>{b && c.phase !== "SHOPPING" && <Icon n={b} size={13} className="bubble" />}{tag && <i className="ktag">{tag}</i>}{browsing && <span className="browse-ring" />}{browsing && <span className="pick-bubble">PICK</span>}{checkoutAction && <span className="checkout-bubble">PAY</span>}{leaving && <span className="leave-arrow">›</span>}{entering && <span className="enter-arrow">↓</span>}{cart && <span className="cart-prop"><i /></span>}</>); })}
       {floats.map((f) => { const k = active[Math.floor(hash(f.id) * active.length)], p = k ? { x: k.x, y: k.y } : { x: 2, y: rows - 2 };
         return <span key={f.id} className="float" style={{ ...css(p), opacity: Math.min(1, 1.6 - f.age / 1.2), marginTop: `${-f.age * 28}px` }}>{f.age < 0.5 && <img src={fxImg("coin-burst")} alt="" className="burst" draggable={false} />}<img src={icon("coin")} alt="" width={14} height={14} />+{formatMoney(f.amt)}</span>; })}
     </div></div></div>);
