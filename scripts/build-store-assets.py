@@ -48,6 +48,13 @@ def build_textures(src: pathlib.Path):
         if not hit: print("missing texture", stem); continue
         im = Image.open(hit).convert("RGB"); im.thumbnail((mx, mx), Image.LANCZOS)
         im.save(OUT / "tex" / f"{name}.jpg", quality=80, optimize=True); used[name] = {"source": hit.name, "size": im.size}
+    # low-memory set (same file names under tex/lite/): product sheets <= 512 px, everything else <= 256 px, no normal maps
+    (OUT / "tex" / "lite").mkdir(parents=True, exist_ok=True)
+    for name, (stem, mx) in TEX.items():
+        if name in ("floor_normal", "ceiling_normal", "legend"): continue          # the scene skips these on low quality; fridge_normal is referenced by fixtures.glb, so a tiny one stays
+        src_img = OUT / "tex" / f"{name}.jpg"
+        if not src_img.exists(): continue
+        im = Image.open(src_img).convert("RGB"); im.thumbnail(((512 if name.startswith("p_") else 128 if "normal" in name else 256),) * 2, Image.LANCZOS); im.save(OUT / "tex" / "lite" / f"{name}.jpg", quality=72, optimize=True)
     return used
 
 # ---------------------------------------------------------------- geometry helpers --------------------------------------
@@ -189,12 +196,13 @@ def main(zip_path):
         for v, i in get(ids): vs.append(v); ix.append(i + off); off += len(v)
         return np.concatenate(vs), np.concatenate(ix)
     def bounds(ids): v, _ = merge(ids); return v.min(0), v.max(0)
-    def to_slot(parts, rot=0.0, clip=None, decim=None, floor=True):
+    def to_slot(parts, rot=0.0, clip=None, decim=None, floor=True, scale=1.0, sq=None):
         """clip (axis, lo, hi) in SOURCE coordinates, then rotate about Y, then pivot at the floor-contact centre."""
         out = []
         for mat, ids2, mode in parts:
             v, i = merge(ids2)
-            if clip: v, i = clip_axis(v, i, *clip)
+            for cl in ([] if not clip else [clip] if isinstance(clip[0], int) else clip):
+                if len(i): v, i = clip_axis(v, i, *cl)
             if decim and mat in decim and len(i): v, i = decimate(v, i, decim[mat])
             out.append([mat, v, i, mode])
         out = [o for o in out if len(o[2])]
@@ -202,7 +210,7 @@ def main(zip_path):
         for o in out:
             if rot: o[1] = rot_y(o[1] - [m0[0], 0, m0[2]], rot) + [m0[0], 0, m0[2]]
         allv = np.concatenate([o[1] for o in out]); lo2, hi2 = allv.min(0), allv.max(0); c = (lo2 + hi2) / 2; piv = np.array([c[0], lo2[1] if floor else c[1], c[2]])
-        return [(mat, v - piv, i, mode) for mat, v, i, mode in out]
+        return [(mat, (v - piv) * scale, i, mode) for mat, v, i, mode in out]
 
     inv = {k: {"id": k, "file": "mesh.fbx" if k == 0 else f"mesh-{k}.fbx", "tris": len(M[k][1]) // 3, "size": (M[k][0].max(0) - M[k][0].min(0)).round(3).tolist(),
                "center": ((M[k][0].max(0) + M[k][0].min(0)) / 2).round(3).tolist(), "role": "unclassified", "usage": "unused", "note": ""} for k in range(250)}
@@ -214,8 +222,10 @@ def main(zip_path):
         allv = np.concatenate([p.v for p in prims]); return allv.min(0), allv.max(0)
 
     # ---- gondola shelf: 10 body, 11 back panel, 12 shelf boards (5 identical runs: 10-12, 13-15, 33-35, 39-41, 45-47)
-    def fixture(name, specs, rot=0.0, clip=None, decim=None):
-        res = to_slot(specs, rot, clip, decim); lo, hi = emit(fx, name, res)
+    def fixture(name, specs, rot=0.0, clip=None, decim=None, scale=1.0, extra=None):
+        res = to_slot(specs, rot, clip, decim, scale=scale)
+        if extra: res = res + extra(res)
+        lo, hi = emit(fx, name, res)
         off = 0; vs, ix = [], []
         for r in res: vs.append(r[1]); ix.append(r[2] + off); off += len(r[1])
         anchors[name] = {"size": (hi - lo).round(3).tolist(), "levels": levels_of(np.concatenate(vs), np.concatenate(ix))}
@@ -259,6 +269,68 @@ def main(zip_path):
     tag([1], "ceiling louvre grid (8 rails)", "partial", "recreated as ceiling plane with потолок.jpg")
     tag([19, 32], "shelf tag clip (tiny)", "unused", "0.06 m parts; below readable size at game zoom")
 
+    # =============================== visual-upgrade fixtures (every one is built from meshes already in the ZIP, no new art) ===============================
+    def boxm(lo, hi):
+        lo, hi = np.array(lo, np.float32), np.array(hi, np.float32); c = [[0,0,0],[1,0,0],[1,1,0],[0,1,0],[0,0,1],[1,0,1],[1,1,1],[0,1,1]]
+        v = lo + np.array(c, np.float32) * (hi - lo); f = [0,2,1, 0,3,2, 4,5,6, 4,6,7, 0,1,5, 0,5,4, 3,7,6, 3,6,2, 1,2,6, 1,6,5, 0,4,7, 0,7,3]
+        return v, np.array(f, np.uint32)
+    # ---- lighter cart for low-quality devices: vertex-clustered basket (wire carts do not decimate much further than ~1,950 tris without breaking up the bars)
+    fixture("cart_lite", [("cart", [20], "box"), ("cart_handle", [21], "box"), ("dark_plastic", [22], "box")], decim={"cart": 0.02})
+    # ---- end cap: one end piece (x >= 0.40 of meshes 16/17/18; the other end is the same piece turned 180 deg at runtime)
+    fixture("shelf_endcap", [("shelf_paint", [16], "box"), ("back_wall", [17], "box"), ("shelf_metal", [18], "box")], clip=(0, 0.40, 1.1))
+    # ---- low gondola ("bread table"): gondola cut to one bay, cut again below the 3rd board, capped with a flat top
+    def low_cap(res):
+        allv = np.concatenate([r[1] for r in res]); lo, hi = allv.min(0), allv.max(0); v, i = boxm([lo[0], hi[1], lo[2]], [hi[0], hi[1] + 0.05, hi[2]]); return [("shelf_paint", v, i, "box")]
+    fixture("shelf_low", [("shelf_paint", [10], "box"), ("back_wall", [11], "box"), ("shelf_metal", [12], "box")], clip=[around([10, 11, 12], 0), (1, -1, 1.12)], extra=low_cap)
+    # ---- freezer / deli chest WITHOUT the 78k-tri wire baskets (96 tris of body, base and lid)
+    fixture("freezer_lite", [("dark_plastic", [106], "box"), ("counter", [108], "box"), ("glass", [109], "box")], clip=around([106, 107, 108, 109], 0))
+    # ---- fridge cabinet without doors + three door poses (closed / ajar / open): meshes 72-74 (closed), 80-82 (~31 deg), 138-140 (~50 deg) are ONE door at three opening angles
+    full = to_slot([("dark_plastic", [55], "box"), ("glass", [56], "box"), ("fridge_panel", [57, 58, 59], "box"), ("chrome", h, "box"), ("dark_plastic", fr, "box"), ("glass", gl, "box")], 90, clip=(2, z0 + 0.01, z0 + 3 * pitch - 0.01))
+    emit(fx, "fridge_cabinet", full[:3])
+    anchors["fridge_cabinet"] = anchors["fridge_bay"]
+    def door_basis(hv, fv):
+        """hv = handle vertices, fv = frame vertices (any frame of reference). Returns hinge point (bottom), unit hinge axis x' (latch->hinge), outward normal n."""
+        xz = fv[:, [0, 2]] - fv[:, [0, 2]].mean(0); w, V = np.linalg.eigh(xz.T @ xz); d = V[:, 1]; ax = np.array([d[0], 0, d[1]])      # principal horizontal direction of the door frame
+        hc = hv.mean(0); fc = fv.mean(0)
+        if np.dot(ax, fc - hc) < 0: ax = -ax        # latch (handle end) -> hinge end
+        proj = (fv - fc) @ ax; b = fv[(fv[:, 1] < fv[:, 1].min() + 0.01) & (proj > proj.max() - 0.03)]
+        hinge = np.array([b[:, 0].mean(), fv[:, 1].min(), b[:, 2].mean()]); n = np.array([-ax[2], 0, ax[0]])
+        if np.dot(hc - fc, n) < 0: n = -n
+        return hinge, ax, n
+    ref_h, ref_f = M[72][0], M[73][0]; ref = door_basis(ref_h, ref_f); angles = []
+    # the hinge comes from each pose's own frame, but the local axes come from the CABINET the door hangs on (hinge on +x, outward normal +z for the two doors on the
+    # +z-facing units; the 138-140 door hangs on a -z-facing unit, so it is mirrored into the same handedness). Using the pose's own axes would un-rotate the open door.
+    for nm, (a, b, c), cab_n in (("door_0", (72, 73, 74), (0, 0, 1)), ("door_1", (80, 81, 82), (0, 0, 1)), ("door_2", (138, 139, 140), (0, 0, -1))):
+        hinge, _, _ = door_basis(M[a][0], M[b][0]); ax, n = np.array([1.0, 0, 0]), np.array(cab_n, float); flip = np.dot(np.cross(ax, [0, 1, 0]), n) * np.dot(np.cross(ref[1], [0, 1, 0]), ref[2]) < 0
+        prims = []
+        for mat, k in (("chrome", a), ("dark_plastic", b), ("glass", c)):
+            v, i = M[k]; d = v - hinge; lv = np.stack([d @ ax, d[:, 1], d @ n], 1).astype(np.float32)
+            if flip: i = i.reshape(-1, 3)[:, ::-1].reshape(-1).copy()
+            prims.append((mat, lv, i, "box"))
+        emit(fx, nm, prims); angles.append(round(float(np.degrees(np.arccos(np.clip(np.dot(ax, ref[1]), -1, 1)))), 1) if nm == "door_0" else None)
+        print(nm, "hinge", hinge.round(2).tolist(), "axis", ax.round(2).tolist(), "normal", n.round(2).tolist(), "mirrored" if flip else "")
+    # slots: where the 3 closed doors of the fridge bay sit (bay frame), found from its own handle/frame vertices
+    bh, bf = full[3][1], full[4][1]; order = np.argsort(bf.reshape(-1, 3, 3)[:, :, 0].mean(1).ravel() if False else bf[::1, 0])
+    tri_c = bf[full[4][2].reshape(-1, 3)].mean(1); th = full[3][1][full[3][2].reshape(-1, 3)].mean(1)
+    cuts = np.linspace(tri_c[:, 0].min(), tri_c[:, 0].max() + 1e-6, 4); slots = []
+    for q in range(3):
+        mf = (tri_c[:, 0] >= cuts[q]) & (tri_c[:, 0] < cuts[q + 1]); mh = (th[:, 0] >= cuts[q]) & (th[:, 0] < cuts[q + 1])
+        fv_ = bf[np.unique(full[4][2].reshape(-1, 3)[mf])]; hv_ = bh[np.unique(full[3][2].reshape(-1, 3)[mh])]
+        hinge, ax, n = door_basis(hv_, fv_); rot = float(np.arctan2(-ax[2], ax[0])); slots.append({"x": round(float(hinge[0]), 3), "y": round(float(hinge[1]), 3), "z": round(float(hinge[2]), 3), "rot": round(rot, 4), "normal": n.round(2).tolist()})
+    print("door slots", slots)
+    # ---- structure + light pieces
+    fixture("pillar", [("back_wall", [150], "box")], scale=0.55)
+    fixture("window_frame", [("dark_plastic", [60], "box")], scale=0.55)
+    def unit_len(name, ids, mat):
+        v, i = M[ids]; lo, hi = v.min(0), v.max(0); w = (v - [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2]) * [1 / (hi[0] - lo[0]), 0.5, 0.5]; fx.add(name, [P(w.astype(np.float32), i, mat, "box")])
+    unit_len("light_housing", 0, "dark_plastic"); unit_len("light_diffuser", 3, "chrome")
+    tag([150], "structural pillar", "used", "visual upgrade: scaled x0.55 as a facade pillar at store tier 3")
+    tag([60], "west wall window panels", "used", "visual upgrade: mesh 60 (window frame ring) scaled x0.55 as a storefront frame at store tier 2+")
+    tag([0, 3], "ceiling light housing / diffuser (28.2 m)", "used", "visual upgrade: normalised to 1 m and stretched to the store width (replaces the plain white bars)")
+    tag([16, 17, 18], "gondola end-cap / header frame (wider than body)", "used", "visual upgrade: right-hand piece used as shelf_endcap")
+    tag([72, 73, 74, 80, 81, 82, 138, 139, 140], "fridge door (closed / ~31 deg / ~50 deg poses of the same door)", "used", "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge")
+    inv_extra = {"doors": {"poses": ["door_0", "door_1", "door_2"], "openDeg": [0, 31, 50], "slots": slots}}
+
     fx_size = fx.write(OUT / "fixtures.glb")
 
     # ---- product packs ------------------------------------------------------------------------------------------------
@@ -282,7 +354,7 @@ def main(zip_path):
     pk_size = pk.write(OUT / "products.glb")
     json.dump({"source": "Super market low poly for free", "creator": "dasy444", "platform": "Sketchfab", "license": "Free Standard",
                "sourceUrl": "https://sketchfab.com/3d-models/super-market-low-poly-for-free-c14deca21a994978a8aa304561aced50", "slotLengthM": SLOT, "tileM": 3.4,
-               "fixtures": {"bytes": fx_size, "anchors": anchors}, "products": {"bytes": pk_size, "departments": {t: [k for k, (tt, _) in DEPT.items() if tt == t] for t in GRID}},
+               "fixtures": {"bytes": fx_size, "anchors": anchors, **inv_extra}, "products": {"bytes": pk_size, "departments": {t: [k for k, (tt, _) in DEPT.items() if tt == t] for t in GRID}},
                "textures": used_tex, "meshes": [inv[k] for k in range(250)]}, open(OUT / "inventory.json", "w"), indent=1, ensure_ascii=False)
     from collections import Counter
     print("fixtures.glb", fx_size, "bytes; products.glb", pk_size, "bytes;", Counter(m["usage"] for m in inv.values()))

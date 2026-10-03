@@ -24,3 +24,6 @@ World fills the screen; `Hud` (cash, level, sales/s, shoppers, satisfaction), on
 
 ## Debug
 Dev builds show a debug bar (cash, XP, spawn, speed). For a production build set `NEXT_PUBLIC_DEBUG=1`.
+
+## 3D visual upgrade
+Department fixtures, end caps, opening fridge doors, tiered store architecture, instancing and low/high quality (`?q=low|high`) are described in [`docs/3d-visual-upgrade.md`](docs/3d-visual-upgrade.md), including the list of assets still to be added.
