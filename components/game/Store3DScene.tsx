@@ -80,9 +80,16 @@ export default function Store3DScene(props: Props) {
     const matCache: Record<string, THREE.Material> = {};
     const stdMat = (k: string, c: number, r = 0.8, m = 0) => (matCache[k] ??= new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m }));
     const box = (w: number, h: number, d: number, m: THREE.Material, x = 0, y = 0, z = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y + h / 2, z); return b; };
+    /** Distance at which the whole floor fits the current canvas shape (portrait phones need far more distance than landscape). Re-run on every resize so a canvas that was 0px tall at mount can't leave the camera zoomed in. */
+    let touched = false;
+    function refit(reset: boolean) {
+      const fit = Math.max(view.D * 1.25, (view.W * 1.05) / Math.max(0.3, camera.aspect)) / (2 * Math.tan((camera.fov * Math.PI) / 360));
+      view.fit = fit * 1.12;
+      if (reset || !touched) { view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; }
+    }
     function buildWorld(p: Props) {
       world.children.slice().forEach((c) => { world.remove(c); disposeTree(c); }); ceiling.clear();
-      const W = p.cols * TILE, D = p.rows * TILE, H = 3.4; view.W = W; view.D = D;
+      const W = p.cols * TILE, D = p.rows * TILE, H = 3.4; view.W = W; view.D = D; 
       const floorMat = new THREE.MeshStandardMaterial({ map: tex("/assets/3d/tex/floor_tile.jpg", [W / 2.4, D / 2.4]), normalMap: tex("/assets/3d/tex/floor_normal.jpg", [W / 2.4, D / 2.4], false), normalScale: new THREE.Vector2(0.5, 0.5), roughness: 0.55, metalness: 0.05 });
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D).rotateX(-Math.PI / 2), floorMat); floor.position.set(W / 2, 0, D / 2); world.add(floor);
       const ground = new THREE.Mesh(new THREE.PlaneGeometry(W + 80, D + 80).rotateX(-Math.PI / 2), stdMat("asph", 0x6b7480, 1)); ground.position.set(W / 2, -0.04, D / 2 + 8); world.add(ground);
@@ -106,7 +113,7 @@ export default function Store3DScene(props: Props) {
       // dirt decals (cleanliness)
       const dirty = Math.max(0, 0.85 - p.cleanliness) / 0.85, nD = Math.floor(dirty * p.cols * p.rows * 1.2);
       for (let n = 0; n < nD; n++) { const d = new THREE.Mesh(blobGeo, new THREE.MeshBasicMaterial({ map: blob, color: 0x6b4f2a, transparent: true, depthWrite: false, opacity: 0.8 })); d.scale.setScalar(1.2 + hash(n * 3) * 1.2); d.position.set(hash(n * 7 + 1) * W, 0.02, hash(n * 11 + 5) * D); world.add(d); }
-      const fit = Math.max(D * 1.25, (W * 1.0) / Math.max(0.8, camera.aspect)) / (2 * Math.tan((camera.fov * Math.PI) / 360)); view.fit = fit * 1.12; view.dist = view.fit; view.tx = W / 2; view.tz = D / 2 + 0.5;
+      refit(true);
     }
 
     // ---------------------------------------------------------------- fixtures per tile (shelves, fridges, checkouts, decor)
@@ -180,7 +187,7 @@ export default function Store3DScene(props: Props) {
       for (const a of L.actors) {
         if (n >= CAP) break; let m = motion.get(a.id); const tx = wp(a.x), tz = wp(a.y);
         if (!m) { m = { x: tx, z: tz, h: Math.PI, ph: hash(a.seed) * 6, seen }; motion.set(a.id, m); } m.seen = seen;
-        const dx = tx - m.x, dz = tz - m.z, dist = Math.hypot(dx, dz), k = 1 - Math.exp(-dt * 7); m.x += dx * k; m.z += dz * k; const sp = (dist * k) / Math.max(dt, 1e-3);
+        const dx = tx - m.x, dz = tz - m.z, dist = Math.hypot(dx, dz), k = 1 - Math.exp(-dt * 20); m.x += dx * k; m.z += dz * k; const sp = (dist * k) / Math.max(dt, 1e-3);
         if (dist > 0.05) { let dh = Math.atan2(dx, dz) - m.h; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); m.h += dh * (1 - Math.exp(-dt * 9)); }
         const walking = sp > 0.5; if (walking) m.ph += dt * 9; const bob = walking ? Math.abs(Math.sin(m.ph)) * 0.04 : 0, sc = a.scale ?? 1, sw = walking ? Math.sin(m.ph) * 0.5 : 0;
         const shirt = a.kind === "customer" ? (a.angry ? 0xdc2626 : a.thief ? 0x111827 : PAL[Math.floor(hash(a.seed) * PAL.length)]) : ROLE[a.kind], skin = SKIN[Math.floor(hash(a.seed + 1) * SKIN.length)], hr = a.kind === "guard" ? 0x0f172a : HAIR[Math.floor(hash(a.seed + 2) * HAIR.length)];
@@ -204,7 +211,7 @@ export default function Store3DScene(props: Props) {
         v3.set(wp(x), hh, wp(y)).project(camera); let d = pool.get(id); if (!d) { d = document.createElement("div"); pool.set(id, d); ov.appendChild(d); } if (d.dataset.h !== html) { d.innerHTML = html; d.dataset.h = html; } d.className = "m3d " + cls;
         const off = v3.z > 1 ? "none" : "block"; d.style.display = off; d.style.transform = `translate(-50%,-100%) translate(${((v3.x + 1) / 2) * w}px,${((1 - v3.y) / 2) * h}px)`; extra?.(d); used.add(id); };
       for (const m of L.markers) place("k" + m.id, m.x, m.y, m.h ?? 2.5, m.html, m.cls ?? "");
-      for (const f of L.floats) place("f" + f.id, f.x, f.y, 2.2 + f.age * 1.4, `+${f.amt}`, "m3d-float", (d) => { d.style.opacity = String(Math.min(1, 1.6 - f.age / 1.2)); });
+      for (const f of L.floats) place("f" + f.id, f.x, f.y, 2.2 + f.age * 1.4, f.amt, "m3d-float", (d) => { d.style.opacity = String(Math.min(1, 1.6 - f.age / 1.2)); });
       pool.forEach((d, k) => { if (!used.has(k)) { d.remove(); pool.delete(k); } });
     }
 
@@ -212,7 +219,7 @@ export default function Store3DScene(props: Props) {
     const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), ndc = new THREE.Vector2(), hit = new THREE.Vector3();
     const toTile = (cx: number, cy: number) => { const r = renderer.domElement.getBoundingClientRect(); ndc.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); if (!ray.ray.intersectPlane(plane, hit)) return null; const x = Math.floor(hit.x / TILE), y = Math.floor(hit.z / TILE), L = latest.current; return x >= 0 && y >= 0 && x < L.cols && y < L.rows ? { x, y } : null; };
     const ptrs = new Map<number, { x: number; y: number }>(); let down: { x: number; y: number; t: number; moved: boolean } | null = null, pinch = 0, twist = 0;
-    const clampView = () => { view.tx = Math.max(0, Math.min(view.W, view.tx)); view.tz = Math.max(0, Math.min(view.D + 2, view.tz)); view.dist = Math.max(view.fit * 0.32, Math.min(view.fit * 1.25, view.dist)); view.pitch = Math.max(0.5, Math.min(1.25, view.pitch)); };
+    const clampView = () => { touched = true; view.tx = Math.max(0, Math.min(view.W, view.tx)); view.tz = Math.max(0, Math.min(view.D + 2, view.tz)); view.dist = Math.max(view.fit * 0.32, Math.min(view.fit * 1.25, view.dist)); view.pitch = Math.max(0.5, Math.min(1.25, view.pitch)); };
     const pan = (dx: number, dy: number) => {   // content follows the finger: right=(cos,-sin) on the ground, forward=(-sin,-cos)
       const k = (2 * view.dist * Math.tan((camera.fov * Math.PI) / 360)) / el.clientHeight, c = Math.cos(view.yaw), s = Math.sin(view.yaw), kf = k / Math.sin(view.pitch);
       view.tx += -c * dx * k - s * dy * kf; view.tz += s * dx * k - c * dy * kf;
@@ -230,7 +237,7 @@ export default function Store3DScene(props: Props) {
     cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("contextmenu", (e) => e.preventDefault());
     cv.addEventListener("wheel", (e) => { e.preventDefault(); view.dist *= Math.exp(e.deltaY * 0.0012); clampView(); }, { passive: false });
 
-    const resize = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / Math.max(h, 1); camera.updateProjectionMatrix(); };
+    const resize = () => { const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); refit(false); };
     const ro = new ResizeObserver(resize); ro.observe(el); resize();
     const sync = () => {
       const L = latest.current; if (!A) return;
@@ -240,7 +247,7 @@ export default function Store3DScene(props: Props) {
       const fk = L.aisles.map((a) => `${a.id}:${a.maxStock ? Math.round((a.stock / a.maxStock) * 14) : 0}:${a.level >= 3}`).join("|") + layoutKey.length; if (fk !== fillKey) { fillKey = fk; buildProducts(L); }
       const sk = `${L.selected?.id ?? ""}${L.buildMode}`; if (sk !== selKey) { selKey = sk; grid.visible = L.buildMode; hover.visible = false; const s = L.selected && [...L.aisles, ...L.checkouts, ...L.restockers, ...L.decors].find((i) => i.id === L.selected!.id); ring.visible = !!s; if (s) ring.position.set(wp(s.x), 0.06, wp(s.y)); }
     };
-    eng.current = { sync, cam: (a) => { if (a === "l") view.yawT += Math.PI / 4; if (a === "r") view.yawT -= Math.PI / 4; if (a === "in") view.dist *= 0.8; if (a === "out") view.dist *= 1.25; if (a === "home") { view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; view.yawT = 0; view.pitch = 0.92; } clampView(); } };
+    eng.current = { sync, cam: (a) => { if (a === "l") view.yawT += Math.PI / 4; if (a === "r") view.yawT -= Math.PI / 4; if (a === "in") view.dist *= 0.8; if (a === "out") view.dist *= 1.25; if (a === "home") { touched = false; view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; view.yawT = 0; view.pitch = 0.92; } clampView(); if (a === "home") touched = false; } };
     loadAssets().then((a) => { if (dead) return; A = a; ensureCarts(); sync(); }).catch((e) => console.error("3D assets failed to load", e));
 
     let last = performance.now();
