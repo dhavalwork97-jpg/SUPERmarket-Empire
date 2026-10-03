@@ -6,7 +6,7 @@ import { simulate, defaultExtras, defaultSupply, deriveAisle, deriveCheckout, de
 import { levelOf, xpForLevel, OBJECTIVES, objectiveAt } from "../lib/progress";
 import { deriveStaff, rederiveAll, canHire, cashierByLane } from "../lib/staff";
 import { CUSTOMERS, CUSTOMER_KINDS } from "../lib/customers";
-import { SimData } from "../types/game";
+import { SimData, Customer } from "../types/game";
 import { SAVE_KEY } from "../lib/constants";
 import { useGame } from "../store/store";
 let n = 0; const t = (name: string, f: () => void) => { f(); n++; console.log("ok -", name); };
@@ -15,13 +15,14 @@ const mk = (): SimData => ({ cash: 500, tier: 0, lifetimeRevenue: 0, totalCustom
   checkouts: [deriveCheckout({ id: "c1", level: 1, processingTime: 0, queueCapacity: 0, currentCustomerProgress: 0, customersProcessed: 0, upgradeCost: 0, x: 2, y: 3 }, 0)],
   decors: [], ...defaultSupply(), ...defaultExtras(), restockers: [deriveRestocker({ id: "r1", level: 1, restockAmount: 0, cooldown: 0, currentCooldown: 0, assignedAisleId: null, upgradeCost: 0, x: 0, y: 1 }, 0)] });
 const run = (s: SimData, secs: number) => { for (let i = 0; i < secs * 10; i++) s = simulate(s, 0.1); return s; };
+const cust = (o: Partial<Customer>): Customer => ({ id: 1, phase: "SHOPPING", kind: "normal", mood: "🛒", basket: 0, wait: 0, co: null, plan: [], stop: 0, dwell: 0, x: 0, y: 3, path: [], pi: 0, goal: "", nav: -1, lost: false, stuck: 0, qn: 0, ...o });
 const staffOf = (role: any, level = 1) => deriveStaff({ id: "s1", role, level, efficiency: 1, workload: 0, salary: 0, upgradeCost: 0 }, 0);
 
 t("level curve is monotonic and consistent", () => { for (let l = 1; l < 40; l++) { assert.equal(levelOf(xpForLevel(l)), l); assert.equal(levelOf(xpForLevel(l + 1) - 1), l); } });
 t("customers shop, pay, deplete stock and earn XP + money", () => { const s = run(mk(), 120); assert.ok(s.totalCustomersServed > 5); assert.ok(s.lifetimeRevenue > 0); assert.ok(s.xp > 0); assert.ok(s.aisles[0].stock < 100 || s.storeroom.produce < 100); });
 t("wages and upkeep are charged and cash never goes negative", () => { let s = mk(); s.staff = rederiveAll([staffOf("manager", 3)], 0); s.cash = 1; s = run({ ...s, spawnAcc: 0 }, 30); assert.ok(s.cash >= 0); assert.ok(s.lifetimeExpenses > 0); });
 t("simulation is deterministic about state shape (no NaN)", () => { const s = run(mk(), 200); for (const k of ["cash", "xp", "satisfaction", "cleanliness", "earningsPerSecond", "revPerSec", "expPerSec"] as const) assert.ok(Number.isFinite(s[k] as number), k); assert.ok(s.satisfaction >= 0 && s.satisfaction <= 1 && s.cleanliness >= 0 && s.cleanliness <= 1); });
-t("cleaner keeps the store cleaner than no cleaner", () => { const base = mk(); base.customers = Array.from({ length: 25 }, (_, i) => ({ id: i + 1000, phase: "SHOPPING" as const, t: 999, wait: 0, basket: 0, co: null, mood: "🛒", plan: [], kind: "normal" as const, t0: 999, at: "E" })); base.spawnAcc = 0;
+t("cleaner keeps the store cleaner than no cleaner", () => { const base = mk(); base.customers = Array.from({ length: 25 }, (_, i) => cust({ id: i + 1000, dwell: 999 })); base.spawnAcc = 0;
   const a = run({ ...base, staff: [] }, 120), b = run({ ...base, staff: rederiveAll([staffOf("cleaner", 2)], 0) }, 120); assert.ok(b.cleanliness > a.cleanliness, `${b.cleanliness} vs ${a.cleanliness}`); });
 t("cashier speeds up its lane", () => { const base = mk(); const c = rederiveAll([staffOf("cashier", 3)], 0); const lane = cashierByLane(c, base.checkouts); assert.ok(lane.c1 && lane.c1.efficiency > 1.3); assert.equal(Object.keys(cashierByLane([], base.checkouts)).length, 0); });
 t("manager boosts other staff", () => { const alone = rederiveAll([staffOf("security", 2)], 0)[0].efficiency; const withMgr = rederiveAll([staffOf("security", 2), { ...staffOf("manager", 4), id: "s2" }], 0)[0].efficiency; assert.ok(withMgr > alone); });
@@ -29,7 +30,7 @@ t("hiring rules: level gate, slot cap, one cashier per lane", () => { assert.equ
   assert.equal(canHire("cashier", rederiveAll([staffOf("cashier")], 0), 0, 1, 9).ok, false); assert.equal(canHire("cleaner", [staffOf("cashier"), { ...staffOf("manager"), id: "s2" }], 0, 1, 9).ok, false); });
 t("shoplifters: guards stop thefts, no guard lets them through", () => { const mkT = (staff: any[]) => { let s = mk(); s.tier = 2; s.staff = staff; s.aisles = s.aisles.map((a) => ({ ...a, stock: a.maxStock })); s.storeroom.produce = 1e6; return run(s, 600); };
   const none = mkT([]), guard = mkT(rederiveAll([staffOf("security", 6)], 2)); assert.ok(none.thefts > 0); assert.ok(guard.theftsPrevented > guard.thefts, `${guard.theftsPrevented} vs ${guard.thefts}`); });
-t("impatient shoppers walk out of long queues", () => { const s = mk(); s.customers = Array.from({ length: 5 }, (_, i) => ({ id: i + 1, phase: "QUEUING" as const, t: 0, wait: 0, basket: 20, co: "c1", mood: "💵", plan: ["a1"], kind: "impatient" as const, t0: 1, at: "a1" })); s.checkouts[0].processingTime = 999;
+t("impatient shoppers walk out of long queues", () => { const s = mk(); s.customers = Array.from({ length: 5 }, (_, i) => cust({ id: i + 1, phase: "QUEUING", basket: 20, co: "c1", mood: "💵", plan: ["a1"], kind: "impatient", qn: i + 1 })); s.checkouts[0].processingTime = 999;
   const r = run(s, 10); assert.ok(r.customers.filter((c) => c.phase === "QUEUING").length < 5); assert.ok(r.satisfaction < s.satisfaction); });
 t("every customer type is fully defined", () => { for (const k of CUSTOMER_KINDS) { const d = CUSTOMERS[k]; assert.ok(d.name && d.basket > 0 && d.maxQueue > 0 && d.weight(0) > 0); } });
 t("out-of-stock and low-stock alerts appear", () => { const s = mk(); s.aisles[0].stock = 0; assert.ok(storeAlerts(s).some((a) => a.text.includes("OUT OF STOCK"))); s.aisles[0].stock = 10; assert.ok(storeAlerts(s).some((a) => a.text.includes("low"))); });

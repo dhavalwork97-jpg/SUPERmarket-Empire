@@ -7,7 +7,7 @@
  "slotLengthM": 3.25,
  "tileM": 3.4,
  "fixtures": {
-  "bytes": 1153604,
+  "bytes": 1625852,
   "anchors": {
    "shelf_bay": {
     "size": [
@@ -289,7 +289,291 @@
       "z1": 0.272
      }
     ]
+   },
+   "cart_lite": {
+    "size": [
+     1.1579999923706055,
+     1.097000002861023,
+     1.1610000133514404
+    ],
+    "levels": []
+   },
+   "shelf_endcap": {
+    "size": [
+     0.6039999723434448,
+     2.2990000247955322,
+     1.4129999876022339
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -0.291,
+      "x1": 0.265,
+      "z0": -0.706,
+      "z1": 0.704
+     },
+     {
+      "y": 0.34,
+      "x0": -0.191,
+      "x1": 0.272,
+      "z0": -0.707,
+      "z1": 0.704
+     },
+     {
+      "y": 0.8,
+      "x0": -0.191,
+      "x1": 0.272,
+      "z0": -0.707,
+      "z1": 0.704
+     },
+     {
+      "y": 1.26,
+      "x0": -0.191,
+      "x1": 0.272,
+      "z0": -0.707,
+      "z1": 0.704
+     },
+     {
+      "y": 1.72,
+      "x0": -0.191,
+      "x1": 0.272,
+      "z0": -0.707,
+      "z1": 0.704
+     },
+     {
+      "y": 2.16,
+      "x0": -0.302,
+      "x1": -0.178,
+      "z0": -0.706,
+      "z1": 0.707
+     }
+    ]
+   },
+   "shelf_low": {
+    "size": [
+     3.25,
+     1.1139999628067017,
+     1.0850000381469727
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.506,
+      "z1": 0.506
+     },
+     {
+      "y": 0.38,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 0.86,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.541,
+      "z1": 0.541
+     },
+     {
+      "y": 1.12,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.542,
+      "z1": 0.542
+     }
+    ]
+   },
+   "freezer_lite": {
+    "size": [
+     3.25,
+     0.8889999985694885,
+     0.9259999990463257
+    ],
+    "levels": [
+     {
+      "y": 0.14,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.463,
+      "z1": 0.463
+     },
+     {
+      "y": 0.16,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.423,
+      "z1": 0.423
+     },
+     {
+      "y": 0.88,
+      "x0": -1.625,
+      "x1": 1.625,
+      "z0": -0.44,
+      "z1": 0.44
+     }
+    ]
+   },
+   "fridge_cabinet": {
+    "size": [
+     3.2190001010894775,
+     2.496999979019165,
+     0.875
+    ],
+    "levels": [
+     {
+      "y": 0.24,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.437,
+      "z1": 0.437
+     },
+     {
+      "y": 0.28,
+      "x0": -1.555,
+      "x1": 1.553,
+      "z0": 0.287,
+      "z1": 0.384
+     },
+     {
+      "y": 0.48,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 0.88,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 1.28,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 1.68,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 2.08,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.329,
+      "z1": 0.175
+     },
+     {
+      "y": 2.46,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.322,
+      "z1": 0.384
+     },
+     {
+      "y": 2.5,
+      "x0": -1.61,
+      "x1": 1.61,
+      "z0": -0.416,
+      "z1": 0.344
+     }
+    ]
+   },
+   "pillar": {
+    "size": [
+     1.034999966621399,
+     3.388000011444092,
+     0.42100000381469727
+    ],
+    "levels": [
+     {
+      "y": 3.38,
+      "x0": -0.518,
+      "x1": 0.518,
+      "z0": -0.211,
+      "z1": 0.211
+     }
+    ]
+   },
+   "window_frame": {
+    "size": [
+     0.23399999737739563,
+     2.0910000801086426,
+     4.618000030517578
+    ],
+    "levels": [
+     {
+      "y": 0.0,
+      "x0": -0.117,
+      "x1": 0.117,
+      "z0": -2.309,
+      "z1": 2.309
+     },
+     {
+      "y": 2.06,
+      "x0": -0.114,
+      "x1": 0.114,
+      "z0": -2.241,
+      "z1": 2.241
+     }
+    ]
    }
+  },
+  "doors": {
+   "poses": [
+    "door_0",
+    "door_1",
+    "door_2"
+   ],
+   "openDeg": [
+    0,
+    31,
+    50
+   ],
+   "slots": [
+    {
+     "x": -0.54,
+     "y": 0.218,
+     "z": 0.342,
+     "rot": 0.0,
+     "normal": [
+      0.0,
+      0.0,
+      1.0
+     ]
+    },
+    {
+     "x": 0.541,
+     "y": 0.218,
+     "z": 0.341,
+     "rot": 0.0,
+     "normal": [
+      0.0,
+      0.0,
+      1.0
+     ]
+    },
+    {
+     "x": 1.61,
+     "y": 0.218,
+     "z": 0.343,
+     "rot": 0.0,
+     "normal": [
+      0.0,
+      0.0,
+      1.0
+     ]
+    }
+   ]
   }
  },
  "products": {
@@ -417,147 +701,147 @@
  },
  "textures": {
   "floor_tile": {
-   "source": "пол плита.png",
+   "source": "#U043f#U043e#U043b #U043f#U043b#U0438#U0442#U0430.png",
    "size": [
     512,
     419
    ]
   },
   "floor_normal": {
-   "source": "NormalMap пол.png",
+   "source": "NormalMap #U043f#U043e#U043b.png",
    "size": [
     512,
     419
    ]
   },
   "wall": {
-   "source": "стена.jpg",
+   "source": "#U0441#U0442#U0435#U043d#U0430.jpg",
    "size": [
     288,
     512
    ]
   },
   "ceiling": {
-   "source": "потолок.jpg",
+   "source": "#U043f#U043e#U0442#U043e#U043b#U043e#U043a.jpg",
    "size": [
     288,
     512
    ]
   },
   "ceiling_normal": {
-   "source": "NormalMap потолок.png",
+   "source": "NormalMap #U043f#U043e#U0442#U043e#U043b#U043e#U043a.png",
    "size": [
     288,
     512
    ]
   },
   "shelf_paint": {
-   "source": "полки.jpg",
+   "source": "#U043f#U043e#U043b#U043a#U0438.jpg",
    "size": [
     341,
     512
    ]
   },
   "fridge_panel": {
-   "source": "холод.jpg",
+   "source": "#U0445#U043e#U043b#U043e#U0434.jpg",
    "size": [
     288,
     512
    ]
   },
   "fridge_normal": {
-   "source": "NormalMap хоод.png",
+   "source": "NormalMap #U0445#U043e#U043e#U0434.png",
    "size": [
     288,
     512
    ]
   },
   "pos_terminal": {
-   "source": "касса ап.jpg",
+   "source": "#U043a#U0430#U0441#U0441#U0430 #U0430#U043f.jpg",
    "size": [
     512,
     401
    ]
   },
   "legend": {
-   "source": "мб.png",
+   "source": "#U043c#U0431.png",
    "size": [
     512,
     288
    ]
   },
   "p_chips": {
-   "source": "чипси.jpg",
+   "source": "#U0447#U0438#U043f#U0441#U0438.jpg",
    "size": [
     1000,
     1000
    ]
   },
   "p_ramen": {
-   "source": "рамены.jpg",
+   "source": "#U0440#U0430#U043c#U0435#U043d#U044b.jpg",
    "size": [
     724,
     1024
    ]
   },
   "p_sushi": {
-   "source": "суши.jpg",
+   "source": "#U0441#U0443#U0448#U0438.jpg",
    "size": [
     714,
     1024
    ]
   },
   "p_dumpling": {
-   "source": "пельмени.jpg",
+   "source": "#U043f#U0435#U043b#U044c#U043c#U0435#U043d#U0438.jpg",
    "size": [
     683,
     1024
    ]
   },
   "p_candy": {
-   "source": "мармелад.jpg",
+   "source": "#U043c#U0430#U0440#U043c#U0435#U043b#U0430#U0434.jpg",
    "size": [
     576,
     1024
    ]
   },
   "p_meat": {
-   "source": "мясо.jpg",
+   "source": "#U043c#U044f#U0441#U043e.jpg",
    "size": [
     576,
     1024
    ]
   },
   "p_fruit": {
-   "source": "фрукты.jpg",
+   "source": "#U0444#U0440#U0443#U043a#U0442#U044b.jpg",
    "size": [
     576,
     1024
    ]
   },
   "p_veg": {
-   "source": "трава.jpg",
+   "source": "#U0442#U0440#U0430#U0432#U0430.jpg",
    "size": [
     576,
     1024
    ]
   },
   "p_household": {
-   "source": "бытовое.jpg",
+   "source": "#U0431#U044b#U0442#U043e#U0432#U043e#U0435.jpg",
    "size": [
     577,
     1024
    ]
   },
   "p_misc": {
-   "source": "всякое.jpg",
+   "source": "#U0432#U0441#U044f#U043a#U043e#U0435.jpg",
    "size": [
     576,
     1024
    ]
   },
   "p_goods": {
-   "source": "быт2.jpg",
+   "source": "#U0431#U044b#U04422.jpg",
    "size": [
     461,
     1024
@@ -579,9 +863,9 @@
     5.738999843597412,
     0.0
    ],
-   "role": "ceiling light housing (28.2 m)",
-   "usage": "partial",
-   "note": "recreated as light bars at runtime, shown when the camera is low"
+   "role": "ceiling light housing / diffuser (28.2 m)",
+   "usage": "used",
+   "note": "visual upgrade: normalised to 1 m and stretched to the store width (replaces the plain white bars)"
   },
   {
    "id": 1,
@@ -633,9 +917,9 @@
     4.415999889373779,
     5.748000144958496
    ],
-   "role": "ceiling light diffuser",
-   "usage": "partial",
-   "note": "see above"
+   "role": "ceiling light housing / diffuser (28.2 m)",
+   "usage": "used",
+   "note": "visual upgrade: normalised to 1 m and stretched to the store width (replaces the plain white bars)"
   },
   {
    "id": 4,
@@ -868,8 +1152,8 @@
     4.2230000495910645
    ],
    "role": "gondola end-cap / header frame (wider than body)",
-   "usage": "partial",
-   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+   "usage": "used",
+   "note": "visual upgrade: right-hand piece used as shelf_endcap"
   },
   {
    "id": 17,
@@ -886,8 +1170,8 @@
     4.2220001220703125
    ],
    "role": "gondola end-cap / header frame (wider than body)",
-   "usage": "partial",
-   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+   "usage": "used",
+   "note": "visual upgrade: right-hand piece used as shelf_endcap"
   },
   {
    "id": 18,
@@ -904,8 +1188,8 @@
     4.2220001220703125
    ],
    "role": "gondola end-cap / header frame (wider than body)",
-   "usage": "partial",
-   "note": "geometry kept in inventory only; end panels are generated at runtime so the 3.25 m bay closes cleanly"
+   "usage": "used",
+   "note": "visual upgrade: right-hand piece used as shelf_endcap"
   },
   {
    "id": 19,
@@ -1660,8 +1944,8 @@
     -1.0149999856948853
    ],
    "role": "west wall window panels",
-   "usage": "unused",
-   "note": "walls are procedural per tier"
+   "usage": "used",
+   "note": "visual upgrade: mesh 60 (window frame ring) scaled x0.55 as a storefront frame at store tier 2+"
   },
   {
    "id": 61,
@@ -1875,9 +2159,9 @@
     1.4559999704360962,
     0.38600000739097595
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 73,
@@ -1893,9 +2177,9 @@
     1.3630000352859497,
     0.30399999022483826
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 74,
@@ -1911,9 +2195,9 @@
     1.3630000352859497,
     0.2980000078678131
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 75,
@@ -2019,9 +2303,9 @@
     1.4559999704360962,
     1.9759999513626099
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 81,
@@ -2037,9 +2321,9 @@
     1.3630000352859497,
     1.6510000228881836
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 82,
@@ -2055,9 +2339,9 @@
     1.3630000352859497,
     1.6460000276565552
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 83,
@@ -3063,9 +3347,9 @@
     1.4559999704360962,
     6.464000225067139
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 139,
@@ -3081,9 +3365,9 @@
     1.3630000352859497,
     6.818999767303467
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 140,
@@ -3099,9 +3383,9 @@
     1.3630000352859497,
     6.815000057220459
    ],
-   "role": "fridge door part (duplicate instance)",
-   "usage": "partial",
-   "note": "identical door parts for the other fridge units"
+   "role": "fridge door (closed / ~31 deg / ~50 deg poses of the same door)",
+   "usage": "used",
+   "note": "visual upgrade: door_0/1/2, driven by shoppers standing at the fridge"
   },
   {
    "id": 141,
@@ -3280,8 +3564,8 @@
     -7.71999979019165
    ],
    "role": "structural pillar",
-   "usage": "unused",
-   "note": "no pillar in the tile-grid layout"
+   "usage": "used",
+   "note": "visual upgrade: scaled x0.55 as a facade pillar at store tier 3"
   },
   {
    "id": 151,

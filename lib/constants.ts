@@ -20,3 +20,5 @@ export const TIERS = [
 export const CHECKOUT = { time: 4, cap: 5, capInc: 1, cost: 45, mult: 1.18, place: 100 };
 export const RESTOCK = { amount: 20, cooldown: 8, cost: 40, mult: 1.2, place: 80 };
 export const AISLE_MULT = 1.15, BASE_DEMAND = 0.12;
+/** A tile is ~3.4 m square (about 11 m²). Two shoppers per tile is a busy but walkable shop; more than that and new arrivals are turned away at the door. */
+export const PEOPLE_PER_TILE = 2;

@@ -9,6 +9,8 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { AisleState, AisleType, CheckoutState, DecorState, RestockerState } from "@/types/game";
 import { AISLE_DEFS } from "@/lib/constants";
+import { Quality, QUALITY_KEY, aisleLook, cartPlan, doorPose, endCapSides, pickQuality, storeLook, texDir } from "@/lib/visual";
+import { BoxBatch, Instanced } from "./instanced";
 
 export const TILE = 3.4;
 export type Actor = { id: string; kind: "customer" | "cashier" | "restocker" | "cleaner" | "guard" | "manager"; x: number; y: number; cart?: boolean; angry?: boolean; thief?: boolean; scale?: number; seed: number };
@@ -17,7 +19,6 @@ export type Float3D = { id: number; x: number; y: number; amt: string; age: numb
 type Props = { cols: number; rows: number; tier: number; name: string; aisles: AisleState[]; checkouts: CheckoutState[]; restockers: RestockerState[]; decors: DecorState[];
   cleanliness: number; actors: Actor[]; markers: Marker[]; floats: Float3D[]; selected: { kind: string; id: string } | null; buildMode: boolean; onTile: (x: number, y: number) => void };
 
-const FIXTURE: Record<AisleType, string> = { produce: "display_wall", bakery: "shelf_bay", electronics: "shelf_bay", refrigerated: "fridge_bay", freezer: "freezer_chest", deli: "freezer_chest" };
 const DEPT: Record<AisleType, string[]> = { produce: ["p_fruit", "p_veg"], bakery: ["p_candy", "p_chips"], electronics: ["p_household", "p_goods"], refrigerated: ["p_sushi", "p_dumpling"], freezer: ["p_dumpling", "p_ramen"], deli: ["p_meat", "p_sushi"] };
 const ACCENT: Record<AisleType, number> = { produce: 0x4ade80, bakery: 0xfb923c, electronics: 0x60a5fa, refrigerated: 0x22d3ee, freezer: 0xa5b4fc, deli: 0xf87171 };
 const FLOOR_TINT: Record<AisleType, number> = { produce: 0xcdeccf, bakery: 0xf6dfc4, electronics: 0xcfe0f6, refrigerated: 0xcdeef2, freezer: 0xdadcf8, deli: 0xf5d3d3 };
@@ -26,13 +27,14 @@ const strHash = (s: string) => { let h = 7; for (let i = 0; i < s.length; i++) h
 const wp = (t: number) => (t + 0.5) * TILE;
 
 type Assets = { fx: THREE.Group; pk: THREE.Group; inv: any };
-let assetsP: Promise<Assets> | null = null;
-function loadAssets(): Promise<Assets> {
-  if (!assetsP) { const l = new GLTFLoader(); assetsP = Promise.all([l.loadAsync("/assets/3d/fixtures.glb"), l.loadAsync("/assets/3d/products.glb"), fetch("/assets/3d/inventory.json").then((r) => r.json())]).then(([f, p, inv]) => { for (const g of [f.scene, p.scene]) g.traverse((o: any) => { if (o.geometry) o.userData.shared = true; }); return { fx: f.scene, pk: p.scene, inv }; }); assetsP.catch(() => (assetsP = null)); }
-  return assetsP;
+const assetsP: Partial<Record<Quality, Promise<Assets>>> = {};
+function loadAssets(q: Quality): Promise<Assets> {
+  if (!assetsP[q]) { const mgr = new THREE.LoadingManager(); mgr.setURLModifier((u) => (q === "low" ? u.replace("/assets/3d/tex/", "/assets/3d/tex/lite/") : u)); const l = new GLTFLoader(mgr); assetsP[q] = Promise.all([l.loadAsync("/assets/3d/fixtures.glb"), l.loadAsync("/assets/3d/products.glb"), fetch("/assets/3d/inventory.json").then((r) => r.json())]).then(([f, p, inv]) => { for (const g of [f.scene, p.scene]) g.traverse((o: any) => { if (o.geometry) o.userData.shared = true; }); return { fx: f.scene, pk: p.scene, inv }; }); assetsP[q]!.catch(() => { delete assetsP[q]; }); }
+  return assetsP[q]!;
 }
-function tex(url: string, repeat?: [number, number], srgb = true) {
-  const t = new THREE.TextureLoader().load(url); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (repeat) t.repeat.set(...repeat); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+const safeLS = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
+function tex(url: string, q: Quality, repeat?: [number, number], srgb = true) {
+  const t = new THREE.TextureLoader().load(url.replace("/assets/3d/tex/", texDir(q))); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (repeat) t.repeat.set(...repeat); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
 }
 function labelTexture(text: string, bg: string, fg = "#fff", w = 512, h = 160) {
   const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d")!;
@@ -51,8 +53,10 @@ export default function Store3DScene(props: Props) {
   useEffect(() => { eng.current?.sync(); });
   useEffect(() => {
     const el = host.current!, ov = overlay.current!; let dead = false, raf = 0;
-    const renderer = new THREE.WebGLRenderer({ antialias: window.devicePixelRatio < 2, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75)); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05; renderer.setClearColor(0xbfd6de);
+    /** low = budget phones (lite textures, simpler fixtures, cheaper carts); chosen from ?q=, a saved choice, or the device. See lib/visual.ts. */
+    const Q: Quality = pickQuality({ override: new URLSearchParams(location.search).get("q"), saved: safeLS(QUALITY_KEY), deviceMemory: (navigator as any).deviceMemory, cores: navigator.hardwareConcurrency, coarse: matchMedia("(pointer: coarse)").matches });
+    const renderer = new THREE.WebGLRenderer({ antialias: Q === "high" && window.devicePixelRatio < 2, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, Q === "low" ? 1.25 : 1.75)); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05; renderer.setClearColor(0xbfd6de);
     el.prepend(renderer.domElement); renderer.domElement.style.cssText = "width:100%;height:100%;display:block;touch-action:none;border-radius:inherit";
     const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(36, 1, 0.5, 400);
     scene.add(new THREE.HemisphereLight(0xffffff, 0x8e99a6, 1.25)); const sun = new THREE.DirectionalLight(0xfff4e0, 1.6); sun.position.set(-14, 26, 18); scene.add(sun); scene.add(new THREE.AmbientLight(0xffffff, 0.35));
@@ -75,19 +79,52 @@ export default function Store3DScene(props: Props) {
     const PAL = [0xef4444, 0x3b82f6, 0x22c55e, 0xeab308, 0xec4899, 0x8b5cf6, 0x06b6d4, 0xf97316, 0x94a3b8, 0xa16207], SKIN = [0xf5d0b0, 0xd9a07a, 0x9a6a47, 0x6b4430, 0xefc3a0], HAIR = [0x1f1a17, 0x4a2c17, 0x8a5a2b, 0xc9a24a, 0x333333];
     const motion = new Map<string, { x: number; z: number; h: number; ph: number; seen: number }>();
     const tmp = new THREE.Object3D(), col = new THREE.Color();
+    (window as any).__r3d = { quality: Q, focus: (tx: number, ty: number, dist: number, pitch = 0.9, yaw = 0) => { touched = true; view.tx = wp(tx); view.tz = wp(ty); view.dist = dist; view.pitch = pitch; view.yaw = view.yawT = yaw; }, info: () => ({ calls: renderer.info.render.calls, triangles: renderer.info.render.triangles, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }) };   // read by the headless checks
+
+    // ---------------------------------------------------------------- instanced fixtures (one draw call per fixture part for ALL aisles) + box batches for the little decorations
+    const FIX_NODES = ["shelf_bay", "shelf_low", "display_wall", "fridge_bay", "fridge_cabinet", "freezer_chest", "freezer_lite", "shelf_endcap"], TOP: Record<string, number> = { shelf_bay: 2.3, shelf_low: 1.17, display_wall: 2.3, fridge_bay: 2.5, fridge_cabinet: 2.5, freezer_chest: 0.9, freezer_lite: 0.9 };
+    const fixSets = new Map<string, Instanced>(); let doorSets: Instanced[] = []; const doorBase: { id: string; X: number; Z: number }[] = [], doorState = new Map<string, { pose: number; until: number }>(); let doorKey = "", doorAt = 0;
+    const strips = new BoxBatch(scene, new THREE.MeshBasicMaterial({ color: 0xffffff })), solid = new BoxBatch(scene, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.15 })),
+      glassB = new BoxBatch(scene, new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, roughness: 0.05, depthWrite: false }), 128);
+    function ensureInstancing() {
+      if (!A || fixSets.size) return; for (const n of FIX_NODES) { const o = A.fx.getObjectByName(n); if (o) fixSets.set(n, new Instanced(scene, o, 96)); }
+      doorSets = ["door_0", "door_1", "door_2"].flatMap((n) => { const o = A!.fx.getObjectByName(n); return o ? [new Instanced(scene, o, 240)] : []; });
+    }
+    /** Fridge doors open for shoppers standing at the cabinet (pose 0 closed, 1 ~31 deg, 2 ~50 deg: three poses of the same door in the ZIP). Draw-only: nothing here feeds back into the simulation. */
+    function refreshDoors(now: number, force = false) {
+      if (!A || doorSets.length < 3) return; const L = latest.current, slots = A.inv.fixtures.doors.slots as { x: number; y: number; z: number; rot: number }[], per: THREE.Matrix4[][] = [[], [], []]; let key = "";
+      const customers = L.actors.filter((u) => u.kind === "customer");
+      for (const d of doorBase) {
+        const a = L.aisles.find((z) => z.id === d.id); if (!a) continue;
+        const dbg = (window as any).__r3d?.doors as number[] | undefined, near = customers.filter((u) => Math.hypot(u.x - a.x, u.y - a.y) <= 1.6).map((u) => ({ off: ((u.x - a.x) * TILE) / 1.08, seed: u.seed }));
+        slots.forEach((sl, i) => {
+          const k = d.id + ":" + i, st = doorState.get(k) ?? { pose: 0, until: 0 }, want = dbg ? dbg[i] ?? 0 : doorPose(i as 0 | 1 | 2, near);   // __r3d.doors = [0,1,2] forces poses (QA only)
+          if (want > 0) { st.pose = want; st.until = now + 1.2; } else if (dbg || now > st.until) st.pose = 0; doorState.set(k, st); key += st.pose;
+          per[st.pose].push(new THREE.Matrix4().makeRotationY(sl.rot).setPosition(d.X + sl.x, sl.y, d.Z - 0.8 + sl.z));
+        });
+      }
+      if (!force && key === doorKey) return; doorKey = key; doorSets.forEach((set, i) => set.set(per[i]));
+    }
 
     // ---------------------------------------------------------------- static world
     const matCache: Record<string, THREE.Material> = {};
     const stdMat = (k: string, c: number, r = 0.8, m = 0) => (matCache[k] ??= new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m }));
     const box = (w: number, h: number, d: number, m: THREE.Material, x = 0, y = 0, z = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y + h / 2, z); return b; };
+    /** Distance at which the whole floor fits the current canvas shape (portrait phones need far more distance than landscape). Re-run on every resize so a canvas that was 0px tall at mount can't leave the camera zoomed in. */
+    let touched = false;
+    function refit(reset: boolean) {
+      const fit = Math.max(view.D * 1.25, (view.W * 1.05) / Math.max(0.3, camera.aspect)) / (2 * Math.tan((camera.fov * Math.PI) / 360));
+      view.fit = fit * 1.12;
+      if (reset || !touched) { view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; }
+    }
     function buildWorld(p: Props) {
       world.children.slice().forEach((c) => { world.remove(c); disposeTree(c); }); ceiling.clear();
-      const W = p.cols * TILE, D = p.rows * TILE, H = 3.4; view.W = W; view.D = D;
-      const floorMat = new THREE.MeshStandardMaterial({ map: tex("/assets/3d/tex/floor_tile.jpg", [W / 2.4, D / 2.4]), normalMap: tex("/assets/3d/tex/floor_normal.jpg", [W / 2.4, D / 2.4], false), normalScale: new THREE.Vector2(0.5, 0.5), roughness: 0.55, metalness: 0.05 });
+      const W = p.cols * TILE, D = p.rows * TILE, H = 3.4; view.W = W; view.D = D; 
+      const floorMat = new THREE.MeshStandardMaterial({ map: tex("/assets/3d/tex/floor_tile.jpg", Q, [W / 2.4, D / 2.4]), ...(Q === "high" ? { normalMap: tex("/assets/3d/tex/floor_normal.jpg", Q, [W / 2.4, D / 2.4], false), normalScale: new THREE.Vector2(0.5, 0.5) } : {}), roughness: 0.55, metalness: 0.05 });
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D).rotateX(-Math.PI / 2), floorMat); floor.position.set(W / 2, 0, D / 2); world.add(floor);
       const ground = new THREE.Mesh(new THREE.PlaneGeometry(W + 80, D + 80).rotateX(-Math.PI / 2), stdMat("asph", 0x6b7480, 1)); ground.position.set(W / 2, -0.04, D / 2 + 8); world.add(ground);
       const walk = new THREE.Mesh(new THREE.PlaneGeometry(W + 6, 5).rotateX(-Math.PI / 2), stdMat("pave", 0xcfd3d8, 0.95)); walk.position.set(W / 2, -0.02, D + 3); world.add(walk);
-      const wallMap = tex("/assets/3d/tex/wall.jpg", [W / 3, 1.2]), tints = [0xffffff, 0xeaf4ff, 0xfff2dc], wallMat = new THREE.MeshStandardMaterial({ map: wallMap, color: tints[p.tier % 3], roughness: 0.9 });
+      const wallMap = tex("/assets/3d/tex/wall.jpg", Q, [W / 3, 1.2]), tints = [0xffffff, 0xeaf4ff, 0xfff2dc], wallMat = new THREE.MeshStandardMaterial({ map: wallMap, color: tints[p.tier % 3], roughness: 0.9 });
       const wall = (w: number, x: number, z: number, ry: number) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, H), wallMat); m.position.set(x, H / 2, z); m.rotation.y = ry; world.add(m); const t = new THREE.Mesh(new THREE.BoxGeometry(w, 0.22, 0.12), stdMat("trim" + p.tier, [0x38bdf8, 0x22c55e, 0xf59e0b][p.tier % 3], 0.5)); t.position.set(x, 0.11, z); t.rotation.y = ry; t.translateZ(0.06); world.add(t); };
       wall(W, W / 2, 0, 0); wall(D, 0, D / 2, Math.PI / 2); wall(D, W, D / 2, -Math.PI / 2);   // single-sided: walls facing the camera are culled, so the room is always open from the front
       const glass = new THREE.MeshStandardMaterial({ color: 0xbfe6f5, transparent: true, opacity: 0.16, roughness: 0.05, side: THREE.DoubleSide, depthWrite: false });
@@ -98,15 +135,27 @@ export default function Store3DScene(props: Props) {
         const s = A.fx.getObjectByName("sign_board")!.clone(true) as THREE.Mesh; const sm = (s.material as THREE.MeshStandardMaterial).clone(); sm.map = labelTexture(p.name.toUpperCase(), "#1e40af"); sm.needsUpdate = true; s.material = sm;
         const bb = new THREE.Box3().setFromObject(s), sz = bb.getSize(new THREE.Vector3()), f = Math.min(1, (W * 0.5) / sz.x); s.scale.setScalar(f); s.position.set(W / 2, H - 0.3 - sz.y * f, 0.35 * f); world.add(s);
       }
-      // ceiling is back-face only (invisible from above) with the supplied ceiling texture + light bars; hidden at steep pitch anyway
-      const cm = new THREE.Mesh(new THREE.PlaneGeometry(W, D).rotateX(Math.PI / 2), new THREE.MeshStandardMaterial({ map: tex("/assets/3d/tex/ceiling.jpg", [W / 2, D / 2]), side: THREE.FrontSide, roughness: 1 })); cm.position.set(W / 2, H + 0.6, D / 2); ceiling.add(cm);
-      for (let r = 0; r < p.rows; r++) { const l = box(W * 0.9, 0.06, 0.3, new THREE.MeshBasicMaterial({ color: 0xffffff }), W / 2, H + 0.52, wp(r)); ceiling.add(l); }
+      // ceiling is back-face only (invisible from above) with the supplied ceiling texture + light fittings; hidden at steep pitch anyway. Skipped on low quality.
+      const look = storeLook(p.tier, Q);
+      if (look.ceiling !== "none") {
+        const cm = new THREE.Mesh(new THREE.PlaneGeometry(W, D).rotateX(Math.PI / 2), new THREE.MeshStandardMaterial({ map: tex("/assets/3d/tex/ceiling.jpg", Q, [W / 2, D / 2]), side: THREE.FrontSide, roughness: 1 })); cm.position.set(W / 2, H + 0.6, D / 2); ceiling.add(cm);
+        for (let r = 0; r < p.rows; r++) {
+          if (look.ceiling === "bars" || !A) { ceiling.add(box(W * 0.9, 0.06, 0.3, new THREE.MeshBasicMaterial({ color: 0xffffff }), W / 2, H + 0.52, wp(r))); continue; }
+          for (const [n, dy] of [["light_housing", 0.56], ["light_diffuser", 0.5]] as const) { const m = clone(n); m.scale.x = W * 0.9; m.position.set(W / 2, H + dy, wp(r)); ceiling.add(m); }   // the ZIP's own light fittings (meshes 0 and 3), stretched to the store width
+        }
+      }
+      // tier 3 (Large Supermarket) architecture: window frames over the storefront glass (mesh 60) and pillars against the back wall (mesh 150), both from the ZIP
+      if (A && look.windowFrames) {
+        const n = Math.max(1, Math.round((W - TILE) / 4.6)), seg = (W - TILE) / n;
+        for (let i = 0; i < n; i++) { const f = clone("window_frame"); f.rotation.y = Math.PI / 2; f.scale.set(1, (H - 1.0) / 2.091, seg / 4.618); f.position.set(TILE + seg * (i + 0.5), 0.9, D + 0.02); world.add(f); }
+      }
+      if (A && look.pillars) for (const fx of [0.2, 0.8]) { const pl = clone("pillar"); pl.position.set(W * fx, 0, 0.3); world.add(pl); }
       // department floor mats + grid
       const gp: number[] = []; for (let x = 0; x <= p.cols; x++) gp.push(x * TILE, 0, 0, x * TILE, 0, D); for (let z = 0; z <= p.rows; z++) gp.push(0, 0, z * TILE, W, 0, z * TILE); grid.geometry.dispose(); grid.geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(gp, 3));
       // dirt decals (cleanliness)
       const dirty = Math.max(0, 0.85 - p.cleanliness) / 0.85, nD = Math.floor(dirty * p.cols * p.rows * 1.2);
       for (let n = 0; n < nD; n++) { const d = new THREE.Mesh(blobGeo, new THREE.MeshBasicMaterial({ map: blob, color: 0x6b4f2a, transparent: true, depthWrite: false, opacity: 0.8 })); d.scale.setScalar(1.2 + hash(n * 3) * 1.2); d.position.set(hash(n * 7 + 1) * W, 0.02, hash(n * 11 + 5) * D); world.add(d); }
-      const fit = Math.max(D * 1.25, (W * 1.0) / Math.max(0.8, camera.aspect)) / (2 * Math.tan((camera.fov * Math.PI) / 360)); view.fit = fit * 1.12; view.dist = view.fit; view.tx = W / 2; view.tz = D / 2 + 0.5;
+      refit(true);
     }
 
     // ---------------------------------------------------------------- fixtures per tile (shelves, fridges, checkouts, decor)
@@ -116,16 +165,22 @@ export default function Store3DScene(props: Props) {
     function buildThings(p: Props) {
       things.children.slice().forEach((c) => { things.remove(c); disposeTree(c); });
       const tint = (x: number, y: number, c: number) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(TILE - 0.1, TILE - 0.1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.55, depthWrite: false })); m.position.set(wp(x), 0.012, wp(y)); things.add(m); };
+      const occupied = new Set([...p.aisles, ...p.checkouts, ...p.restockers, ...p.decors].map((i) => `${i.x},${i.y}`)), mats = new Map<string, THREE.Matrix4[]>();
+      const push = (n: string, x: number, z: number, ry = 0) => { const l = mats.get(n) ?? []; l.push(new THREE.Matrix4().makeRotationY(ry).setPosition(x, 0, z)); mats.set(n, l); };
+      strips.clear(); solid.clear(); glassB.clear(); doorBase.length = 0;
       for (const a of p.aisles) {
-        const g = new THREE.Group(); g.position.set(wp(a.x), 0, wp(a.y)); tint(a.x, a.y, FLOOR_TINT[a.type]);
-        const f = clone(FIXTURE[a.type]); const single = FIXTURE[a.type] !== "shelf_bay"; f.position.z = single ? -0.8 : 0; g.add(f); addBlob(g, 3.8, 1.8, 0, single ? -0.5 : 0);
-        const hex = ACCENT[a.type];
-        if (a.level >= 3) g.add(box(3.25, 0.05, 0.12, new THREE.MeshBasicMaterial({ color: hex }), 0, single ? 2.3 : 2.32, single ? -0.45 : 0.55));        // L3: lit accent strip
-        if (a.level >= 6) { const s = deptSign(a.type); s.position.set(0, 2.75, single ? -0.8 : 0); g.add(s); }                                              // L6: department header sign
-        if (a.level >= 10) { for (const sx of [-1.7, 1.7]) g.add(box(0.1, 2.4, 0.1, stdMat("gold", 0xf5c542, 0.3, 0.8), sx, 0, single ? -0.8 : 0)); }        // L10: gold end posts
-        if (!single) for (const sx of [-1.64, 1.64]) g.add(box(0.06, 2.0, 1.06, stdMat("endp", 0xf8fafc, 0.5), sx, 0, 0));                                     // close the cut bay
+        const look = aisleLook(a.type, a.level, Q), single = look.sides === 1, zOff = single ? -0.8 : 0, X = wp(a.x), Z = wp(a.y), top = TOP[look.fixture] ?? 2.3, g = new THREE.Group(); g.position.set(X, 0, Z); tint(a.x, a.y, FLOOR_TINT[a.type]);
+        push(look.fixture, X, Z + zOff); addBlob(g, 3.8, 1.8, 0, single ? -0.5 : 0);
+        if (look.accentStrip) strips.add(3.25, 0.05, 0.12, X, top + 0.01, Z + (single ? -0.45 : 0.55), ACCENT[a.type]);                                         // L3: lit accent strip
+        if (look.header) { const sg = deptSign(a.type); sg.position.set(0, top + 0.45, zOff); g.add(sg); }                                                      // L6: department header sign
+        if (look.goldPosts) for (const sx of [-1.7, 1.7]) solid.add(0.1, Math.max(1.3, top + 0.1), 0.1, X + sx, 0, Z + zOff, 0xf5c542);                          // L10: gold end posts
+        const caps = endCapSides(a.x, a.y, occupied, p.cols, p.rows, look.endcaps);                                                                              // L3+: end caps (ZIP meshes 16-18) on free ends
+        if (!single) for (const sx of [-1, 1]) { if (caps.includes(sx < 0 ? "L" : "R")) push("shelf_endcap", X + sx * 1.927, Z, sx < 0 ? Math.PI : 0); else solid.add(0.06, look.fixture === "shelf_low" ? 1.15 : 2.0, 1.06, X + sx * 1.64, 0, Z, 0xf8fafc); }   // close the cut bay
+        if (look.guard) { glassB.add(3.1, 0.5, 0.03, X, 0.9, Z + zOff + 0.44, 0xbfe6f5); solid.add(3.2, 0.84, 0.9, X, 0, Z + zOff, 0xeadfd6); }                                                                           // deli: glass guard over the lid
+        if (look.doors) doorBase.push({ id: a.id, X, Z });
         things.add(g);
       }
+      fixSets.forEach((set, n) => set.set(mats.get(n) ?? [])); strips.flush(); solid.flush(); glassB.flush(); refreshDoors(performance.now() / 1000, true);
       for (const k of p.checkouts) {
         const g = new THREE.Group(); g.position.set(wp(k.x), 0, wp(k.y)); tint(k.x, k.y, 0xe2e8f0); const c = clone("checkout_counter"); c.position.set(0, 0, 0.55); g.add(c);
         const pos = clone("pos"); pos.position.set(-0.3, 0.88, 0.55); pos.scale.setScalar(0.75); pos.rotation.y = Math.PI; g.add(pos);
@@ -150,21 +205,28 @@ export default function Store3DScene(props: Props) {
     }
 
     // ---------------------------------------------------------------- products: instanced packs placed on the fixture shelf boards found in the geometry
-    const PLAN: Record<string, { sides: number; y: (l: number) => boolean; inset: number }> = { shelf_bay: { sides: 2, y: (l) => l > 0.3 && l < 2.0, inset: 0.14 }, display_wall: { sides: 1, y: (l) => l > 0.3 && l < 2.0, inset: 0.12 }, fridge_bay: { sides: 1, y: (l) => l > 0.4 && l < 2.3, inset: 0.18 }, freezer_chest: { sides: 1, y: (l) => l > 0.4 && l < 0.7, inset: 0.3 } };
-    function slotsFor(a: AisleState) {
-      const fx = FIXTURE[a.type], plan = PLAN[fx], anc = A!.inv.fixtures.anchors[fx], depts: Record<string, number[]> = A!.inv.products.departments, ids = DEPT[a.type].flatMap((t) => depts[t].slice(0, a.level >= 3 ? 4 : 3));
-      const single = fx !== "shelf_bay", zOff = single ? -0.8 : 0, out: { id: number; m: THREE.Matrix4 }[] = []; let n = 0;
+    const PLAN: Record<string, { sides: number; y: (l: number) => boolean; inset: number; rows?: number }> = { shelf_bay: { sides: 2, y: (l) => l > 0.3 && l < 2.0, inset: 0.14 }, display_wall: { sides: 1, y: (l) => l > 0.3 && l < 2.0, inset: 0.12 }, fridge_bay: { sides: 1, y: (l) => l > 0.4 && l < 2.3, inset: 0.18 }, freezer_chest: { sides: 1, y: (l) => l > 0.4 && l < 0.7, inset: 0.3 },
+      shelf_low: { sides: 2, y: (l) => l >= 0 && l < 1.05, inset: 0.14 },                     // bread table: floor deck + two boards (the flat top at 1.12 m is a lid, not a shelf)
+      deli_top: { sides: 1, y: (l) => l > 0.8 && l < 1.0, inset: 0.2, rows: 2 } };             // deli: products stand on the chest lid behind the glass guard, two rows
+    function slotsFor(a: AisleState, p: Props) {
+      const look = aisleLook(a.type, a.level, Q), plan = PLAN[look.plan], anc = A!.inv.fixtures.anchors[look.fixture], depts: Record<string, number[]> = A!.inv.products.departments, ids = DEPT[a.type].flatMap((t) => depts[t].slice(0, a.level >= 3 ? 4 : 3));
+      const single = look.sides === 1, zOff = single ? -0.8 : 0, out: { id: number; m: THREE.Matrix4 }[] = []; let n = 0;
       const lv = (anc.levels as { y: number; x0: number; x1: number; z0: number; z1: number }[]).filter((l) => plan.y(l.y));
-      for (const l of lv) for (let side = 0; side < plan.sides; side++) {
-        const front = side === 0, z = (front ? l.z1 - plan.inset : l.z0 + plan.inset) + zOff, count = 9;
+      for (const l of lv) for (let side = 0; side < plan.sides * (plan.rows ?? 1); side++) {
+        const front = plan.rows ? true : side === 0, z = (plan.rows ? (side === 0 ? l.z1 - plan.inset : l.z0 + plan.inset) : front ? l.z1 - plan.inset : l.z0 + plan.inset) + zOff, count = 9;
         for (let i = 0; i < count; i++) { const id = ids[(n * 7 + i * 3 + side) % ids.length]; tmp.position.set(-1.44 + i * 0.36 + hash(strHash(a.id) + n) * 0.03, l.y + 0.005, z); tmp.rotation.set(0, front ? 0 : Math.PI, 0); tmp.scale.setScalar(1); tmp.updateMatrix(); out.push({ id, m: tmp.matrix.clone() }); n++; }
+      }
+      // end caps carry a column of packs facing outwards, on the boards measured from the end-cap mesh
+      const occupied = new Set([...p.aisles, ...p.checkouts, ...p.restockers, ...p.decors].map((i) => `${i.x},${i.y}`)), ecl = (A!.inv.fixtures.anchors.shelf_endcap?.levels ?? []) as { y: number; x0: number; x1: number; z0: number; z1: number }[];
+      for (const side of endCapSides(a.x, a.y, occupied, p.cols, p.rows, look.endcaps)) for (const l of ecl.filter((e) => e.y > 0.3 && e.y < 1.9)) {
+        const sx = side === "R" ? 1 : -1; for (let i = 0; i < 3; i++) { const id = ids[(n * 5 + i) % ids.length]; tmp.position.set(sx * (1.927 + l.x1 - 0.16), l.y + 0.005, l.z0 + 0.22 + i * ((l.z1 - l.z0 - 0.44) / 2)); tmp.rotation.set(0, sx * Math.PI / 2, 0); tmp.scale.setScalar(1); tmp.updateMatrix(); out.push({ id, m: tmp.matrix.clone() }); n++; }
       }
       return out;
     }
     function buildProducts(p: Props) {
       const counts = new Map<number, number>(), root = new THREE.Matrix4();
       for (const a of p.aisles) {
-        const slots = slotsFor(a); const pct = a.maxStock ? Math.max(0, Math.min(1, a.stock / a.maxStock)) : 0, show = pct <= 0 ? 0 : Math.max(1, Math.ceil(pct * slots.length));
+        const slots = slotsFor(a, p); const pct = a.maxStock ? Math.max(0, Math.min(1, a.stock / a.maxStock)) : 0, show = pct <= 0 ? 0 : Math.max(1, Math.ceil(pct * slots.length));
         const order = slots.map((_, i) => i).sort((u, v) => hash(u * 31 + strHash(a.id)) - hash(v * 31 + strHash(a.id)));
         root.makeTranslation(wp(a.x), 0, wp(a.y));
         for (let k = 0; k < show; k++) { const s = slots[order[k]], key = "pack_" + s.id; let im = packMeshes.get(key); if (!im) { const src = A!.pk.getObjectByName(key) as THREE.Mesh; im = new THREE.InstancedMesh(src.geometry, src.material, 1400); im.frustumCulled = false; im.userData.shared = true; packMeshes.set(key, im); packsGroup.add(im); }
@@ -174,13 +236,13 @@ export default function Store3DScene(props: Props) {
     }
 
     // ---------------------------------------------------------------- people + carts
-    function ensureCarts() { if (cartParts.length || !A) return; const c = A.fx.getObjectByName("cart_a")!; c.traverse((o: any) => { if (o.isMesh) { const im = new THREE.InstancedMesh(o.geometry, o.material, 64); im.count = 0; im.frustumCulled = false; im.userData.shared = true; scene.add(im); cartParts.push(im); } }); }
+    function ensureCarts() { if (cartParts.length || !A) return; const c = A.fx.getObjectByName(cartPlan(Q).node)!; c.traverse((o: any) => { if (o.isMesh) { const im = new THREE.InstancedMesh(o.geometry, o.material, cartPlan(Q).cap); im.count = 0; im.frustumCulled = false; im.userData.shared = true; scene.add(im); cartParts.push(im); } }); }
     function drawActors(dt: number, t: number) {
       const L = latest.current, seen = t; let n = 0, nc = 0; const set = (im: THREE.InstancedMesh, i: number, c: number) => { col.setHex(c); im.setColorAt(i, col); };
       for (const a of L.actors) {
         if (n >= CAP) break; let m = motion.get(a.id); const tx = wp(a.x), tz = wp(a.y);
         if (!m) { m = { x: tx, z: tz, h: Math.PI, ph: hash(a.seed) * 6, seen }; motion.set(a.id, m); } m.seen = seen;
-        const dx = tx - m.x, dz = tz - m.z, dist = Math.hypot(dx, dz), k = 1 - Math.exp(-dt * 7); m.x += dx * k; m.z += dz * k; const sp = (dist * k) / Math.max(dt, 1e-3);
+        const dx = tx - m.x, dz = tz - m.z, dist = Math.hypot(dx, dz), k = 1 - Math.exp(-dt * 20); m.x += dx * k; m.z += dz * k; const sp = (dist * k) / Math.max(dt, 1e-3);
         if (dist > 0.05) { let dh = Math.atan2(dx, dz) - m.h; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); m.h += dh * (1 - Math.exp(-dt * 9)); }
         const walking = sp > 0.5; if (walking) m.ph += dt * 9; const bob = walking ? Math.abs(Math.sin(m.ph)) * 0.04 : 0, sc = a.scale ?? 1, sw = walking ? Math.sin(m.ph) * 0.5 : 0;
         const shirt = a.kind === "customer" ? (a.angry ? 0xdc2626 : a.thief ? 0x111827 : PAL[Math.floor(hash(a.seed) * PAL.length)]) : ROLE[a.kind], skin = SKIN[Math.floor(hash(a.seed + 1) * SKIN.length)], hr = a.kind === "guard" ? 0x0f172a : HAIR[Math.floor(hash(a.seed + 2) * HAIR.length)];
@@ -189,7 +251,7 @@ export default function Store3DScene(props: Props) {
         const pants = a.kind === "guard" || a.kind === "manager" ? 0x1e293b : 0x334155; tmp.position.set(m.x, bob + 0.72 * sc * 0.95, m.z); tmp.rotation.set(0, m.h, 0); tmp.rotateX(sw); tmp.updateMatrix(); legL.setMatrixAt(n, tmp.matrix); set(legL, n, pants);
         tmp.rotation.set(0, m.h, 0); tmp.rotateX(-sw); tmp.updateMatrix(); legR.setMatrixAt(n, tmp.matrix); set(legR, n, pants);
         tmp.position.set(m.x, 0.01, m.z); tmp.rotation.set(0, 0, 0); tmp.scale.set(0.9, 1, 0.9); tmp.updateMatrix(); shadowIM.setMatrixAt(n, tmp.matrix);
-        if (a.cart && cartParts.length && nc < 64) { tmp.position.set(m.x + Math.sin(m.h) * 0.75, 0, m.z + Math.cos(m.h) * 0.75); tmp.rotation.set(0, m.h + Math.PI, 0); tmp.scale.setScalar(1); tmp.updateMatrix(); cartParts.forEach((im) => im.setMatrixAt(nc, tmp.matrix)); nc++; }
+        if (a.cart && cartParts.length && nc < cartPlan(Q).cap) { tmp.position.set(m.x + Math.sin(m.h) * 0.75, 0, m.z + Math.cos(m.h) * 0.75); tmp.rotation.set(0, m.h + Math.PI, 0); tmp.scale.setScalar(1); tmp.updateMatrix(); cartParts.forEach((im) => im.setMatrixAt(nc, tmp.matrix)); nc++; }
         n++;
       }
       for (const im of [torso, head, hair, legL, legR, shadowIM]) { im.count = n; im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; }
@@ -204,7 +266,7 @@ export default function Store3DScene(props: Props) {
         v3.set(wp(x), hh, wp(y)).project(camera); let d = pool.get(id); if (!d) { d = document.createElement("div"); pool.set(id, d); ov.appendChild(d); } if (d.dataset.h !== html) { d.innerHTML = html; d.dataset.h = html; } d.className = "m3d " + cls;
         const off = v3.z > 1 ? "none" : "block"; d.style.display = off; d.style.transform = `translate(-50%,-100%) translate(${((v3.x + 1) / 2) * w}px,${((1 - v3.y) / 2) * h}px)`; extra?.(d); used.add(id); };
       for (const m of L.markers) place("k" + m.id, m.x, m.y, m.h ?? 2.5, m.html, m.cls ?? "");
-      for (const f of L.floats) place("f" + f.id, f.x, f.y, 2.2 + f.age * 1.4, `+${f.amt}`, "m3d-float", (d) => { d.style.opacity = String(Math.min(1, 1.6 - f.age / 1.2)); });
+      for (const f of L.floats) place("f" + f.id, f.x, f.y, 2.2 + f.age * 1.4, f.amt, "m3d-float", (d) => { d.style.opacity = String(Math.min(1, 1.6 - f.age / 1.2)); });
       pool.forEach((d, k) => { if (!used.has(k)) { d.remove(); pool.delete(k); } });
     }
 
@@ -212,7 +274,7 @@ export default function Store3DScene(props: Props) {
     const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), ndc = new THREE.Vector2(), hit = new THREE.Vector3();
     const toTile = (cx: number, cy: number) => { const r = renderer.domElement.getBoundingClientRect(); ndc.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); if (!ray.ray.intersectPlane(plane, hit)) return null; const x = Math.floor(hit.x / TILE), y = Math.floor(hit.z / TILE), L = latest.current; return x >= 0 && y >= 0 && x < L.cols && y < L.rows ? { x, y } : null; };
     const ptrs = new Map<number, { x: number; y: number }>(); let down: { x: number; y: number; t: number; moved: boolean } | null = null, pinch = 0, twist = 0;
-    const clampView = () => { view.tx = Math.max(0, Math.min(view.W, view.tx)); view.tz = Math.max(0, Math.min(view.D + 2, view.tz)); view.dist = Math.max(view.fit * 0.32, Math.min(view.fit * 1.25, view.dist)); view.pitch = Math.max(0.5, Math.min(1.25, view.pitch)); };
+    const clampView = () => { touched = true; view.tx = Math.max(0, Math.min(view.W, view.tx)); view.tz = Math.max(0, Math.min(view.D + 2, view.tz)); view.dist = Math.max(view.fit * 0.32, Math.min(view.fit * 1.25, view.dist)); view.pitch = Math.max(0.5, Math.min(1.25, view.pitch)); };
     const pan = (dx: number, dy: number) => {   // content follows the finger: right=(cos,-sin) on the ground, forward=(-sin,-cos)
       const k = (2 * view.dist * Math.tan((camera.fov * Math.PI) / 360)) / el.clientHeight, c = Math.cos(view.yaw), s = Math.sin(view.yaw), kf = k / Math.sin(view.pitch);
       view.tx += -c * dx * k - s * dy * kf; view.tz += s * dx * k - c * dy * kf;
@@ -230,7 +292,7 @@ export default function Store3DScene(props: Props) {
     cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("contextmenu", (e) => e.preventDefault());
     cv.addEventListener("wheel", (e) => { e.preventDefault(); view.dist *= Math.exp(e.deltaY * 0.0012); clampView(); }, { passive: false });
 
-    const resize = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / Math.max(h, 1); camera.updateProjectionMatrix(); };
+    const resize = () => { const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); refit(false); };
     const ro = new ResizeObserver(resize); ro.observe(el); resize();
     const sync = () => {
       const L = latest.current; if (!A) return;
@@ -240,15 +302,15 @@ export default function Store3DScene(props: Props) {
       const fk = L.aisles.map((a) => `${a.id}:${a.maxStock ? Math.round((a.stock / a.maxStock) * 14) : 0}:${a.level >= 3}`).join("|") + layoutKey.length; if (fk !== fillKey) { fillKey = fk; buildProducts(L); }
       const sk = `${L.selected?.id ?? ""}${L.buildMode}`; if (sk !== selKey) { selKey = sk; grid.visible = L.buildMode; hover.visible = false; const s = L.selected && [...L.aisles, ...L.checkouts, ...L.restockers, ...L.decors].find((i) => i.id === L.selected!.id); ring.visible = !!s; if (s) ring.position.set(wp(s.x), 0.06, wp(s.y)); }
     };
-    eng.current = { sync, cam: (a) => { if (a === "l") view.yawT += Math.PI / 4; if (a === "r") view.yawT -= Math.PI / 4; if (a === "in") view.dist *= 0.8; if (a === "out") view.dist *= 1.25; if (a === "home") { view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; view.yawT = 0; view.pitch = 0.92; } clampView(); } };
-    loadAssets().then((a) => { if (dead) return; A = a; ensureCarts(); sync(); }).catch((e) => console.error("3D assets failed to load", e));
+    eng.current = { sync, cam: (a) => { if (a === "l") view.yawT += Math.PI / 4; if (a === "r") view.yawT -= Math.PI / 4; if (a === "in") view.dist *= 0.8; if (a === "out") view.dist *= 1.25; if (a === "home") { touched = false; view.dist = view.fit; view.tx = view.W / 2; view.tz = view.D / 2 + 0.5; view.yawT = 0; view.pitch = 0.92; } clampView(); if (a === "home") touched = false; } };
+    loadAssets(Q).then((a) => { if (dead) return; A = a; ensureCarts(); ensureInstancing(); sync(); }).catch((e) => console.error("3D assets failed to load", e));
 
     let last = performance.now();
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop); const dt = Math.min(0.1, (now - last) / 1000); last = now; if (document.hidden) return;
       view.yaw += (view.yawT - view.yaw) * (1 - Math.exp(-dt * 8)); const cp = Math.cos(view.pitch);
       camera.position.set(view.tx + view.dist * Math.sin(view.yaw) * cp, view.dist * Math.sin(view.pitch), view.tz + view.dist * Math.cos(view.yaw) * cp); camera.lookAt(view.tx, 0, view.tz);
-      ceiling.visible = view.pitch < 0.62; if (A) { drawActors(dt, now / 1000); } camera.updateMatrixWorld(); drawMarkers(); renderer.render(scene, camera);
+      ceiling.visible = view.pitch < 0.62; if (A) { drawActors(dt, now / 1000); if (now - doorAt > 200) { doorAt = now; refreshDoors(now / 1000); } } camera.updateMatrixWorld(); drawMarkers(); renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(loop);
     return () => { dead = true; cancelAnimationFrame(raf); ro.disconnect(); renderer.dispose(); renderer.domElement.remove(); pool.forEach((d) => d.remove()); eng.current = null; };
