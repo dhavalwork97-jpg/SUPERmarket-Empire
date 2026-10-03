@@ -7,7 +7,7 @@
   "build": "next build",
   "start": "next start",
   "sim": "tsx scripts/balance-sim.ts 3",
-  "test": "tsx scripts/test-game.ts",
+  "test": "tsx scripts/test-game.ts && tsx scripts/test-nav.ts",
   "assets": "python3 scripts/optimize-assets.py",
   "assets3d": "python3 scripts/build-store-assets.py"
  },

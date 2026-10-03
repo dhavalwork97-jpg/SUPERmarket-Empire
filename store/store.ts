@@ -33,11 +33,12 @@ export const useGame = create<GameState>((set, get) => {
     const item = { ...list[i], level: list[i].level + 1 };
     const d = key === "aisles" ? deriveAisle(item) : key === "checkouts" ? deriveCheckout(item, 0) : deriveRestocker(item, 0);
     set({ cash: s.cash - list[i].upgradeCost, [key]: list.map((x, j) => (j === i ? d : x)), lastUpgrade: `${label(d)} upgraded → Level ${d.level}` } as any);
-    addXp(Math.max(2, Math.round(Math.sqrt(list[i].upgradeCost)))); say("built", `${label(d)} upgraded to level ${d.level}`); get().saveGame();
+    pop(list[i].x, list[i].y, `▲ Level ${d.level}`); addXp(Math.max(2, Math.round(Math.sqrt(list[i].upgradeCost)))); say("built", `${label(d)} upgraded to level ${d.level}`); get().saveGame();
   };
   /** Adds XP and announces level-ups (used for build/upgrade/mission/achievement rewards; sales XP is handled inside simulate). */
   const addXp = (n: number) => { if (n <= 0) return; const s = get(), before = levelOf(s.xp), xp = s.xp + n, after = levelOf(xp);
     set({ xp, ...(after > before ? { fx: [...s.fx, { id: s.nextId, kind: "level" as FxKind, text: `LEVEL UP! You are now level ${after}`, age: 0 }], nextId: s.nextId + 1 } : {}) }); };
+  const pop = (x: number, y: number, txt: string) => { const s = get(); set({ floats: [...s.floats.slice(-12), { id: s.nextId, amt: 0, age: 0, x, y, txt }], nextId: s.nextId + 1 }); };
   const say = (kind: FxKind, text: string) => { const s = get(); set({ fx: [...s.fx.slice(-7), { id: s.nextId, kind, text, age: 0 }], nextId: s.nextId + 1 }); };
   let tickN = 0, notified = -1;
   return {
@@ -53,7 +54,7 @@ export const useGame = create<GameState>((set, get) => {
       else if (kind === "checkout") set({ checkouts: [...s.checkouts, mkCheckout(seq(s.checkouts, "c"), x, y)] });
       else if (kind === "decor") set({ decors: [...s.decors, { id: seq(s.decors, "d"), x, y, style: DECOR.some((d) => d.id === style) ? style : DECOR[0].id }] });
       else { set({ restockers: [...s.restockers, mkRestocker(seq(s.restockers, "r"), x, y, null)] }); }
-      set({ cash: s.cash - cost, lastUpgrade: "Built!" }); addXp(Math.max(3, Math.round(Math.sqrt(cost)))); say("built", kind === "aisle" ? `New ${AISLE_DEFS[type!].name} aisle built!` : kind === "checkout" ? "New checkout lane opened!" : kind === "restocker" ? "Restocker hired!" : "Decor placed"); get().saveGame();
+      set({ cash: s.cash - cost, lastUpgrade: "Built!" }); pop(x, y, "🔨 Built"); addXp(Math.max(3, Math.round(Math.sqrt(cost)))); say("built", kind === "aisle" ? `New ${AISLE_DEFS[type!].name} aisle built!` : kind === "checkout" ? "New checkout lane opened!" : kind === "restocker" ? "Restocker hired!" : "Decor placed"); get().saveGame();
     },
     moveItem: (kind, id, x, y) => {
       const s = get(); if (!inGrid(s, x, y) || taken(s, x, y)) return;
@@ -66,7 +67,7 @@ export const useGame = create<GameState>((set, get) => {
       const aisles = kind === "aisle" ? s.aisles.filter((a) => a.id !== id) : s.aisles;
       const restockers = (kind === "restocker" ? s.restockers.filter((r) => r.id !== id) : s.restockers).map((r) => (r.assignedAisleId === id ? { ...r, assignedAisleId: null } : r));
       const checkouts = kind === "checkout" ? s.checkouts.filter((c) => c.id !== id) : s.checkouts;
-      const customers = kind === "checkout" ? s.customers.map((c) => (c.co === id ? { ...c, co: null, phase: "LEAVING" as const, t: 1, basket: 0, mood: "😡" } : c)) : s.customers;
+      const customers = kind === "checkout" ? s.customers.map((c) => (c.co === id ? { ...c, co: null, phase: "LEAVING" as const, basket: 0, mood: "😡", goal: "", path: [], pi: 0, lost: false, stuck: 0, say: "Lane closed", sayT: 2.6 } : c)) : s.customers;
       set({ aisles, restockers, checkouts, customers, decors: kind === "decor" ? s.decors.filter((d) => d.id !== id) : s.decors, cash: s.cash + refund }); get().saveGame();
     },
     expandStore: () => { const s = get(), n = TIERS[s.tier + 1]; if (!n || s.cash < n.cost) return;
@@ -82,6 +83,11 @@ export const useGame = create<GameState>((set, get) => {
     claimObjective: () => { const s = get(), o = objectiveAt(s.objectiveStep); if (o.value(s) < o.target) return;
       set({ cash: s.cash + o.cash, objectiveStep: s.objectiveStep + 1 }); addXp(o.xp); say("mission", `Objective complete! +$${Math.round(o.cash).toLocaleString()}${o.xp ? ` +${o.xp} XP` : ""}`); get().saveGame(); },
     toast: (text, kind = "toast") => say(kind, text),
+    restockAisle: (id) => { const s = get(), a = s.aisles.find((x) => x.id === id); if (!a || a.level < 1 || a.maxStock - a.stock < 0.5) return "full";
+      const have = s.storeroom[a.type]; if (have < 1) return "empty";
+      const n = Math.min(a.maxStock - a.stock, Math.floor(have));
+      set({ aisles: s.aisles.map((x) => (x.id === id ? { ...x, stock: x.stock + n } : x)), storeroom: { ...s.storeroom, [a.type]: have - n }, lastUpgrade: `Restocked +${Math.round(n)}` });
+      pop(a.x, a.y, `📦 +${Math.round(n)}`); say("built", `${AISLE_DEFS[a.type].name} #${a.id.slice(1)} restocked (+${Math.round(n)})`); get().saveGame(); return "ok"; },
     assignRestocker: (id, aisleId) => { set({ restockers: get().restockers.map((r) => (r.id === id ? { ...r, assignedAisleId: aisleId || null } : r)) }); get().saveGame(); },
     simulateTick: (dt) => { if (!(dt > 0)) return; const n = simulate(get(), Math.min(dt, 1)); set({ ...n, ...counts(n) });
       if (++tickN % 10) return; // once a second or so: unlock achievements, announce finished objectives

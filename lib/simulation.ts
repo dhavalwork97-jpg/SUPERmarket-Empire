@@ -1,14 +1,15 @@
-import { AISLE_DEFS, CHECKOUT, RESTOCK, AISLE_MULT, BASE_DEMAND, MAX_CUSTOMERS, TIERS, AISLE_ORDER, DELIVERY_TIME } from "./constants";
+import { AISLE_DEFS, CHECKOUT, RESTOCK, AISLE_MULT, BASE_DEMAND, MAX_CUSTOMERS, TIERS, AISLE_ORDER, DELIVERY_TIME, PEOPLE_PER_TILE } from "./constants";
 import * as E from "./economy";
-import { AisleState, Bottleneck, CheckoutState, Customer, Fx, FxKind, RestockerState, SimData } from "@/types/game";
+import { AisleState, Bottleneck, CheckoutState, Customer, Fx, FxKind, RestockerState, SimData, Walker } from "@/types/game";
 import { CUSTOMERS, rollKind } from "./customers";
 import { EVENTS, rollEvent, DAY_SECONDS } from "./events";
 import { cashierByLane, managerBonus, restockerWage, wagePerSecond, rederiveAll } from "./staff";
 import { levelOf, xpForSale } from "./progress";
+import { analyzeStore, Layout, Pt, findRoute, advance, WALK_SPEED, doorOf, entranceTile, streetPoint, isFree, tileOf } from "./navigation";
 
 /** Fields added after the first save format. Used by new games, the loader (for old saves) and the balance bot. */
 export const defaultExtras = () => ({ xp: 0, staff: [] as SimData["staff"], lifetimeExpenses: 0, satisfaction: 0.8, cleanliness: 1, clock: 0, event: null as SimData["event"], objectiveStep: 0,
-  achievements: [] as string[], thefts: 0, theftsPrevented: 0, gems: 0, cosmetics: [] as string[], adsRemoved: false, revPerSec: 0, expPerSec: 0, recentThief: 0, fx: [] as Fx[] });
+  achievements: [] as string[], thefts: 0, theftsPrevented: 0, gems: 0, cosmetics: [] as string[], adsRemoved: false, revPerSec: 0, expPerSec: 0, recentThief: 0, recentBalk: 0, fx: [] as Fx[], crew: [] as Walker[] });
 export const THEFT_CHANCE = 0.02;
 export const demandMult = (s: SimData) => (0.85 + 0.15 * s.cleanliness) * (0.85 + 0.15 * s.satisfaction) * (s.event ? EVENTS[s.event.id]?.demand ?? 1 : 1);
 
@@ -26,34 +27,57 @@ export function deriveRestocker(r: RestockerState, i: number): RestockerState {
   return { ...r, restockAmount: E.getRestockAmount(RESTOCK.amount, Math.max(1, r.level)), cooldown: E.getRestockCooldown(RESTOCK.cooldown, Math.max(1, r.level)), upgradeCost: E.getUpgradeCost(RESTOCK.cost * (1 + i * 3), RESTOCK.mult, r.level) };
 }
 export const storeLevel = (s: SimData) => [...s.aisles, ...s.checkouts, ...s.restockers].reduce((n, x) => n + x.level, 0);
-export const demandOf = (s: SimData) => E.getCustomerDemand(storeLevel(s), BASE_DEMAND) * TIERS[Math.min(s.tier, TIERS.length - 1)].demand;
+/** Comfortable headcount: PEOPLE_PER_TILE shoppers per tile of floor (never above the hard simulation cap). */
+export const storeCapacity = (s: SimData) => Math.min(MAX_CUSTOMERS, Math.round(tierOf(s).cols * tierOf(s).rows * PEOPLE_PER_TILE));
+/** What draws shoppers in is what they can see on the shelves. Checkout and restocker levels used to count too, so every till or crate-runner upgrade also raised footfall. */
+export const appealOf = (s: SimData) => s.aisles.reduce((n, a) => n + Math.max(0, a.level), 0);
+export const demandOf = (s: SimData) => E.getCustomerDemand(appealOf(s), BASE_DEMAND) * TIERS[Math.min(s.tier, TIERS.length - 1)].demand;
 
-export type Layout = { dist: Record<string, Record<string, number>>; spots: Record<string, number>; boost: Record<string, number> };
-let cacheKey = "", cache: Layout | null = null;
+export type { Layout } from "./navigation";
 const tierOf = (s: SimData) => TIERS[Math.min(s.tier, TIERS.length - 1)];
-/** Walkable-grid analysis: BFS distances between entrance "E", shelves and checkouts; queue space; decor boosts. Cached by layout. */
+/**
+ * Walkable-space analysis of the store the player has actually built (see lib/navigation.ts). Everything the player places occupies its tile; routes,
+ * reachability, queue positions and decor boosts all come from that one grid, and it is rebuilt only when the layout changes.
+ */
 export function analyzeLayout(s: SimData): Layout {
   const { cols, rows } = tierOf(s);
-  const key = `${cols}x${rows}|` + [...s.aisles, ...s.checkouts].map((i) => `${i.id}${i.x},${i.y}`).join(";") + "|" + s.decors.map((d) => `${d.x},${d.y}`).join(";");
-  if (cache && key === cacheKey) return cache;
-  const blocked = new Set([...s.aisles, ...s.checkouts].map((i) => `${i.x},${i.y}`));
-  const free = (x: number, y: number) => x >= 0 && y >= 0 && x < cols && y < rows && !blocked.has(`${x},${y}`);
-  const N: [number, number][] = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-  const bfs = (src: [number, number][]) => {
-    const d = new Map<string, number>(), q: [number, number][] = [];
-    for (const [x, y] of src) if (free(x, y)) { d.set(`${x},${y}`, 0); q.push([x, y]); }
-    for (let i = 0; i < q.length; i++) { const [x, y] = q[i], v = d.get(`${x},${y}`)!;
-      for (const [dx, dy] of N) { const k = `${x + dx},${y + dy}`; if (free(x + dx, y + dy) && !d.has(k)) { d.set(k, v + 1); q.push([x + dx, y + dy]); } } }
-    return d;
-  };
-  const items = [...s.aisles, ...s.checkouts];
-  const pois = [{ id: "E", acc: [[0, rows - 1]] as [number, number][] }, ...items.map((i) => ({ id: i.id, acc: N.map(([dx, dy]) => [i.x + dx, i.y + dy] as [number, number]) }))];
-  const fields = pois.map((p) => bfs(p.acc)), dist: Layout["dist"] = {};
-  pois.forEach((p, a) => { dist[p.id] = {}; pois.forEach((q) => { let m = Infinity; for (const [x, y] of q.acc) m = Math.min(m, fields[a].get(`${x},${y}`) ?? Infinity); dist[p.id][q.id] = m; }); });
-  const spots: Layout["spots"] = {}, boost: Layout["boost"] = {};
-  for (const k of s.checkouts) { let n = 0; for (let dx = -3; dx <= 3; dx++) for (let dy = -3; dy <= 3; dy++) if (Math.abs(dx) + Math.abs(dy) <= 3 && free(k.x + dx, k.y + dy)) n++; spots[k.id] = n; }
-  for (const a of s.aisles) boost[a.id] = 1 + 0.1 * Math.min(5, s.decors.filter((d) => Math.abs(d.x - a.x) + Math.abs(d.y - a.y) <= 2).length);
-  cacheKey = key; cache = { dist, spots, boost }; return cache;
+  return analyzeStore(cols, rows, s.aisles, s.checkouts, s.restockers, s.decors);
+}
+
+const hash01 = (a: number, b: number) => { let x = Math.imul((a ^ 0x9e3779b9) | 0, 2654435761) ^ Math.imul((b + 0x85ebca6b) | 0, 2246822519); x = Math.imul(x ^ (x >>> 15), 2246822519) >>> 0; return (x % 100000) / 100000; };
+const idNum = (id: string) => { let h = 7; for (let i = 0; i < id.length; i++) h = Math.imul(h ^ id.charCodeAt(i), 16777619); return h | 0; };
+/**
+ * Roaming staff. Cosmetic only (cash, stock and queues never read this), but they use the very same router as shoppers so nobody on the floor walks
+ * through a shelf: cleaners wander open floor, guards hang around the door, the manager visits shelves and tills, restockers run crates to the shelf
+ * they just filled and back to their desk.
+ */
+function stepCrew(s: SimData, L: Layout, dt: number, aisles: AisleState[], restockers: RestockerState[], staff: SimData["staff"], fired: Map<string, string>, rows: number): Walker[] {
+  const ent = entranceTile(rows), step = WALK_SPEED * 0.9 * dt, old = new Map(s.crew.map((w) => [w.id, w]));
+  const want: { id: string; role: Walker["role"]; desk?: RestockerState }[] = [...restockers.filter((r) => r.level > 0).map((r) => ({ id: "r" + r.id, role: "restocker" as const, desk: r })),
+    ...staff.filter((x) => x.role === "cleaner" || x.role === "security" || x.role === "manager").map((x) => ({ id: "s" + x.id, role: (x.role === "security" ? "guard" : x.role) as Walker["role"] }))];
+  return want.map((m) => {
+    const home = m.desk ? L.access["desk" + m.desk.id]?.[0] : undefined;
+    const w: Walker = old.has(m.id) ? { ...old.get(m.id)! } : { id: m.id, role: m.role, x: home?.x ?? m.desk?.x ?? ent.x, y: home?.y ?? m.desk?.y ?? ent.y, path: [], pi: 0, goal: "", nav: -1, wait: 0, turn: 0, task: "idle" };
+    const seed = idNum(m.id);
+    const go = (key: string, targets: Pt[]) => { if (w.goal === key && w.nav === L.version) return; const r = findRoute(L.grid, w, targets); w.goal = key; w.nav = L.version; w.path = r ? r.path : []; w.pi = 0; };
+    const walk = () => { const a = advance(w.x, w.y, w.path, w.pi, step); if (a.x !== w.x || a.y !== w.y) w.face = { x: a.x - w.x, y: a.y - w.y }; w.x = a.x; w.y = a.y; w.pi = a.pi; return a.done; };
+    if (m.role === "restocker") {
+      const job = fired.get(m.desk!.id); if (job) { w.task = "to:" + job; w.goal = ""; w.wait = 0; }
+      if (w.task?.startsWith("to:")) { const id = w.task.slice(3), sh = aisles.find((a) => a.id === id);
+        if (!sh) w.task = "home"; else { go(w.task + "@" + sh.x + "," + sh.y, L.access[id] ?? []); if (walk() || !w.path.length) { w.task = "work:" + id; w.wait = 1; w.face = { x: sh.x - w.x, y: sh.y - w.y }; } } }
+      else if (w.task?.startsWith("work:")) { w.wait -= dt; if (w.wait <= 0) { w.task = "home"; w.goal = ""; } }
+      else { if (home) { go("home", [home]); walk(); } }
+    } else {
+      if (w.task === "walk") { if (walk() || !w.path.length) { w.task = "idle"; w.wait = m.role === "guard" ? 4 : m.role === "manager" ? 3 : 2.5; } }
+      else { w.wait -= dt; if (w.wait <= 0) {
+        w.turn++; let targets: Pt[] = [];
+        if (m.role === "cleaner") { const t = L.floor[Math.floor(hash01(seed, w.turn) * L.floor.length)]; targets = t ? [t] : []; }
+        else if (m.role === "guard") { const near = L.floor.filter((t) => Math.max(Math.abs(t.x - ent.x), Math.abs(t.y - ent.y)) <= 3), t = near[Math.floor(hash01(seed, w.turn) * near.length)]; targets = t ? [t] : []; }
+        else { const items = [...aisles.filter((a) => a.level > 0), ...s.checkouts.filter((k) => k.level > 0)]; const it = items[w.turn % Math.max(1, items.length)]; targets = it ? L.access[it.id] ?? [] : []; }
+        go(m.role + w.turn, targets); w.task = "walk"; if (!w.path.length) { w.task = "idle"; w.wait = 2; } } }
+    }
+    return w;
+  });
 }
 
 export function simulate(s: SimData, dt: number): SimData {
@@ -68,67 +92,115 @@ export function simulate(s: SimData, dt: number): SimData {
   const floats = s.floats.map((f) => ({ ...f, age: f.age + dt })).filter((f) => f.age < 1.5);
   const fx: Fx[] = s.fx.map((f) => ({ ...f, age: f.age + dt })).filter((f) => f.age < 4);
   const say = (kind: FxKind, text: string) => { if (fx.length < 8 && !fx.some((f) => f.text === text)) fx.push({ id: nextId++, kind, text, age: 0 }); };
-  let { xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event } = s, happy = 0, angry = 0, recentThief = Math.max(0, s.recentThief - dt);
+  let { xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event } = s, happy = 0, angry = 0, recentThief = Math.max(0, s.recentThief - dt), recentBalk = Math.max(0, s.recentBalk - dt);
   const staff = s.staff.map((x) => ({ ...x })), lanes = cashierByLane(staff, checkouts), mb = managerBonus(staff), ev = event ? EVENTS[event.id] : undefined;
   const secStop = Math.min(0.85, staff.filter((x) => x.role === "security").reduce((n, x) => n + x.efficiency, 0));
   const lvlBefore = levelOf(xp);
   clock += dt;
   if (Math.floor(clock / DAY_SECONDS) > Math.floor(s.clock / DAY_SECONDS)) { event = rollEvent(); if (event) say("event", `${EVENTS[event.id].name}: ${EVENTS[event.id].blurb}`); }
   else if (event) { event = { ...event, left: event.left - dt }; if (event.left <= 0) event = null; }
-  const leave = (c: Customer, at: string, mood: string) => { c.phase = "LEAVING"; c.t = 1; c.at = at; c.mood = mood; c.co = null; };
+  const { rows } = tierOf(s), ent = entranceTile(rows), door = doorOf(rows), BROWSE = 1.0;
+  const leave = (c: Customer, mood: string, say?: string) => { c.phase = "LEAVING"; c.mood = mood; c.co = null; c.goal = ""; c.path = []; c.pi = 0; c.lost = false; c.stuck = 0; c.dwell = 0; if (say) { c.say = say; c.sayT = 2.6; } };
   const active = checkouts.filter((c) => c.level > 0);
+  const fired = new Map<string, string>();
 
   spawnAcc += demandOf(s) * demandMult({ ...s, event }) * dt;
-  while (spawnAcc >= 1) { spawnAcc -= 1; if (customers.length < MAX_CUSTOMERS) customers.push({ id: nextId++, phase: "ENTERING", t: 1, wait: 0, basket: 0, co: null, mood: "🚶", plan: [], kind: rollKind(s.tier, ev?.kinds), t0: 1, at: "E" }); }
+  const room = storeCapacity(s); // a shop only holds so many people: when the floor is full, new arrivals look in and walk on
+  while (spawnAcc >= 1) { spawnAcc -= 1; if (customers.length >= room) { recentBalk = 4; continue; } const st = streetPoint(rows, nextId);
+    customers.push({ id: nextId++, phase: "ENTERING", kind: rollKind(s.tier, ev?.kinds), mood: "🚶", basket: 0, wait: 0, co: null, plan: [], stop: 0, dwell: 0, x: st.x, y: st.y, path: [door, ent], pi: 0, goal: "door", nav: L.version, lost: false, stuck: 0, qn: 0 }); }
 
-  const tileTime = 0.5 * (1 + customers.length / 150); // crowds walk slower
-  const qlen = (id: string) => customers.filter((c) => c.co === id && (c.phase === "QUEUING" || c.phase === "CHECKOUT")).length;
+  const step = (WALK_SPEED / (1 + customers.length / 150)) * dt; // crowds shuffle a little slower
+  let repaths = 0; const REPATH_BUDGET = 48;      // after a layout change at most this many shoppers re-route per tick; the rest hold still (never walking an old route) until their turn
+  const lane: Record<string, Customer[]> = {}; for (const k of active) lane[k.id] = [];
+  for (const c of customers) if (c.co && lane[c.co] && (c.phase === "QUEUING" || c.phase === "CHECKOUT")) lane[c.co].push(c);
+  for (const k in lane) lane[k].sort((a, b) => (a.phase === "CHECKOUT" ? -1 : 0) - (b.phase === "CHECKOUT" ? -1 : 0) || a.qn - b.qn);
+  /** Make sure c has a route for `key` that was searched on the current layout, from where c stands now. False = hold position this tick. */
+  const route = (c: Customer, key: string, targets: Pt[]): boolean => {
+    if (c.goal === key && c.nav === L.version) return true;
+    if (c.goal === key && repaths >= REPATH_BUDGET) return false;
+    repaths++; const r = findRoute(L.grid, c, targets); c.goal = key; c.nav = L.version;
+    if (r) { c.path = r.path; c.pi = 0; c.lost = false; } else { c.path = []; c.pi = 0; c.lost = true; }
+    return true;
+  };
+  const walk = (c: Customer): boolean => { const a = advance(c.x, c.y, c.path, c.pi, step); if (a.x !== c.x || a.y !== c.y) c.face = { x: a.x - c.x, y: a.y - c.y }; c.x = a.x; c.y = a.y; c.pi = a.pi; return a.done; };
+  const purchase = (c: Customer, id: string) => {
+    const a = aisles.find((x) => x.id === id); if (!a) return; const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal;
+    if (a.stock >= a.stockConsumptionRate) { a.stock -= a.stockConsumptionRate; c.basket += E.getAisleRevenue(a.baseRevenue, a.level) * (L.boost[id] ?? 1) * def.basket * (ev?.revenue?.[a.type] ?? 1); cogs += a.stockConsumptionRate * unitCost(a.type); c.mood = "🛒"; }
+    else { c.oos = true; c.say = "Out of stock"; c.sayT = 2.2; }
+  };
+  /** End of the shopping trip: same decisions as before (nothing bought / no lane / shoplifter / join the shortest queue), now followed by a walk to the lane. */
+  const finishShopping = (c: Customer) => {
+    const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal, last = c.plan.length && L.dist[c.plan[c.plan.length - 1]] ? c.plan[c.plan.length - 1] : "E";
+    const open = active.filter((k) => lane[k.id].length < Math.min(k.queueCapacity, def.maxQueue) && isFinite(L.dist[last][k.id]) && L.slots[k.id]?.length).sort((x, y) => lane[x.id].length + L.dist[last][x.id] * 0.25 - (lane[y.id].length + L.dist[last][y.id] * 0.25))[0];
+    if (c.basket <= 0) { leave(c, c.oos ? "❗" : "😐"); if (c.oos) angry++; }
+    else if (!open) { c.basket = 0; leave(c, "😡", active.length ? "Queues are too long" : "No checkout!"); angry++; }
+    else if (Math.random() < THEFT_CHANCE * (1 + s.tier * 0.5)) { // shoplifter: a guard may stop them, otherwise the basket walks out
+      recentThief = 3;
+      if (Math.random() < secStop) { theftsPrevented++; say("stopped", "Security stopped a shoplifter!"); c.basket = 0; leave(c, "🛡️"); }
+      else { thefts++; say("theft", `Shoplifter got away with ${"$" + Math.round(c.basket)}`); c.basket = 0; leave(c, "🦹"); }
+    }
+    else { c.phase = "QUEUING"; c.co = open.id; c.mood = "💵"; c.qn = nextId++; c.goal = ""; lane[open.id].push(c); }
+  };
+
   for (const c of customers) {
-    if (c.phase === "ENTERING" || c.phase === "SHOPPING" || c.phase === "LEAVING") c.t -= dt;
-    if (c.phase === "ENTERING" && c.t <= 0) {
-      // plan the trip: reachable shelves only, nearest-neighbour order, then walk to a checkout
-      const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal, reach = aisles.filter((a) => a.level > 0 && isFinite(L.dist.E[a.id]));
+    if (c.sayT !== undefined) { c.sayT -= dt; if (c.sayT <= 0) { c.sayT = undefined; c.say = undefined; } }
+    // the player built on the tile someone is standing on (till-side, or browsing a shelf): move them on rather than leave them inside the furniture
+    if ((c.phase === "CHECKOUT" || (c.phase === "SHOPPING" && c.dwell > 0)) && c.nav !== L.version && !isFree(L.grid, tileOf(c.x), tileOf(c.y))) { if (c.phase === "CHECKOUT") c.phase = "QUEUING"; c.dwell = 0; c.goal = ""; }
+    if (c.phase === "ENTERING") {
+      if (!walk(c)) continue;
+      // inside the door: plan the trip on the layout as it is right now. Only shelves/lanes a person can actually reach are candidates.
+      const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal, seen = aisles.filter((a) => a.level > 0), reach = seen.filter((a) => isFinite(L.dist.E[a.id]));
       const picks = reach.filter((a) => Math.random() < Math.min(1, a.demandRate * def.want(a))).sort(() => Math.random() - 0.5).slice(0, 2 + s.tier);
       if (def.impulse && Math.random() < def.impulse) { const extra = reach.filter((a) => !picks.includes(a)); if (extra.length) picks.push(extra[Math.floor(Math.random() * extra.length)]); }
-      const cks = active.filter((k) => isFinite(L.dist.E[k.id]));
+      const cks = active.filter((k) => isFinite(L.dist.E[k.id]) && L.slots[k.id]?.length);
       let at = "E", tiles = 0; const order: string[] = [];
       while (picks.length) { picks.sort((p, q) => L.dist[at][p.id] - L.dist[at][q.id]); const n = picks.shift()!; if (isFinite(L.dist[at][n.id])) { tiles += L.dist[at][n.id]; at = n.id; order.push(n.id); } }
       const back = Math.min(...cks.map((k) => L.dist[at][k.id]));
-      const secs = (tiles + (isFinite(back) ? back : 0)) * tileTime + order.length * 1.0 + 1;
-      if (!cks.length || !isFinite(back) || secs > 40) { leave(c, "E", "😡"); angry++; } // no route, or lost patience
-      else { c.phase = "SHOPPING"; c.plan = order; c.t = secs; c.t0 = secs; c.mood = "🛒"; }
-    } else if (c.phase === "SHOPPING" && c.t <= 0) {
-      let oos = false; const def = CUSTOMERS[c.kind] ?? CUSTOMERS.normal;
-      for (const id of c.plan) { const a = aisles.find((x) => x.id === id); if (!a) continue;
-        if (a.stock >= a.stockConsumptionRate) { a.stock -= a.stockConsumptionRate; c.basket += E.getAisleRevenue(a.baseRevenue, a.level) * (L.boost[id] ?? 1) * def.basket * (ev?.revenue?.[a.type] ?? 1); cogs += a.stockConsumptionRate * unitCost(a.type); } else oos = true; }
-      const last = L.dist[c.plan[c.plan.length - 1]] ? c.plan[c.plan.length - 1] : "E";
-      const open = active.filter((k) => qlen(k.id) < Math.min(k.queueCapacity, def.maxQueue) && isFinite(L.dist[last][k.id])).sort((x, y) => qlen(x.id) + L.dist[last][x.id] * 0.25 - (qlen(y.id) + L.dist[last][y.id] * 0.25))[0];
-      const spot = c.plan.length ? c.plan[c.plan.length - 1] : "E";
-      if (c.basket <= 0) { leave(c, spot, oos ? "❗" : "😐"); if (oos) angry++; }
-      else if (!open) { c.basket = 0; leave(c, spot, "😡"); angry++; }
-      else if (Math.random() < THEFT_CHANCE * (1 + s.tier * 0.5)) { // shoplifter: a guard may stop them, otherwise the basket walks out
-        recentThief = 3;
-        if (Math.random() < secStop) { theftsPrevented++; say("stopped", "Security stopped a shoplifter!"); c.basket = 0; leave(c, spot, "🛡️"); }
-        else { thefts++; say("theft", `Shoplifter got away with ${"$" + Math.round(c.basket)}`); c.basket = 0; leave(c, spot, "🦹"); }
+      const secs = (tiles + (isFinite(back) ? back : 0)) / (WALK_SPEED / (1 + customers.length / 150)) + order.length * BROWSE + 1;
+      if (!cks.length || !isFinite(back) || secs > 90) { leave(c, "😡", !cks.length ? (active.length ? "Can't reach checkout" : "No checkout!") : seen.length && !reach.length ? "Can't reach shelf" : "This is too far"); angry++; }
+      else { c.phase = "SHOPPING"; c.plan = order; c.stop = 0; c.dwell = 0; c.mood = "🛒"; c.goal = ""; }
+    } else if (c.phase === "SHOPPING") {
+      if (c.dwell > 0) { c.dwell -= dt; if (c.dwell <= 0) { purchase(c, c.plan[c.stop]); c.stop++; c.goal = ""; } continue; }
+      const id = c.plan[c.stop]; if (id === undefined) { finishShopping(c); continue; }
+      const a = aisles.find((x) => x.id === id); if (!a || a.level < 1) { c.stop++; c.goal = ""; continue; }
+      if (!route(c, `s${id}@${a.x},${a.y}`, L.access[id] ?? [])) continue;
+      if (c.lost) { c.say = "Can't reach shelf"; c.sayT = 2.6; c.stop++; c.goal = ""; angry++; continue; } // layout changed under them: skip it, keep shopping
+      if (walk(c)) { c.dwell = BROWSE; c.face = { x: a.x - c.x, y: a.y - c.y }; }
+    } else if (c.phase === "QUEUING") {
+      c.wait += dt; if (c.wait > 12) c.mood = "😡";
+      const pat = (CUSTOMERS[c.kind] ?? CUSTOMERS.normal).patience; if (c.wait > pat) { c.basket = 0; leave(c, "😡", "Too slow!"); angry++; continue; }
+      const slots = c.co ? L.slots[c.co] : undefined, rank = Math.max(0, lane[c.co ?? ""]?.indexOf(c) ?? 0), t = slots?.[Math.min(rank, (slots?.length ?? 1) - 1)];
+      if (!t) { c.basket = 0; leave(c, "😡", "Can't reach checkout"); angry++; continue; }
+      if (!route(c, `q${c.co}#${rank}@${t.x.toFixed(2)},${t.y.toFixed(2)}`, [t])) continue;
+      if (c.lost) { c.stuck += dt; if (c.stuck > 5) { c.basket = 0; leave(c, "😡", "Can't reach checkout"); angry++; } continue; }
+      walk(c);
+    } else if (c.phase === "LEAVING") {
+      if (c.goal !== "out" && c.goal !== "away") {
+        if (c.y > rows - 0.5) { c.path = [streetPoint(rows, c.id + 7)]; c.pi = 0; c.goal = "away"; }
+        else {
+          if (!route(c, "exit", [ent])) continue;
+          if (c.lost) { c.stuck += dt; if (c.stuck > 8) { c.gone = true; angry++; } continue; }   // walled in with no way out: give up after a while rather than phase through geometry
+          if (walk(c)) { c.path = [door, streetPoint(rows, c.id + 7)]; c.pi = 0; c.goal = "out"; }
+          continue;
+        }
       }
-      else { c.phase = "QUEUING"; c.co = open.id; c.mood = "💵"; }
-    } else if (c.phase === "QUEUING") { c.wait += dt; if (c.wait > 12) c.mood = "😡";
-      const pat = (CUSTOMERS[c.kind] ?? CUSTOMERS.normal).patience; if (c.wait > pat) { const lane = c.co ?? "E"; c.basket = 0; leave(c, lane, "😡"); angry++; } }
+      if (walk(c)) c.gone = true;
+    }
   }
   for (const k of active) {
-    let cur = customers.find((c) => c.co === k.id && c.phase === "CHECKOUT");
-    if (!cur) { cur = customers.find((c) => c.co === k.id && c.phase === "QUEUING"); if (cur) { cur.phase = "CHECKOUT"; k.currentCustomerProgress = 0; } }
+    let cur = lane[k.id].find((c) => c.phase === "CHECKOUT");
+    if (!cur) { const first = lane[k.id][0]; if (first && first.phase === "QUEUING" && !first.lost && first.pi >= first.path.length && first.goal.startsWith(`q${k.id}#0@`)) { cur = first; cur.phase = "CHECKOUT"; k.currentCustomerProgress = 0; } } // the next shopper must have actually reached the till
     if (!cur) { k.currentCustomerProgress = 0; continue; }
     const cashier = lanes[k.id], speed = cashier ? cashier.efficiency : 1;
     k.currentCustomerProgress += (dt * speed) / k.processingTime;
     if (k.currentCustomerProgress >= 1) {
       cash += cur.basket; revenue += cur.basket; lifetimeRevenue += cur.basket; totalCustomersServed++; k.customersProcessed++;
-      floats.push({ id: nextId++, amt: cur.basket, age: 0 });
+      floats.push({ id: nextId++, amt: cur.basket, age: 0, x: k.x, y: k.y });
       xp += xpForSale(cur.basket); happy++;
-      leave(cur, k.id, "💚"); cur.basket = 0; k.currentCustomerProgress = 0;
+      leave(cur, "💚"); cur.basket = 0; k.currentCustomerProgress = 0;
     }
   }
-  customers = customers.filter((c) => c.phase !== "LEAVING" || c.t > 0);
+  customers = customers.filter((c) => !c.gone);
   // deliveries arrive in the storeroom; standing orders reorder automatically when total stock runs low
   for (const o of orders) if (o.eta <= 0) storeroom[o.type] += o.qty;
   orders = orders.filter((o) => o.eta > 0);
@@ -146,7 +218,7 @@ export function simulate(s: SimData, dt: number): SimData {
     if (r.level < 1) continue;
     r.currentCooldown = Math.max(0, r.currentCooldown - dt * mb); r.busy = Math.max(0, (r.busy ?? 0) - dt); r.salary = restockerWage(r.level, s.tier);
     const a = r.assignedAisleId ? aisles.find((x) => x.id === r.assignedAisleId) : aisles.filter((x) => x.level > 0 && x.stock < x.maxStock && storeroom[x.type] > 0).sort((p, q) => p.stock / p.maxStock - q.stock / q.maxStock)[0]; // null = Auto: emptiest shelf
-    if (r.currentCooldown <= 0 && a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0) { const n = Math.min(Math.max(1, Math.round(r.restockAmount * AISLE_DEFS[a.type].restock)), a.maxStock - a.stock, storeroom[a.type]); a.stock += n; storeroom[a.type] -= n; r.currentCooldown = r.cooldown; r.busy = 2.4; r.target = a.id; }
+    if (r.currentCooldown <= 0 && a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0) { const n = Math.min(Math.max(1, Math.round(r.restockAmount * AISLE_DEFS[a.type].restock)), a.maxStock - a.stock, storeroom[a.type]); a.stock += n; storeroom[a.type] -= n; r.currentCooldown = r.cooldown; r.busy = 2.4; r.target = a.id; fired.set(r.id, a.id); }
     const hasWork = !!(a && a.level > 0 && a.stock < a.maxStock && storeroom[a.type] > 0); r.workload = (r.workload ?? 0) + ((hasWork || r.busy > 0 ? 1 : 0) - (r.workload ?? 0)) * Math.min(1, dt / 4);
   }
   // running costs: wages + store upkeep (never push cash below zero)
@@ -167,7 +239,8 @@ export function simulate(s: SimData, dt: number): SimData {
   const lvlAfter = levelOf(xp); if (lvlAfter > lvlBefore) say("level", `LEVEL UP! You are now level ${lvlAfter}`);
   const eps = E.calculateEPS(s.earningsPerSecond, revenue - cogs - wage, dt);
   const revPerSec = E.calculateEPS(s.revPerSec, revenue, dt), expPerSec = E.calculateEPS(s.expPerSec, wage, dt);
-  return { ...s, aisles, checkouts, restockers, customers, floats, fx, staff, xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event, recentThief, lifetimeExpenses: s.lifetimeExpenses + wage, storeroom, orders, cash, lifetimeRevenue, totalCustomersServed, nextId, spawnAcc, earningsPerSecond: eps, revPerSec, expPerSec };
+  const crew = stepCrew(s, L, dt, aisles, restockers, staff, fired, rows);
+  return { ...s, aisles, checkouts, restockers, customers, crew, floats, fx, staff, xp, thefts, theftsPrevented, satisfaction, cleanliness, clock, event, recentThief, recentBalk, lifetimeExpenses: s.lifetimeExpenses + wage, storeroom, orders, cash, lifetimeRevenue, totalCustomersServed, nextId, spawnAcc, earningsPerSecond: eps, revPerSec, expPerSec };
 }
 
 export function storeStatus(s: SimData) {
@@ -213,6 +286,7 @@ export function storeAlerts(s: SimData): Alert[] {
   for (const k of s.checkouts) { const q = s.customers.filter((c) => c.co === k.id).length; if (k.level > 0 && q >= k.queueCapacity) out.push({ id: `q${k.id}`, icon: "wait", tone: "warn", text: `Checkout #${k.id.slice(1)} queue is full: add a lane or a cashier` }); }
   for (const i of [...s.aisles, ...s.checkouts]) if (!isFinite(L.dist.E?.[i.id])) { out.push({ id: `b${i.id}`, icon: "alert", tone: "bad", text: "Something is blocked off: customers cannot reach it" }); break; }
   if (s.cleanliness < 0.35) out.push({ id: "dirty", icon: "angry", tone: "warn", text: "The store is getting dirty: hire a cleaner" });
+  if (s.recentBalk > 0) out.push({ id: "full", icon: "wait", tone: "warn", text: "Store is full: shoppers are turned away at the door" });
   if (s.satisfaction < 0.4) out.push({ id: "sat", icon: "angry", tone: "bad", text: "Customers are unhappy: check queues and stock" });
   if (s.cash < 10 && s.customers.length === 0) out.push({ id: "broke", icon: "coin", tone: "bad", text: "Out of cash" });
   return out;
